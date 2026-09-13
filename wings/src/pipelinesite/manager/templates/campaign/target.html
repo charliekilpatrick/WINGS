@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_head %}
+<title>{{ campaign.target.display_name }} — {{ program_short }}</title>
+<link rel="stylesheet" href="{% static 'manager/campaign.css' %}">
+{% endblock %}
+
+{% block body %}
+<div class="campaign-wrap" data-campaign-root data-status-url="{% url 'manager:target_status' campaign.target.name %}">
+  {% csrf_token %}
+  <div class="campaign-hero">
+    <div>
+      <h1>{{ campaign.target.display_name }}</h1>
+      <ul class="meta-list">
+        <li><span class="k">Name</span><span>{{ campaign.target.name }}</span></li>
+        {% if campaign.target.host %}
+        <li><span class="k">Host</span><span>{{ campaign.target.host }}</span></li>
+        {% endif %}
+        {% if campaign.target.distance_display %}
+        <li><span class="k">Distance</span><span>{{ campaign.target.distance_display }}</span></li>
+        {% endif %}
+        <li><span class="k">Coordinates</span><span>{{ campaign.target.ra_sex }} {{ campaign.target.dec_sex }}</span></li>
+        <li><span class="k">Base directory</span><span>{{ campaign.target.base_dir }}</span></li>
+        <li><span class="k">Job</span><span data-job-state class="state state-{{ campaign.job.state }}">{{ campaign.job.state }}</span></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h2>Dispatch</h2>
+      <p class="campaign-sub" data-dispatch-message>{% if dispatch_error %}{{ dispatch_error }}{% else %}{{ campaign.dispatch.message }}{% endif %}</p>
+      <form method="post" action="{% url 'manager:target_dispatch' campaign.target.name %}" data-dispatch-form data-ajax="1" data-dispatch-allowed="{% if campaign.dispatch.allowed %}1{% else %}0{% endif %}">
+        {% csrf_token %}
+        <input type="hidden" name="target" value="{{ campaign.target.name }}">
+        <div class="dispatch-row">
+          <button type="submit" class="btn btn-accent"{% if not campaign.dispatch.allowed %} disabled{% endif %}>
+            {% if campaign.remaining %}Run remaining stages{% else %}Re-run full pipeline{% endif %}
+          </button>
+          <label>
+            <input type="checkbox" name="rerun_all" value="1"{% if not campaign.dispatch.allowed %} disabled{% endif %}>
+            Re-run all stages
+          </label>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="stage-rail">
+    {% for stage in campaign.stages %}
+    <div class="stage-chip" data-stage-key="{{ stage.key }}">
+      <div class="n">{{ stage.cli }}</div>
+      <div class="t">{{ stage.label }}</div>
+      <div class="state state-{{ stage.state }}" data-stage-state>{{ stage.state }}</div>
+      <div class="d" data-stage-duration>{{ stage.duration|default:"—" }}</div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="card" style="margin-bottom:1.25rem;">
+    <h2>Stage timings</h2>
+    <div class="table-wrap">
+      <table class="table campaign-table">
+        <thead>
+          <tr>
+            <th>Stage</th>
+            <th>CLI</th>
+            <th>State</th>
+            <th>Duration</th>
+            <th>Started</th>
+            <th>Ended</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for stage in campaign.stages %}
+          <tr>
+            <td>{{ stage.label }}</td>
+            <td><code>{{ stage.cli }}</code></td>
+            <td><span class="state state-{{ stage.state }}">{{ stage.state }}</span></td>
+            <td>{{ stage.duration|default:"—" }}</td>
+            <td>{{ stage.started_at|default:"—" }}</td>
+            <td>{{ stage.ended_at|default:"—" }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:1.25rem;">
+    <h2>Images ({{ campaign.n_images }})</h2>
+    <div class="table-wrap">
+      <table class="table campaign-table">
+        <thead>
+          <tr>
+            <th>File</th>
+            <th>Telescope</th>
+            <th>Instrument</th>
+            <th>Filter</th>
+            <th>Product</th>
+            <th>Exp. (s)</th>
+            <th>Date</th>
+            <th>RA</th>
+            <th>Dec</th>
+            <th>Size</th>
+            <th>ObsID</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for image in campaign.images %}
+          <tr>
+            <td>{{ image.filename }}</td>
+            <td>{{ image.telescope }}</td>
+            <td>{{ image.instrument }}</td>
+            <td>{{ image.filter }}</td>
+            <td>{{ image.product }}</td>
+            <td>{% if image.exptime %}{{ image.exptime|floatformat:1 }}{% else %}—{% endif %}</td>
+            <td>{{ image.date_obs|default:"—" }}</td>
+            <td>{% if image.ra %}{{ image.ra|floatformat:5 }}{% else %}—{% endif %}</td>
+            <td>{% if image.dec %}{{ image.dec|floatformat:5 }}{% else %}—{% endif %}</td>
+            <td>{{ image.size_display|default:"—" }}</td>
+            <td>{{ image.obsid }}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="11">No downloaded science images yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:1.25rem;">
+    <h2>Catalogs</h2>
+    {% if campaign.catalogs %}
+      {% for cat in campaign.catalogs %}
+      <p>
+        <code>{{ cat.name }}</code>
+        <a class="btn btn-sm btn-outline-secondary" href="{% url 'manager:catalog_hdf5' campaign.target.name cat.stem %}">Download HDF5</a>
+        <strong>{{ cat.n_before }}</strong> sources before cuts,
+        <strong>{{ cat.n_after }}</strong> after
+        type ∈ {{ cat.cuts.types }},
+        |sharp| ≤ {{ cat.cuts.sharp_max }},
+        crowd ≤ {{ cat.cuts.crowd_max }}{% if cat.cuts.snr_min %},
+        SNR ≥ {{ cat.cuts.snr_min }}{% endif %}.
+      </p>
+      {% endfor %}
+    {% else %}
+      <p>No DOLPHOT catalog yet.</p>
+    {% endif %}
+  </div>
+
+  <div class="card">
+    <h2 data-reference-heading>{{ campaign.reference.heading|default:"Reference image" }}</h2>
+    {% if campaign.wcs_quality %}
+    <p data-gaia-count>{{ campaign.wcs_quality }}</p>
+    {% endif %}
+    {% if campaign.mosaics %}
+    <label class="viewer-ref-pick">
+      Mosaic
+      <select data-reference-select>
+        {% for image in campaign.mosaics %}
+        <option value="{{ image.id }}"{% if image.selected %} selected{% endif %}>{{ image.option_label }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    {% endif %}
+    {% if campaign.reference.path %}
+    <p>
+      <a class="btn btn-sm btn-outline-secondary" data-reference-fits href="{% url 'manager:reference_fits' campaign.target.name %}{% if campaign.reference.id %}?image={{ campaign.reference.id }}{% endif %}">Download mosaic</a>
+    </p>
+    {% endif %}
+    {% if campaign.viewer_ready %}
+    <div class="viewer-shell">
+      <div>
+        <div class="viewer-frame" data-viewer
+             data-preview-url="{% url 'manager:target_preview' campaign.target.name %}"
+             data-sources-url="{% url 'manager:target_sources' campaign.target.name %}"
+             data-image-id="{{ campaign.reference.id|default:'' }}">
+          <canvas></canvas>
+          <div class="viewer-hud is-empty" data-sky-hud></div>
+        </div>
+      </div>
+      <div class="viewer-side">
+        <div class="viewer-toggles">
+          <button type="button" class="viewer-toggle is-on" data-show-quality aria-pressed="true">Quality DOLPHOT sources</button>
+          <button type="button" class="viewer-toggle" data-show-cut aria-pressed="false">Quality-cut DOLPHOT sources</button>
+          <button type="button" class="viewer-toggle is-on" data-show-gaia aria-pressed="true">Gaia alignment sources</button>
+        </div>
+        <p data-source-count class="campaign-sub"></p>
+        <div class="viewer-legend">
+          <span><i class="swatch swatch-quality"></i> Quality</span>
+          <span><i class="swatch swatch-cut"></i> Quality-cut</span>
+          <span><i class="swatch swatch-gaia"></i> Gaia</span>
+        </div>
+        <div data-source-info class="source-card">Click a source to inspect it.</div>
+      </div>
+    </div>
+    {% else %}
+    <p>No mosaic or reference image yet.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'manager/campaign.js' %}"></script>
+{% endblock %}

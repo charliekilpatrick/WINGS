@@ -12,7 +12,7 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('.'))
+sys.path.insert(0, os.path.abspath('../../wings/src'))
 
 # -- Project information -----------------------------------------------------
 
@@ -31,7 +31,7 @@ release = '1.0'
 # ones.
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.napoleon', 'sphinx.ext.autosectionlabel']
 #extensions = ['autoapi.extension', 'sphinx.ext.napoleon', 'sphinx.ext.autosectionlabel']
-#autoapi_dirs = ['../../src']
+#autoapi_dirs = ['../../wings/src']
 napoleon_google_docstring = False
 napoleon_use_param = False
 napoleon_use_ivar = True
