@@ -1,0 +1,89 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "wpipe"
+description = "Provides a suite of classes to deploy the WINGS pipeline functionalities."
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+authors = [
+  { name = "Adrien Thob", email = "athob@uw.edu" },
+  { name = "Tristan Hillis" },
+  { name = "Ben Williams" },
+]
+maintainers = [
+  { name = "Adrien Thob", email = "athob@uw.edu" },
+]
+keywords = ["astronomy", "pipeline", "wings"]
+classifiers = [
+  "Development Status :: 1 - Planning",
+  "Environment :: Console",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: MIT License",
+  "Natural Language :: English",
+  "Operating System :: Unix",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Database",
+  "Topic :: Scientific/Engineering :: Astronomy",
+]
+dynamic = ["version"]
+dependencies = [
+  "numpy",
+  "pandas",
+  "tenacity",
+  "tables",
+  "sqlalchemy",
+  "mysql-connector-python",
+  "mysqlclient",
+  "astropy",
+  "jinja2",
+]
+
+[project.optional-dependencies]
+test = [
+  "pytest>=8",
+]
+demo = [
+  "Django==3.2.25",
+  "django-filter==21.1",
+  "django-bootstrap-icons==0.8.7",
+  "sqlparse==0.4.4",
+  "Pillow>=9.0",
+  "astroquery>=0.4.6",
+  "h5py>=3.1",
+]
+docs = [
+  "sphinx",
+  "sphinxcontrib-napoleon",
+  "sphinx-rtd-theme",
+]
+
+[project.urls]
+Homepage = "https://github.com/charliekilpatrick/WINGS"
+Repository = "https://github.com/charliekilpatrick/WINGS"
+
+[project.scripts]
+wingspipe = "wpipe:wingspipe"
+
+[tool.setuptools]
+package-dir = { "" = "wings/src" }
+script-files = [
+  "wings/bin/pbsconsumer.py",
+  "wings/bin/slurmconsumer.py",
+]
+
+[tool.setuptools.packages.find]
+where = ["wings/src"]
+include = ["wpipe*"]
+
+[tool.setuptools.dynamic]
+version = { attr = "wpipe.__metadata__.__version__" }
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["tests"]
+pythonpath = ["wings/src", "wings/src/pipelinesite"]
+norecursedirs = ["manual", ".git", ".venv", "build", "dist"]

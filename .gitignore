@@ -3,7 +3,7 @@
 *.o
 
 # Packaging files
-py_sphviewer.egg_info/*
+*.egg-info/
 dependency_links.txt
 PKG-INFO
 requires.txt
@@ -14,6 +14,7 @@ dist/
 
 # Python bytecode
 *.pyc
+__pycache__/
 
 # Document files
 docs/_static/
@@ -26,6 +27,9 @@ docs/source/_templates
 .idea
 
 # Local pipelinesite demo
+wings/src/pipelinesite/.venv/
+wings/src/pipelinesite/.venv312/
+wings/src/pipelinesite/demo.sqlite3
 src/pipelinesite/.venv/
 src/pipelinesite/.venv312/
 src/pipelinesite/demo.sqlite3
