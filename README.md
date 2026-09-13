@@ -1,5 +1,8 @@
 # WINGS
 
+[![Build](https://github.com/charliekilpatrick/WINGS/actions/workflows/build_and_test.yaml/badge.svg?branch=main)](https://github.com/charliekilpatrick/WINGS/actions/workflows/build_and_test.yaml?query=branch%3Amain)
+[![Docs](https://github.com/charliekilpatrick/WINGS/actions/workflows/docs.yaml/badge.svg?branch=main)](https://github.com/charliekilpatrick/WINGS/actions/workflows/docs.yaml?query=branch%3Amain)
+
 Pipeline toolkit and campaign site for nearby-galaxy HST imaging. The installable package is `wpipe`; the NGP demo site lives under `wings/src/pipelinesite`.
 
 ## Requirements
@@ -102,6 +105,8 @@ PIPELINESITE_DEMO=1 .venv/bin/python manage.py sync_program_targets
 ```
 
 ## Documentation
+
+Pushes to `main` build the Sphinx site and publish it to the `gh-pages` branch. After you set **Settings → Pages → Deploy from a branch** to `gh-pages` `/ (root)`, the site is at https://charliekilpatrick.github.io/WINGS/.
 
 ```bash
 python -m pip install -e ".[docs]"
