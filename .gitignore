@@ -27,4 +27,5 @@ docs/source/_templates
 
 # Local pipelinesite demo
 src/pipelinesite/.venv/
+src/pipelinesite/.venv312/
 src/pipelinesite/demo.sqlite3

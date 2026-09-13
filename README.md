@@ -9,7 +9,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-You need to have MySQL installed and a working Python3 installation. If your machine can connect to the Python Package Index (PyPI), the installation `wpipe` process will handle the package necessary dependencies. Otherwise, you will need to have the following packages installed:
+You need to have MySQL installed and a working Python 3.12 installation. If your machine can connect to the Python Package Index (PyPI), the installation `wpipe` process will handle the package necessary dependencies. Otherwise, you will need to have the following packages installed:
 
 ```
 numpy

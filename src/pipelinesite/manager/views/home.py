@@ -1,8 +1,5 @@
-from django.shortcuts import render
-from django.shortcuts import HttpResponse
+from manager.views.campaign import campaign_home
 
-# def home(request):
-#     return HttpResponse('{% extends "base.html" %}{% load static %}<h1> This is the WINGS PIPELINE Home Page </h1>')
 
 def home(request):
-    return render(request, 'home.html')
+    return campaign_home(request)

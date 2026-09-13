@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_head %}
+<title>{{ program_name }}</title>
+<link rel="stylesheet" href="{% static 'manager/campaign.css' %}">
+{% endblock %}
+
+{% block body %}
+<div class="campaign-wrap">
+  <h1>{{ program_name }}</h1>
+  <p>
+    GO {{ hst_program_id }}
+    {% if hst_program_title %} — {{ hst_program_title }}{% endif %}
+  </p>
+  <p>
+    <a href="{{ hst_program_url }}" target="_blank" rel="noopener">STScI program page</a>
+  </p>
+  {% if dispatch %}
+  <p class="campaign-sub">
+    Jobs {{ dispatch.running }} / {{ dispatch.max_jobs }} running.
+    {% if dispatch.running %}
+    Wait for a running job to finish before starting another.
+    {% else %}
+    A new job can be started from a target page.
+    {% endif %}
+  </p>
+  {% endif %}
+
+  {% if search_query and not targets %}
+  <p>No targets match “{{ search_query }}”.</p>
+  {% endif %}
+
+  <div class="table-wrap">
+    <table class="table campaign-table">
+      <thead>
+        <tr>
+          <th>Target</th>
+          <th>Host</th>
+          <th>Distance</th>
+          <th>Coordinates</th>
+          <th>Images</th>
+          <th>Stages</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in targets %}
+        <tr>
+          <td><a href="{% url 'manager:target_detail' row.name %}">{{ row.display_name }}</a></td>
+          <td>{{ row.host|default:"—" }}</td>
+          <td>{{ row.distance_display|default:"—" }}</td>
+          <td>{{ row.ra_sex }} {{ row.dec_sex }}</td>
+          <td>{{ row.n_images }}</td>
+          <td>{{ row.n_done }} / {{ row.n_stages }}</td>
+          <td><span class="state state-{{ row.job_state|default:'pending' }}">{{ row.status }}</span></td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="7">No targets yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

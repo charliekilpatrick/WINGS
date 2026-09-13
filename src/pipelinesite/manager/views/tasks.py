@@ -2,12 +2,13 @@ from django.core.paginator import Paginator
 from django.shortcuts import render
 
 from manager.filters.task_filter import TaskFilter
+from manager.local_scope import local_tasks
 from pipelinesite.models import Tasks
 
 
 def task_list(request):
 
-    all_tasks = Tasks.objects.all()
+    all_tasks = local_tasks()
 
     task_filter = TaskFilter(request.GET, queryset=all_tasks)
 

@@ -1,9 +1,10 @@
 from django.shortcuts import render
 
+from manager.local_scope import local_pipelines
 from pipelinesite.models import Pipelines, Tasks, Inputs, Targets
 
 def pipelines(request):
-    all_pipes = Pipelines.objects.all()
+    all_pipes = local_pipelines()
     context = {'pipelines': all_pipes}
     return render(request, 'pipelines.html', context)
 

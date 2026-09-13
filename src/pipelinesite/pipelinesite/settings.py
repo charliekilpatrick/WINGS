@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 import os
+import sys
 
 from pathlib import Path
 
@@ -27,10 +28,73 @@ SECRET_KEY = 'django-insecure-d1mt%gux!&g6uqt%#w_v7btsgcexm)#xi#p*vd*a=qxf3cdtr6
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]']
-
 # Local example site: PIPELINESITE_DEMO=1 uses SQLite instead of the live MySQL wpipe DB.
-DEMO_MODE = os.environ.get('PIPELINESITE_DEMO', '') == '1'
+DEMO_MODE = os.environ.get('PIPELINESITE_DEMO', '') == '1' or 'test' in sys.argv
+
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]']
+if DEMO_MODE:
+    ALLOWED_HOSTS.extend([
+        'burbidge',
+        'burbidge.northwestern.edu',
+        '165.124.148.146',
+    ])
+ALLOWED_HOSTS.extend(
+    host.strip()
+    for host in os.environ.get('PIPELINESITE_ALLOWED_HOSTS', '').split(',')
+    if host.strip()
+)
+
+# Public program name on the example site (pipeline software remains st123).
+PROGRAM_NAME = os.environ.get('PIPELINESITE_PROGRAM_NAME', 'Nearby Galaxies Program')
+PROGRAM_SHORT = os.environ.get('PIPELINESITE_PROGRAM_SHORT', 'NGP')
+HST_PROGRAM_ID = os.environ.get('PIPELINESITE_HST_PROGRAM_ID', '18338')
+HST_PROGRAM_URL = os.environ.get(
+    'PIPELINESITE_HST_PROGRAM_URL',
+    'https://www.stsci.edu/hst-program-info/program/?program=18338',
+)
+HST_PROGRAM_TITLE = os.environ.get(
+    'PIPELINESITE_HST_PROGRAM_TITLE',
+    'Completing a Legacy Dataset with Deep HST Imaging of 121 Nearby Star-Forming Galaxies',
+)
+
+# st123 campaign used by the example site.
+ST123_ROOT = os.environ.get('ST123_ROOT', '/data/ckilpatrick/st123')
+ST123_BIN = os.environ.get(
+    'ST123_BIN',
+    '/home/ckilpatrick/anaconda3/envs/st123/bin',
+)
+ST123_DOLPHOT_BIN = os.environ.get('ST123_DOLPHOT_BIN', '/data/software/dolphot/bin')
+ST123_BASE_DIR = os.environ.get('ST123_BASE_DIR', '/data/ckilpatrick/HST/2026dix')
+ST123_NCORES = int(os.environ.get('ST123_NCORES', '4'))
+ST123_MAX_CONCURRENT_JOBS = int(os.environ.get('ST123_MAX_CONCURRENT_JOBS', '1'))
+ST123_DISPATCH_LOCK = os.environ.get(
+    'ST123_DISPATCH_LOCK',
+    '/data/ckilpatrick/HST/.pipelinesite/dispatch.lock',
+)
+ST123_TARGET_NAME = os.environ.get('ST123_TARGET_NAME', '2026dix')
+ST123_TARGET_DISPLAY = os.environ.get('ST123_TARGET_DISPLAY', 'SN 2026dix')
+ST123_TARGET_HOST = os.environ.get('ST123_TARGET_HOST', 'NGC 3913')
+ST123_TARGET_TYPE = os.environ.get('ST123_TARGET_TYPE', 'IIb')
+ST123_TARGET_RA = float(os.environ.get('ST123_TARGET_RA', '177.65595'))
+ST123_TARGET_DEC = float(os.environ.get('ST123_TARGET_DEC', '55.353589'))
+ST123_TARGET_RA_SEX = os.environ.get('ST123_TARGET_RA_SEX', '11:50:37.428')
+ST123_TARGET_DEC_SEX = os.environ.get('ST123_TARGET_DEC_SEX', '+55:21:12.92')
+ST123_RADIUS_ARCMIN = float(os.environ.get('ST123_RADIUS_ARCMIN', '5'))
+ST123_TELESCOPE = os.environ.get('ST123_TELESCOPE', 'hst')
+ST123_INSTRUMENTS = tuple(
+    part.strip()
+    for part in os.environ.get('ST123_INSTRUMENTS', 'ACS,WFC3,WFPC2').split(',')
+    if part.strip()
+)
+ST123_CUT_SHARP_MAX = float(os.environ.get('ST123_CUT_SHARP_MAX', '0.3'))
+ST123_CUT_CROWD_MAX = float(os.environ.get('ST123_CUT_CROWD_MAX', '0.5'))
+ST123_CUT_SNR_MIN = os.environ.get('ST123_CUT_SNR_MIN') or None
+ST123_DATA_ROOT = os.environ.get('ST123_DATA_ROOT', '/data/ckilpatrick/HST')
+ST123_CAMPAIGN_REGISTRY = os.environ.get(
+    'ST123_CAMPAIGN_REGISTRY',
+    str(Path(ST123_DATA_ROOT) / '.pipelinesite' / 'campaign_targets.json'),
+)
+GLADEPLUS_DIR = os.environ.get('GLADEPLUS_DIR', '/data/ckilpatrick/catalogs/GLADE+')
 
 
 # Application definition
@@ -75,6 +139,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'manager.context_processors.campaign',
             ],
         },
     },

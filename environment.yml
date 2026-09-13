@@ -4,7 +4,7 @@ channels:
   - defaults
   - ska
 dependencies:
-  - python=3.7
+  - python=3.12
   - pytables
   #  - sphinx-autoapi
   - numpy

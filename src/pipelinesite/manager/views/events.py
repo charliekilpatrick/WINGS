@@ -2,12 +2,13 @@ from django.core.paginator import Paginator
 from django.shortcuts import render
 
 from manager.filters.event_filter import EventFilter
+from manager.local_scope import local_events
 from pipelinesite.models import Events
 
 
 def event_list(request):
 
-    all_events = Events.objects.all()
+    all_events = local_events()
 
     event_filter = EventFilter(request.GET, queryset=all_events)
 

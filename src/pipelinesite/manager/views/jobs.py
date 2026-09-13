@@ -2,6 +2,7 @@ from django.db.models import Value, Case, When
 from django.shortcuts import render
 from django.core.paginator import Paginator
 
+from manager.local_scope import local_jobs
 from pipelinesite.models import Jobs
 from pipelinesite.utils import JobStates
 from manager.filters.job_filter import JobFilter
@@ -15,7 +16,7 @@ def jobs(request):
     # -> my_job.parent_job.task
     # -> my_event.parent_job.task
 
-    all_jobs = Jobs.objects.\
+    all_jobs = local_jobs().\
         annotate(state_integer=Case(
             When(state=JobStates.SUBMITTED.value[0], then=Value(JobStates.SUBMITTED.value[1])),
             When(state=JobStates.INITIALIZED.value[0], then=Value(JobStates.INITIALIZED.value[1])),
