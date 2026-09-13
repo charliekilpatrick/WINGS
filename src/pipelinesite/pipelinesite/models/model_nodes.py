@@ -17,7 +17,7 @@ class Nodes(models.Model):
     def __str__(self):
         string = "{}".format(self.name)
         if self.int_ip:
-            string = "{} (init_ip: {})".format(string, self.init_ip)
+            string = "{} (int_ip: {})".format(string, self.int_ip)
         return string
 
     class Meta:

@@ -27,7 +27,10 @@ SECRET_KEY = 'django-insecure-d1mt%gux!&g6uqt%#w_v7btsgcexm)#xi#p*vd*a=qxf3cdtr6
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]']
+
+# Local example site: PIPELINESITE_DEMO=1 uses SQLite instead of the live MySQL wpipe DB.
+DEMO_MODE = os.environ.get('PIPELINESITE_DEMO', '') == '1'
 
 
 # Application definition
@@ -84,16 +87,24 @@ WSGI_APPLICATION = 'pipelinesite.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 # Need to run this in the mysql container to let MySQLDB connect: ALTER USER 'yourusername'@'localhost' IDENTIFIED WITH mysql_native_password BY 'yourpassword';
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'HOST': '127.0.0.1',
-        'PORT': 8001,
-        'NAME': 'wpipe',
-        'USER': 'root',
-        'PASSWORD': 'password',
+if DEMO_MODE:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'demo.sqlite3',
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'HOST': '127.0.0.1',
+            'PORT': 8001,
+            'NAME': 'wpipe',
+            'USER': 'root',
+            'PASSWORD': 'password',
+        }
+    }
 
 
 # Password validation

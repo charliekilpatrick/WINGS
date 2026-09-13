@@ -4,9 +4,6 @@ from django.shortcuts import render
 from django.urls import reverse
 from pipelinesite.models import Jobs, Events
 
-from wpipe.Job import Job as WpipeJob
-
-
 
 def job_single_view(request, pk):
     #TODO: Tree view of events and parent events
@@ -17,8 +14,11 @@ def job_single_view(request, pk):
     # job = session.query(Job).get(pk) # Sqlalchemy notation
 
     print('job id and name:', job.id, job)
-    # events_tree = events_stack_generator(job.firing_event, 2, 2)
-    job_stack = jobs_stack_generator(job, 2, 2)
+    try:
+        job_stack = jobs_stack_generator(job, 2, 2)
+    except Exception as exc:
+        print('Falling back to Django job stack:', exc)
+        job_stack = django_job_stack(job)
 
     print("OUR JOB STACK:", job_stack)
 
@@ -78,7 +78,46 @@ def events_stack_generator(base_firing_event: Events, parent_count: int, child_c
 # TODO: Get child event for a job.  Then to get it's latest job we would look at the event and use the self.fired_jobs[-1]
 #
 
+def django_job_stack(job: 'Jobs') -> List[dict]:
+    """Parent/child job chain using Django models only (no wpipe MySQL session)."""
+    stack = []
+    current = job
+    parents = []
+    seen = {job.pk}
+    for _ in range(5):
+        event = current.firing_event
+        if event is None or event.parent_job_id is None:
+            break
+        parent = event.parent_job
+        if parent is None or parent.pk in seen:
+            break
+        seen.add(parent.pk)
+        parents.append({
+            'value': f'Parent job ({parent.pk}) {parent.task} [{parent.state}]',
+            'url': reverse('manager:job_single_view', args=[parent.pk]),
+        })
+        current = parent
+    stack.extend(reversed(parents))
+    stack.append({
+        'value': f'This job ({job.pk}) {job.task} [{job.state}]',
+        'url': reverse('manager:job_single_view', args=[job.pk]),
+    })
+    for ev in Events.objects.filter(parent_job=job):
+        stack.append({
+            'value': f'Child event ({ev.pk}) {ev.name}',
+            'url': reverse('manager:event_detail_view', args=[ev.pk]),
+        })
+        for child_job in Jobs.objects.filter(firing_event=ev):
+            stack.append({
+                'value': f'Child job ({child_job.pk}) {child_job.task} [{child_job.state}]',
+                'url': reverse('manager:job_single_view', args=[child_job.pk]),
+            })
+    return stack
+
+
 def jobs_stack_generator(base_job: 'Jobs', parent_count: int, child_count: int) -> List[dict]:
+
+    from wpipe.Job import Job as WpipeJob
 
     jobs_stack = []
     print("base_job:", base_job)

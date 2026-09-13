@@ -24,3 +24,7 @@ docs/source/_templates
 
 # Ignore pycharm directory
 .idea
+
+# Local pipelinesite demo
+src/pipelinesite/.venv/
+src/pipelinesite/demo.sqlite3

@@ -21,6 +21,7 @@ from manager.views import home
 
 urlpatterns = [
     path('', home, name='home_page'),
+    path('admin/', admin.site.urls),
     path('manager/', include('manager.urls'))
     # path('pipelines', pipelines, name='pipelines_page')
 ]

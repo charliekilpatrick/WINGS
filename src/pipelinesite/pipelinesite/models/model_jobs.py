@@ -24,4 +24,4 @@ class Jobs(models.Model):
         db_table = 'jobs'
 
     def __str__(self):
-        return str(id)
+        return f'<Job {self.pk}>'
