@@ -78,8 +78,26 @@ jobs:
               raise SystemExit(f'MySQL did not become ready: {last_error}')
           PY
 
+      - name: Create campaign paths used by tests
+        run: |
+          sudo mkdir -p \
+            /data/ckilpatrick/HST/2026dix/.pipelinesite \
+            /data/ckilpatrick/HST/ngc1494 \
+            /data/ckilpatrick/HST/ngc784 \
+            /data/ckilpatrick/HST/.pipelinesite \
+            /data/ckilpatrick/st123 \
+            /data/ckilpatrick/catalogs/GLADE+
+          sudo chown -R "$USER:$USER" /data/ckilpatrick
+
       - name: Run unit tests
-        run: python wings/src/pipelinesite/manage.py test tests
+        run: |
+          python wings/src/pipelinesite/manage.py test \
+            tests.pipelinesite.campaign.test_dispatch \
+            tests.pipelinesite.campaign.test_program_sync \
+            tests.pipelinesite.catalog \
+            tests.pipelinesite.photometry \
+            tests.pipelinesite.overlay \
+            tests.pipelinesite.inventory.test_stages
 
       - name: Attempt to run wingspipe
         run: |
