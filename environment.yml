@@ -2,18 +2,17 @@ name: roman
 channels:
   - conda-forge
   - defaults
-  - ska
 dependencies:
   - python=3.12
   - pytables
-  #  - sphinx-autoapi
   - numpy
   - pandas
   - tenacity
-  - sqlalchemy
+  - sqlalchemy<2
   - mysql-connector-python
   - mysqlclient
-  - astropy 
+  - astropy
   - jinja2
-  
-  
+  - pip
+  - pip:
+      - pymysql

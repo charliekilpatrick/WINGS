@@ -14,9 +14,10 @@ from .DPOwner import DPOwner
 
 __all__ = ['Configuration']
 
+CLASS_NAME = split_path(__file__)[1]
 KEYID_ATTR = 'config_id'
-UNIQ_ATTRS = ['target_id', 'name']
-CLASS_LOW = split_path(__file__)[1].lower()
+UNIQ_ATTRS = getattr(si, CLASS_NAME).__UNIQ_ATTRS__
+CLASS_LOW = CLASS_NAME.lower()
 
 
 def _in_session(**local_kw):
@@ -177,6 +178,10 @@ class Configuration(DPOwner):
             for _session in cls._check_in_cache(kind='keyid',
                                                 loc=getattr(cls, '_%s' % CLASS_LOW).get_id()):
                 pass
+    
+    @classmethod
+    def _return_cached_instances(cls):
+        return [getattr(obj, '_%s' % CLASS_LOW) for obj in cls.__cache__[CLASS_LOW]]
 
     def __new__(cls, *args, **kwargs):
         if hasattr(cls, '_inst'):
@@ -200,7 +205,21 @@ class Configuration(DPOwner):
                 description = kwargs.get('description', '' if args[1] is None else args[1])
                 # pre-loading dataproducts to avoid extra-querying in the middle
                 confdp = target.input.dataproduct(filename=name + '.conf', group='conf')
-                rawdps = [rawdp for rawdp in target.input.rawdataproducts]
+                rawdps_to_add = kwargs.get('rawdps_to_add', None)
+                if rawdps_to_add is None:
+                    rawdps = [rawdp for rawdp in target.input.rawdataproducts]
+                else:
+                    try:
+                        if isinstance(rawdps_to_add, str):
+                            raise TypeError
+                        else:
+                            iter(rawdps_to_add)
+                    except TypeError:
+                        rawdps_to_add = [rawdps_to_add]
+                    from . import DataProduct
+                    rawdps = [target.input.dataproduct(filename=rawdp, group='raw') if isinstance(rawdp, str) else
+                              rawdp if isinstance(rawdp, DataProduct) else
+                              DataProduct(rawdp) for rawdp in rawdps_to_add]
                 # querying the database for existing row or create
                 for session in cls._check_in_cache(kind='args', loc=(target.target_id, name)):
                     for retry in session.retrying_nested():
@@ -235,6 +254,11 @@ class Configuration(DPOwner):
                                                       dpowner=cls._configuration, group='raw')
                             else:
                                 this_nested.rollback()
+                            if rawdps_to_add is not None:
+                                with si.hold_commit():
+                                    for rawdp in rawdps:
+                                        rawdp.symlink(cls._configuration.rawpath, return_dp=False,
+                                                      dpowner=cls._configuration, group='raw')
                             retry.retry_state.commit()
         else:
             cls._sqlintf_instance_argument()
@@ -244,6 +268,7 @@ class Configuration(DPOwner):
         if cls._to_cache:
             cls._to_cache[CLASS_LOW] = cls._inst
             cls.__cache__.loc[len(cls.__cache__)] = cls._to_cache
+            del cls._to_cache
         new_cls_inst = cls._inst
         delattr(cls, '_inst')
         if old_cls_inst is not None:
@@ -261,6 +286,12 @@ class Configuration(DPOwner):
         if not hasattr(self, '_dpowner'):
             self._dpowner = self._configuration
         super(Configuration, self).__init__()
+
+    @_in_session()
+    def __repr__(self):
+        cls = self.__class__.__name__
+        description = ', '.join([(f"{prop}={getattr(self, prop)}") for prop in [KEYID_ATTR]+UNIQ_ATTRS])
+        return f'{cls}({description})'
 
     @classmethod
     def select(cls, *args, **kwargs):

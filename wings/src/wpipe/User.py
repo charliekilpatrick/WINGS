@@ -14,9 +14,10 @@ from .proxies import ChildrenProxy
 
 __all__ = ['User']
 
+CLASS_NAME = split_path(__file__)[1]
 KEYID_ATTR = 'user_id'
-UNIQ_ATTRS = ['name']
-CLASS_LOW = split_path(__file__)[1].lower()
+UNIQ_ATTRS = getattr(si, CLASS_NAME).__UNIQ_ATTRS__
+CLASS_LOW = CLASS_NAME.lower()
 
 
 def _in_session(**local_kw):
@@ -97,6 +98,10 @@ class User:
             for _session in cls._check_in_cache(kind='keyid',
                                                 loc=getattr(cls, '_%s' % CLASS_LOW).get_id()):
                 pass
+    
+    @classmethod
+    def _return_cached_instances(cls):
+        return [getattr(obj, '_%s' % CLASS_LOW) for obj in cls.__cache__[CLASS_LOW]]
 
     def __new__(cls, *args, **kwargs):
         if hasattr(cls, '_inst'):
@@ -138,6 +143,7 @@ class User:
         if cls._to_cache:
             cls._to_cache[CLASS_LOW] = cls._inst
             cls.__cache__.loc[len(cls.__cache__)] = cls._to_cache
+            del cls._to_cache
         new_cls_inst = cls._inst
         delattr(cls, '_inst')
         if old_cls_inst is not None:
@@ -150,8 +156,11 @@ class User:
             self._pipelines_proxy = ChildrenProxy(self._user, 'pipelines', 'Pipeline', child_attr='pipe_root')
         self.update_timestamp()
 
-    def __repr__(self):  # TODO
-        return super(User, self).__repr__()
+    @_in_session()
+    def __repr__(self):
+        cls = self.__class__.__name__
+        description = ', '.join([(f"{prop}={getattr(self, prop)}") for prop in [KEYID_ATTR]+UNIQ_ATTRS])
+        return f'{cls}({description})'
 
     @classmethod
     def select(cls, *args, **kwargs):

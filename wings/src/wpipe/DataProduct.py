@@ -13,9 +13,10 @@ from .OptOwner import OptOwner
 
 __all__ = ['DataProduct']
 
+CLASS_NAME = split_path(__file__)[1]
 KEYID_ATTR = 'dp_id'
-UNIQ_ATTRS = ['dpowner_id', 'group', 'filename']
-CLASS_LOW = split_path(__file__)[1].lower()
+UNIQ_ATTRS = getattr(si, CLASS_NAME).__UNIQ_ATTRS__
+CLASS_LOW = CLASS_NAME.lower()
 
 
 def _in_session(**local_kw):
@@ -186,6 +187,10 @@ class DataProduct(OptOwner):
             for _session in cls._check_in_cache(kind='keyid',
                                                 loc=getattr(cls, '_%s' % CLASS_LOW).get_id()):
                 pass
+    
+    @classmethod
+    def _return_cached_instances(cls):
+        return [getattr(obj, '_%s' % CLASS_LOW) for obj in cls.__cache__[CLASS_LOW]]
 
     def __new__(cls, *args, **kwargs):
         if hasattr(cls, '_inst'):
@@ -257,6 +262,7 @@ class DataProduct(OptOwner):
         if cls._to_cache:
             cls._to_cache[CLASS_LOW] = cls._inst
             cls.__cache__.loc[len(cls.__cache__)] = cls._to_cache
+            del cls._to_cache
         new_cls_inst = cls._inst
         delattr(cls, '_inst')
         if old_cls_inst is not None:
@@ -268,6 +274,12 @@ class DataProduct(OptOwner):
         if not hasattr(self, '_optowner'):
             self._optowner = self._dataproduct
         super(DataProduct, self).__init__(kwargs.get('options', {}))
+
+    @_in_session()
+    def __repr__(self):
+        cls = self.__class__.__name__
+        description = ', '.join([(f"{prop}={getattr(self, prop)}") for prop in [KEYID_ATTR]+UNIQ_ATTRS])
+        return f'{cls}({description})'
 
     @classmethod
     def select(cls, *args, **kwargs):
@@ -361,7 +373,14 @@ class DataProduct(OptOwner):
         """
         str: Type of the data.
         """
+        self._session.refresh(self._dataproduct)
         return self._dataproduct.data_type
+
+    @data_type.setter
+    @_in_session()
+    def data_type(self, data_type):
+        self._dataproduct.data_type = data_type
+        self.update_timestamp()
 
     @property
     @_in_session()
@@ -369,7 +388,14 @@ class DataProduct(OptOwner):
         """
         str: Subtype of the data.
         """
+        self._session.refresh(self._dataproduct)
         return self._dataproduct.subtype
+
+    @subtype.setter
+    @_in_session()
+    def subtype(self, subtype):
+        self._dataproduct.subtype = subtype
+        self.update_timestamp()
 
     @property
     @_in_session()
@@ -527,7 +553,7 @@ class DataProduct(OptOwner):
         """
         return self.config.target_id
 
-    def _prep_copy_symlink(self, path, kwargs):
+    def _prep_copy_symlink(self, path, kwargs):  # TODO case if path is base+filename and if path is DP
         path = clean_path(path)
         if os.path.exists(path):
             filename = self.filename
@@ -542,7 +568,6 @@ class DataProduct(OptOwner):
         newkwargs['filename'] = filename
         newkwargs['relativepath'] = path
         return newkwargs
-
     def _copy_symlink(self, path, kwargs, func):
         dpowner = kwargs.pop('dpowner', self.dpowner)
         return_dp = kwargs.pop('return_dp', True)
@@ -642,6 +667,9 @@ class DataProduct(OptOwner):
         """
         Delete corresponding row from the database.
         """
-        self.remove_data()
+        try:
+            self.remove_data()
+        except TypeError:
+            pass
         super(DataProduct, self).delete()
         self.__class__.__cache__ = self.__cache__[self.__cache__[CLASS_LOW] != self]

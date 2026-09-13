@@ -14,9 +14,10 @@ from .OptOwner import OptOwner
 
 __all__ = ['Target']
 
+CLASS_NAME = split_path(__file__)[1]
 KEYID_ATTR = 'target_id'
-UNIQ_ATTRS = ['input_id', 'name']
-CLASS_LOW = split_path(__file__)[1].lower()
+UNIQ_ATTRS = getattr(si, CLASS_NAME).__UNIQ_ATTRS__
+CLASS_LOW = CLASS_NAME.lower()
 
 
 def _in_session(**local_kw):
@@ -133,6 +134,10 @@ class Target(OptOwner):
             for _session in cls._check_in_cache(kind='keyid',
                                                 loc=getattr(cls, '_%s' % CLASS_LOW).get_id()):
                 pass
+    
+    @classmethod
+    def _return_cached_instances(cls):
+        return [getattr(obj, '_%s' % CLASS_LOW) for obj in cls.__cache__[CLASS_LOW]]
 
     def __new__(cls, *args, **kwargs):
         if hasattr(cls, '_inst'):
@@ -184,6 +189,7 @@ class Target(OptOwner):
         if cls._to_cache:
             cls._to_cache[CLASS_LOW] = cls._inst
             cls.__cache__.loc[len(cls.__cache__)] = cls._to_cache
+            del cls._to_cache
         new_cls_inst = cls._inst
         delattr(cls, '_inst')
         if old_cls_inst is not None:
@@ -196,8 +202,14 @@ class Target(OptOwner):
             self._configurations_proxy = ChildrenProxy(self._target, 'configurations', 'Configuration')
         if not hasattr(self, '_optowner'):
             self._optowner = self._target
-        self.configure_target()
+        self.configure_target(rawdps_to_add=kwargs.get('rawdps_to_add', None))
         super(Target, self).__init__(kwargs.get('options', {}))
+
+    @_in_session()
+    def __repr__(self):
+        cls = self.__class__.__name__
+        description = ', '.join([(f"{prop}={getattr(self, prop)}") for prop in [KEYID_ATTR]+UNIQ_ATTRS])
+        return f'{cls}({description})'
 
     @classmethod
     def select(cls, *args, **kwargs):
@@ -338,14 +350,14 @@ class Target(OptOwner):
         from .Configuration import Configuration
         return Configuration(self, *args, **kwargs)
 
-    def configure_target(self):
+    def configure_target(self, **kwargs):
         """
         Generate configurations for each conf dataproduct owned by parent
         input.
         """
         for confdp in self.input.confdataproducts:
             self.configuration(os.path.splitext(confdp.filename)[0],
-                               parameters=json.load(open(confdp.relativepath+'/'+confdp.filename))[0])
+                               parameters=json.load(open(confdp.relativepath+'/'+confdp.filename))[0], **kwargs)
 
     def remove_data(self):
         """
