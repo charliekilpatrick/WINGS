@@ -1,0 +1,96 @@
+# Build Sphinx HTML and publish it to the gh-pages branch.
+name: Docs
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: docs-gh-pages
+  cancel-in-progress: true
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    env:
+      WPIPE_ENGINEURL: mysql+pymysql://root:password@127.0.0.1:8000/server
+      PYTHONPATH: ${{ github.workspace }}:${{ github.workspace }}/wings/src
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: server
+        ports:
+          - 8000:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -ppassword"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=12
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install system libraries
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            build-essential \
+            pkg-config \
+            default-libmysqlclient-dev
+
+      - name: Install package
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[docs]" 'sqlalchemy>=1.4,<2' 'pandas>=2.0,<2.2' pymysql
+
+      - name: Wait for MySQL
+        run: |
+          python - <<'PY'
+          import time
+          import pymysql
+          last_error = None
+          for _ in range(30):
+              try:
+                  pymysql.connect(
+                      host='127.0.0.1',
+                      port=8000,
+                      user='root',
+                      password='password',
+                      database='server',
+                  ).close()
+                  print('MySQL is ready')
+                  break
+              except Exception as exc:
+                  last_error = exc
+                  time.sleep(2)
+          else:
+              raise SystemExit(f'MySQL did not become ready: {last_error}')
+          PY
+
+      - name: Build documentation
+        run: make html
+        working-directory: docs
+
+      - name: Publish to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/build/html
+          publish_branch: gh-pages
+          force_orphan: true
+          enable_jekyll: false
+          user_name: github-actions[bot]
+          user_email: github-actions[bot]@users.noreply.github.com
