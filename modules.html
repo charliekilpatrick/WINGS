@@ -1,0 +1,1275 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WINGS API &mdash; WINGS 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=f2a433a1"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Module contents" href="wpipe.html" />
+    <link rel="prev" title="WINGS Pipeline Documentation and Cook Book" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            WINGS
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">WINGS API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#wpipe-package"><code class="docutils literal notranslate"><span class="pre">wpipe.*</span></code> Package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html">Module contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#module-wpipe.Configuration">wpipe.Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#module-wpipe.DPOwner">wpipe.DPOwner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#module-wpipe.DataProduct">wpipe.DataProduct</a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#module-wpipe.Event">wpipe.Event</a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#module-wpipe.Input">wpipe.Input</a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#module-wpipe.Job">wpipe.Job</a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#module-wpipe.Mask">wpipe.Mask</a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#module-wpipe.Node">wpipe.Node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#module-wpipe.OptOwner">wpipe.OptOwner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#module-wpipe.Option">wpipe.Option</a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#module-wpipe.Parameter">wpipe.Parameter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#module-wpipe.Pipeline">wpipe.Pipeline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe-simple">wpipe.Simple</a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#module-wpipe.Target">wpipe.Target</a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#module-wpipe.Task">wpipe.Task</a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#module-wpipe.User">wpipe.User</a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#module-wpipe.core">wpipe.core</a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#module-wpipe.wingtips">wpipe.wingtips</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#wpipe-sqlintf-subpackage"><code class="docutils literal notranslate"><span class="pre">wpipe.sqlintf.*</span></code> Subpackage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html">Module contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#module-wpipe.sqlintf.Configuration">wpipe.sqlintf.Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#module-wpipe.sqlintf.DPOwner">wpipe.sqlintf.DPOwner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#module-wpipe.sqlintf.DataProduct">wpipe.sqlintf.DataProduct</a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#module-wpipe.sqlintf.Event">wpipe.sqlintf.Event</a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#module-wpipe.sqlintf.Input">wpipe.sqlintf.Input</a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#module-wpipe.sqlintf.Job">wpipe.sqlintf.Job</a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#module-wpipe.sqlintf.Mask">wpipe.sqlintf.Mask</a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#module-wpipe.sqlintf.Node">wpipe.sqlintf.Node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#module-wpipe.sqlintf.OptOwner">wpipe.sqlintf.OptOwner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#module-wpipe.sqlintf.Option">wpipe.sqlintf.Option</a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#module-wpipe.sqlintf.Parameter">wpipe.sqlintf.Parameter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#module-wpipe.sqlintf.Pipeline">wpipe.sqlintf.Pipeline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#module-wpipe.sqlintf.Target">wpipe.sqlintf.Target</a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#module-wpipe.sqlintf.Task">wpipe.sqlintf.Task</a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#module-wpipe.sqlintf.User">wpipe.sqlintf.User</a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#module-wpipe.sqlintf.core">wpipe.sqlintf.core</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cookbook.html">WINGS Cook Book</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">WINGS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">WINGS API</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/modules.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="wings-api">
+<h1>WINGS API<a class="headerlink" href="#wings-api" title="Link to this heading"></a></h1>
+<section id="wpipe-package">
+<h2><code class="docutils literal notranslate"><span class="pre">wpipe.*</span></code> Package<a class="headerlink" href="#wpipe-package" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="wpipe.html">Module contents</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.html#how-to-use">How to use</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.html#available-subpackages">Available subpackages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.html#utilities">Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.html#wpipe.Configuration"><code class="docutils literal notranslate"><span class="pre">Configuration</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Configuration.config_id"><code class="docutils literal notranslate"><span class="pre">Configuration.config_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Configuration.confpath"><code class="docutils literal notranslate"><span class="pre">Configuration.confpath</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Configuration.datapath"><code class="docutils literal notranslate"><span class="pre">Configuration.datapath</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Configuration.delete"><code class="docutils literal notranslate"><span class="pre">Configuration.delete()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Configuration.description"><code class="docutils literal notranslate"><span class="pre">Configuration.description</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Configuration.dummy_task"><code class="docutils literal notranslate"><span class="pre">Configuration.dummy_task</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Configuration.input"><code class="docutils literal notranslate"><span class="pre">Configuration.input</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Configuration.input_id"><code class="docutils literal notranslate"><span class="pre">Configuration.input_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Configuration.job"><code class="docutils literal notranslate"><span class="pre">Configuration.job()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Configuration.jobs"><code class="docutils literal notranslate"><span class="pre">Configuration.jobs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Configuration.logpath"><code class="docutils literal notranslate"><span class="pre">Configuration.logpath</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Configuration.name"><code class="docutils literal notranslate"><span class="pre">Configuration.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Configuration.parameter"><code class="docutils literal notranslate"><span class="pre">Configuration.parameter()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Configuration.parameters"><code class="docutils literal notranslate"><span class="pre">Configuration.parameters</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Configuration.parents"><code class="docutils literal notranslate"><span class="pre">Configuration.parents</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Configuration.pipeline"><code class="docutils literal notranslate"><span class="pre">Configuration.pipeline</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Configuration.pipeline_id"><code class="docutils literal notranslate"><span class="pre">Configuration.pipeline_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Configuration.procpath"><code class="docutils literal notranslate"><span class="pre">Configuration.procpath</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Configuration.rawpath"><code class="docutils literal notranslate"><span class="pre">Configuration.rawpath</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Configuration.remove_data"><code class="docutils literal notranslate"><span class="pre">Configuration.remove_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Configuration.select"><code class="docutils literal notranslate"><span class="pre">Configuration.select()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Configuration.target"><code class="docutils literal notranslate"><span class="pre">Configuration.target</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Configuration.target_id"><code class="docutils literal notranslate"><span class="pre">Configuration.target_id</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.html#wpipe.DataProduct"><code class="docutils literal notranslate"><span class="pre">DataProduct</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.config"><code class="docutils literal notranslate"><span class="pre">DataProduct.config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.config_id"><code class="docutils literal notranslate"><span class="pre">DataProduct.config_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.data_type"><code class="docutils literal notranslate"><span class="pre">DataProduct.data_type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.dec"><code class="docutils literal notranslate"><span class="pre">DataProduct.dec</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.delete"><code class="docutils literal notranslate"><span class="pre">DataProduct.delete()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.dp_id"><code class="docutils literal notranslate"><span class="pre">DataProduct.dp_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.dpowner"><code class="docutils literal notranslate"><span class="pre">DataProduct.dpowner</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.dpowner_id"><code class="docutils literal notranslate"><span class="pre">DataProduct.dpowner_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.filename"><code class="docutils literal notranslate"><span class="pre">DataProduct.filename</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.filesplitext"><code class="docutils literal notranslate"><span class="pre">DataProduct.filesplitext</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.filtername"><code class="docutils literal notranslate"><span class="pre">DataProduct.filtername</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.group"><code class="docutils literal notranslate"><span class="pre">DataProduct.group</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.input"><code class="docutils literal notranslate"><span class="pre">DataProduct.input</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.input_id"><code class="docutils literal notranslate"><span class="pre">DataProduct.input_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.make_copy"><code class="docutils literal notranslate"><span class="pre">DataProduct.make_copy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.open"><code class="docutils literal notranslate"><span class="pre">DataProduct.open()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.parents"><code class="docutils literal notranslate"><span class="pre">DataProduct.parents</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.path"><code class="docutils literal notranslate"><span class="pre">DataProduct.path</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.pipeline"><code class="docutils literal notranslate"><span class="pre">DataProduct.pipeline</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.pipeline_id"><code class="docutils literal notranslate"><span class="pre">DataProduct.pipeline_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.pointing_angle"><code class="docutils literal notranslate"><span class="pre">DataProduct.pointing_angle</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.ra"><code class="docutils literal notranslate"><span class="pre">DataProduct.ra</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.relativepath"><code class="docutils literal notranslate"><span class="pre">DataProduct.relativepath</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.remove_data"><code class="docutils literal notranslate"><span class="pre">DataProduct.remove_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.select"><code class="docutils literal notranslate"><span class="pre">DataProduct.select()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.subtype"><code class="docutils literal notranslate"><span class="pre">DataProduct.subtype</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.suffix"><code class="docutils literal notranslate"><span class="pre">DataProduct.suffix</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.symlink"><code class="docutils literal notranslate"><span class="pre">DataProduct.symlink()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.target"><code class="docutils literal notranslate"><span class="pre">DataProduct.target</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.target_id"><code class="docutils literal notranslate"><span class="pre">DataProduct.target_id</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.html#wpipe.DefaultNode"><code class="docutils literal notranslate"><span class="pre">DefaultNode</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.html#wpipe.DefaultUser"><code class="docutils literal notranslate"><span class="pre">DefaultUser</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.html#wpipe.Event"><code class="docutils literal notranslate"><span class="pre">Event</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Event.config"><code class="docutils literal notranslate"><span class="pre">Event.config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Event.delete"><code class="docutils literal notranslate"><span class="pre">Event.delete()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Event.event_id"><code class="docutils literal notranslate"><span class="pre">Event.event_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Event.fire"><code class="docutils literal notranslate"><span class="pre">Event.fire()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Event.fired_job"><code class="docutils literal notranslate"><span class="pre">Event.fired_job()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Event.fired_jobs"><code class="docutils literal notranslate"><span class="pre">Event.fired_jobs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Event.jargs"><code class="docutils literal notranslate"><span class="pre">Event.jargs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Event.name"><code class="docutils literal notranslate"><span class="pre">Event.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Event.parent_job"><code class="docutils literal notranslate"><span class="pre">Event.parent_job</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Event.parent_job_id"><code class="docutils literal notranslate"><span class="pre">Event.parent_job_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Event.parents"><code class="docutils literal notranslate"><span class="pre">Event.parents</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Event.pipeline"><code class="docutils literal notranslate"><span class="pre">Event.pipeline</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Event.select"><code class="docutils literal notranslate"><span class="pre">Event.select()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Event.tag"><code class="docutils literal notranslate"><span class="pre">Event.tag</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Event.value"><code class="docutils literal notranslate"><span class="pre">Event.value</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.html#wpipe.Input"><code class="docutils literal notranslate"><span class="pre">Input</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Input.confpath"><code class="docutils literal notranslate"><span class="pre">Input.confpath</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Input.delete"><code class="docutils literal notranslate"><span class="pre">Input.delete()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Input.input_id"><code class="docutils literal notranslate"><span class="pre">Input.input_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Input.make_config"><code class="docutils literal notranslate"><span class="pre">Input.make_config()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Input.name"><code class="docutils literal notranslate"><span class="pre">Input.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Input.parents"><code class="docutils literal notranslate"><span class="pre">Input.parents</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Input.pipeline"><code class="docutils literal notranslate"><span class="pre">Input.pipeline</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Input.pipeline_id"><code class="docutils literal notranslate"><span class="pre">Input.pipeline_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Input.rawspath"><code class="docutils literal notranslate"><span class="pre">Input.rawspath</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Input.remove_data"><code class="docutils literal notranslate"><span class="pre">Input.remove_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Input.reset"><code class="docutils literal notranslate"><span class="pre">Input.reset()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Input.select"><code class="docutils literal notranslate"><span class="pre">Input.select()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Input.target"><code class="docutils literal notranslate"><span class="pre">Input.target()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Input.targets"><code class="docutils literal notranslate"><span class="pre">Input.targets</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.html#wpipe.Job"><code class="docutils literal notranslate"><span class="pre">Job</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.attempt"><code class="docutils literal notranslate"><span class="pre">Job.attempt</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.child_event"><code class="docutils literal notranslate"><span class="pre">Job.child_event()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.child_events"><code class="docutils literal notranslate"><span class="pre">Job.child_events</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.config"><code class="docutils literal notranslate"><span class="pre">Job.config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.config_id"><code class="docutils literal notranslate"><span class="pre">Job.config_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.config_is_none"><code class="docutils literal notranslate"><span class="pre">Job.config_is_none</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.delete"><code class="docutils literal notranslate"><span class="pre">Job.delete()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.endtime"><code class="docutils literal notranslate"><span class="pre">Job.endtime</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.expire"><code class="docutils literal notranslate"><span class="pre">Job.expire()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.firing_event"><code class="docutils literal notranslate"><span class="pre">Job.firing_event</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.firing_event_id"><code class="docutils literal notranslate"><span class="pre">Job.firing_event_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.has_a_node"><code class="docutils literal notranslate"><span class="pre">Job.has_a_node</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.has_completed"><code class="docutils literal notranslate"><span class="pre">Job.has_completed</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.has_expired"><code class="docutils literal notranslate"><span class="pre">Job.has_expired</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.is_active"><code class="docutils literal notranslate"><span class="pre">Job.is_active</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.job_id"><code class="docutils literal notranslate"><span class="pre">Job.job_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.logprint"><code class="docutils literal notranslate"><span class="pre">Job.logprint()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.node"><code class="docutils literal notranslate"><span class="pre">Job.node</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.node_id"><code class="docutils literal notranslate"><span class="pre">Job.node_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.not_submitted"><code class="docutils literal notranslate"><span class="pre">Job.not_submitted</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.parent_job"><code class="docutils literal notranslate"><span class="pre">Job.parent_job</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.parent_job_id"><code class="docutils literal notranslate"><span class="pre">Job.parent_job_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.parents"><code class="docutils literal notranslate"><span class="pre">Job.parents</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.pipeline"><code class="docutils literal notranslate"><span class="pre">Job.pipeline</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.pipeline_id"><code class="docutils literal notranslate"><span class="pre">Job.pipeline_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.reset"><code class="docutils literal notranslate"><span class="pre">Job.reset()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.select"><code class="docutils literal notranslate"><span class="pre">Job.select()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.starttime"><code class="docutils literal notranslate"><span class="pre">Job.starttime</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.state"><code class="docutils literal notranslate"><span class="pre">Job.state</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.target"><code class="docutils literal notranslate"><span class="pre">Job.target</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.target_id"><code class="docutils literal notranslate"><span class="pre">Job.target_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.task"><code class="docutils literal notranslate"><span class="pre">Job.task</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.task_changed"><code class="docutils literal notranslate"><span class="pre">Job.task_changed</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.task_id"><code class="docutils literal notranslate"><span class="pre">Job.task_id</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.html#wpipe.Mask"><code class="docutils literal notranslate"><span class="pre">Mask</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Mask.delete"><code class="docutils literal notranslate"><span class="pre">Mask.delete()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Mask.mask_id"><code class="docutils literal notranslate"><span class="pre">Mask.mask_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Mask.name"><code class="docutils literal notranslate"><span class="pre">Mask.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Mask.parents"><code class="docutils literal notranslate"><span class="pre">Mask.parents</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Mask.select"><code class="docutils literal notranslate"><span class="pre">Mask.select()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Mask.source"><code class="docutils literal notranslate"><span class="pre">Mask.source</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Mask.task"><code class="docutils literal notranslate"><span class="pre">Mask.task</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Mask.task_id"><code class="docutils literal notranslate"><span class="pre">Mask.task_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Mask.timestamp"><code class="docutils literal notranslate"><span class="pre">Mask.timestamp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Mask.update_timestamp"><code class="docutils literal notranslate"><span class="pre">Mask.update_timestamp()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Mask.value"><code class="docutils literal notranslate"><span class="pre">Mask.value</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.html#wpipe.Node"><code class="docutils literal notranslate"><span class="pre">Node</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Node.delete"><code class="docutils literal notranslate"><span class="pre">Node.delete()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Node.ext_ip"><code class="docutils literal notranslate"><span class="pre">Node.ext_ip</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Node.int_ip"><code class="docutils literal notranslate"><span class="pre">Node.int_ip</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Node.job"><code class="docutils literal notranslate"><span class="pre">Node.job()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Node.jobs"><code class="docutils literal notranslate"><span class="pre">Node.jobs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Node.name"><code class="docutils literal notranslate"><span class="pre">Node.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Node.node_id"><code class="docutils literal notranslate"><span class="pre">Node.node_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Node.parents"><code class="docutils literal notranslate"><span class="pre">Node.parents</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Node.select"><code class="docutils literal notranslate"><span class="pre">Node.select()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Node.timestamp"><code class="docutils literal notranslate"><span class="pre">Node.timestamp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Node.update_timestamp"><code class="docutils literal notranslate"><span class="pre">Node.update_timestamp()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.html#wpipe.Option"><code class="docutils literal notranslate"><span class="pre">Option</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Option.delete"><code class="docutils literal notranslate"><span class="pre">Option.delete()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Option.name"><code class="docutils literal notranslate"><span class="pre">Option.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Option.option_id"><code class="docutils literal notranslate"><span class="pre">Option.option_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Option.optowner"><code class="docutils literal notranslate"><span class="pre">Option.optowner</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Option.optowner_id"><code class="docutils literal notranslate"><span class="pre">Option.optowner_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Option.parents"><code class="docutils literal notranslate"><span class="pre">Option.parents</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Option.select"><code class="docutils literal notranslate"><span class="pre">Option.select()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Option.timestamp"><code class="docutils literal notranslate"><span class="pre">Option.timestamp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Option.update_timestamp"><code class="docutils literal notranslate"><span class="pre">Option.update_timestamp()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Option.value"><code class="docutils literal notranslate"><span class="pre">Option.value</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.html#wpipe.Parameter"><code class="docutils literal notranslate"><span class="pre">Parameter</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Parameter.config"><code class="docutils literal notranslate"><span class="pre">Parameter.config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Parameter.config_id"><code class="docutils literal notranslate"><span class="pre">Parameter.config_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Parameter.delete"><code class="docutils literal notranslate"><span class="pre">Parameter.delete()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Parameter.name"><code class="docutils literal notranslate"><span class="pre">Parameter.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Parameter.parameter_id"><code class="docutils literal notranslate"><span class="pre">Parameter.parameter_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Parameter.parents"><code class="docutils literal notranslate"><span class="pre">Parameter.parents</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Parameter.select"><code class="docutils literal notranslate"><span class="pre">Parameter.select()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Parameter.timestamp"><code class="docutils literal notranslate"><span class="pre">Parameter.timestamp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Parameter.update_timestamp"><code class="docutils literal notranslate"><span class="pre">Parameter.update_timestamp()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Parameter.value"><code class="docutils literal notranslate"><span class="pre">Parameter.value</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.html#wpipe.Pipeline"><code class="docutils literal notranslate"><span class="pre">Pipeline</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.attach_inputs"><code class="docutils literal notranslate"><span class="pre">Pipeline.attach_inputs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.attach_tasks"><code class="docutils literal notranslate"><span class="pre">Pipeline.attach_tasks()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.clean"><code class="docutils literal notranslate"><span class="pre">Pipeline.clean()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.config_root"><code class="docutils literal notranslate"><span class="pre">Pipeline.config_root</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.data_root"><code class="docutils literal notranslate"><span class="pre">Pipeline.data_root</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.delete"><code class="docutils literal notranslate"><span class="pre">Pipeline.delete()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.description"><code class="docutils literal notranslate"><span class="pre">Pipeline.description</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.diagnose"><code class="docutils literal notranslate"><span class="pre">Pipeline.diagnose()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.dummy_job"><code class="docutils literal notranslate"><span class="pre">Pipeline.dummy_job</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.dummy_task"><code class="docutils literal notranslate"><span class="pre">Pipeline.dummy_task</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.input"><code class="docutils literal notranslate"><span class="pre">Pipeline.input()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.input_root"><code class="docutils literal notranslate"><span class="pre">Pipeline.input_root</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.inputs"><code class="docutils literal notranslate"><span class="pre">Pipeline.inputs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.name"><code class="docutils literal notranslate"><span class="pre">Pipeline.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.nondummy_tasks"><code class="docutils literal notranslate"><span class="pre">Pipeline.nondummy_tasks</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.parents"><code class="docutils literal notranslate"><span class="pre">Pipeline.parents</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.pipe_root"><code class="docutils literal notranslate"><span class="pre">Pipeline.pipe_root</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.pipeline_id"><code class="docutils literal notranslate"><span class="pre">Pipeline.pipeline_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.remove_data"><code class="docutils literal notranslate"><span class="pre">Pipeline.remove_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.reset"><code class="docutils literal notranslate"><span class="pre">Pipeline.reset()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.run"><code class="docutils literal notranslate"><span class="pre">Pipeline.run()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.select"><code class="docutils literal notranslate"><span class="pre">Pipeline.select()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.software_root"><code class="docutils literal notranslate"><span class="pre">Pipeline.software_root</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.task"><code class="docutils literal notranslate"><span class="pre">Pipeline.task()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.tasks"><code class="docutils literal notranslate"><span class="pre">Pipeline.tasks</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.user"><code class="docutils literal notranslate"><span class="pre">Pipeline.user</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.user_id"><code class="docutils literal notranslate"><span class="pre">Pipeline.user_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.user_name"><code class="docutils literal notranslate"><span class="pre">Pipeline.user_name</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.html#wpipe.Target"><code class="docutils literal notranslate"><span class="pre">Target</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Target.configuration"><code class="docutils literal notranslate"><span class="pre">Target.configuration()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Target.configurations"><code class="docutils literal notranslate"><span class="pre">Target.configurations</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Target.configure_target"><code class="docutils literal notranslate"><span class="pre">Target.configure_target()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Target.datapath"><code class="docutils literal notranslate"><span class="pre">Target.datapath</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Target.dataraws"><code class="docutils literal notranslate"><span class="pre">Target.dataraws</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Target.default_conf"><code class="docutils literal notranslate"><span class="pre">Target.default_conf</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Target.delete"><code class="docutils literal notranslate"><span class="pre">Target.delete()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Target.input"><code class="docutils literal notranslate"><span class="pre">Target.input</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Target.input_id"><code class="docutils literal notranslate"><span class="pre">Target.input_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Target.name"><code class="docutils literal notranslate"><span class="pre">Target.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Target.parents"><code class="docutils literal notranslate"><span class="pre">Target.parents</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Target.pipeline"><code class="docutils literal notranslate"><span class="pre">Target.pipeline</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Target.pipeline_id"><code class="docutils literal notranslate"><span class="pre">Target.pipeline_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Target.remove_data"><code class="docutils literal notranslate"><span class="pre">Target.remove_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Target.select"><code class="docutils literal notranslate"><span class="pre">Target.select()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Target.target_id"><code class="docutils literal notranslate"><span class="pre">Target.target_id</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.html#wpipe.Task"><code class="docutils literal notranslate"><span class="pre">Task</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Task.delete"><code class="docutils literal notranslate"><span class="pre">Task.delete()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Task.executable"><code class="docutils literal notranslate"><span class="pre">Task.executable</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Task.is_exclusive"><code class="docutils literal notranslate"><span class="pre">Task.is_exclusive</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Task.job"><code class="docutils literal notranslate"><span class="pre">Task.job()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Task.jobs"><code class="docutils literal notranslate"><span class="pre">Task.jobs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Task.last_modification_timestamp"><code class="docutils literal notranslate"><span class="pre">Task.last_modification_timestamp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Task.mask"><code class="docutils literal notranslate"><span class="pre">Task.mask()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Task.masks"><code class="docutils literal notranslate"><span class="pre">Task.masks</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Task.name"><code class="docutils literal notranslate"><span class="pre">Task.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Task.nruns"><code class="docutils literal notranslate"><span class="pre">Task.nruns</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Task.parents"><code class="docutils literal notranslate"><span class="pre">Task.parents</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Task.pipeline"><code class="docutils literal notranslate"><span class="pre">Task.pipeline</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Task.pipeline_id"><code class="docutils literal notranslate"><span class="pre">Task.pipeline_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Task.register"><code class="docutils literal notranslate"><span class="pre">Task.register()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Task.remove_data"><code class="docutils literal notranslate"><span class="pre">Task.remove_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Task.run_time"><code class="docutils literal notranslate"><span class="pre">Task.run_time</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Task.select"><code class="docutils literal notranslate"><span class="pre">Task.select()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Task.task_id"><code class="docutils literal notranslate"><span class="pre">Task.task_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Task.timestamp"><code class="docutils literal notranslate"><span class="pre">Task.timestamp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Task.update_timestamp"><code class="docutils literal notranslate"><span class="pre">Task.update_timestamp()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.html#wpipe.User"><code class="docutils literal notranslate"><span class="pre">User</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.User.delete"><code class="docutils literal notranslate"><span class="pre">User.delete()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.User.name"><code class="docutils literal notranslate"><span class="pre">User.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.User.parents"><code class="docutils literal notranslate"><span class="pre">User.parents</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.User.pipeline"><code class="docutils literal notranslate"><span class="pre">User.pipeline()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.User.pipelines"><code class="docutils literal notranslate"><span class="pre">User.pipelines</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.User.select"><code class="docutils literal notranslate"><span class="pre">User.select()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.User.timestamp"><code class="docutils literal notranslate"><span class="pre">User.timestamp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.User.update_timestamp"><code class="docutils literal notranslate"><span class="pre">User.update_timestamp()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.User.user_id"><code class="docutils literal notranslate"><span class="pre">User.user_id</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.html#wpipe.wingspipe"><code class="docutils literal notranslate"><span class="pre">wingspipe()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="wpipe.html#module-wpipe.Configuration">wpipe.Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.html#wpipe.Configuration.Configuration"><code class="docutils literal notranslate"><span class="pre">Configuration</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Configuration.Configuration.config_id"><code class="docutils literal notranslate"><span class="pre">Configuration.config_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Configuration.Configuration.confpath"><code class="docutils literal notranslate"><span class="pre">Configuration.confpath</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Configuration.Configuration.datapath"><code class="docutils literal notranslate"><span class="pre">Configuration.datapath</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Configuration.Configuration.delete"><code class="docutils literal notranslate"><span class="pre">Configuration.delete()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Configuration.Configuration.description"><code class="docutils literal notranslate"><span class="pre">Configuration.description</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Configuration.Configuration.dummy_task"><code class="docutils literal notranslate"><span class="pre">Configuration.dummy_task</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Configuration.Configuration.input"><code class="docutils literal notranslate"><span class="pre">Configuration.input</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Configuration.Configuration.input_id"><code class="docutils literal notranslate"><span class="pre">Configuration.input_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Configuration.Configuration.job"><code class="docutils literal notranslate"><span class="pre">Configuration.job()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Configuration.Configuration.jobs"><code class="docutils literal notranslate"><span class="pre">Configuration.jobs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Configuration.Configuration.logpath"><code class="docutils literal notranslate"><span class="pre">Configuration.logpath</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Configuration.Configuration.name"><code class="docutils literal notranslate"><span class="pre">Configuration.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Configuration.Configuration.parameter"><code class="docutils literal notranslate"><span class="pre">Configuration.parameter()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Configuration.Configuration.parameters"><code class="docutils literal notranslate"><span class="pre">Configuration.parameters</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Configuration.Configuration.parents"><code class="docutils literal notranslate"><span class="pre">Configuration.parents</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Configuration.Configuration.pipeline"><code class="docutils literal notranslate"><span class="pre">Configuration.pipeline</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Configuration.Configuration.pipeline_id"><code class="docutils literal notranslate"><span class="pre">Configuration.pipeline_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Configuration.Configuration.procpath"><code class="docutils literal notranslate"><span class="pre">Configuration.procpath</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Configuration.Configuration.rawpath"><code class="docutils literal notranslate"><span class="pre">Configuration.rawpath</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Configuration.Configuration.remove_data"><code class="docutils literal notranslate"><span class="pre">Configuration.remove_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Configuration.Configuration.select"><code class="docutils literal notranslate"><span class="pre">Configuration.select()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Configuration.Configuration.target"><code class="docutils literal notranslate"><span class="pre">Configuration.target</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Configuration.Configuration.target_id"><code class="docutils literal notranslate"><span class="pre">Configuration.target_id</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="wpipe.html#module-wpipe.DPOwner">wpipe.DPOwner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.html#wpipe.DPOwner.DPOwner"><code class="docutils literal notranslate"><span class="pre">DPOwner</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DPOwner.DPOwner.confdataproducts"><code class="docutils literal notranslate"><span class="pre">DPOwner.confdataproducts</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DPOwner.DPOwner.dataproduct"><code class="docutils literal notranslate"><span class="pre">DPOwner.dataproduct()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DPOwner.DPOwner.dataproducts"><code class="docutils literal notranslate"><span class="pre">DPOwner.dataproducts</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DPOwner.DPOwner.dataproducts_of_group"><code class="docutils literal notranslate"><span class="pre">DPOwner.dataproducts_of_group()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DPOwner.DPOwner.delete"><code class="docutils literal notranslate"><span class="pre">DPOwner.delete()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DPOwner.DPOwner.dpowner_id"><code class="docutils literal notranslate"><span class="pre">DPOwner.dpowner_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DPOwner.DPOwner.logdataproducts"><code class="docutils literal notranslate"><span class="pre">DPOwner.logdataproducts</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DPOwner.DPOwner.procdataproducts"><code class="docutils literal notranslate"><span class="pre">DPOwner.procdataproducts</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DPOwner.DPOwner.rawdataproducts"><code class="docutils literal notranslate"><span class="pre">DPOwner.rawdataproducts</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DPOwner.DPOwner.timestamp"><code class="docutils literal notranslate"><span class="pre">DPOwner.timestamp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DPOwner.DPOwner.update_timestamp"><code class="docutils literal notranslate"><span class="pre">DPOwner.update_timestamp()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="wpipe.html#module-wpipe.DataProduct">wpipe.DataProduct</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.DataProduct"><code class="docutils literal notranslate"><span class="pre">DataProduct</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.DataProduct.config"><code class="docutils literal notranslate"><span class="pre">DataProduct.config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.DataProduct.config_id"><code class="docutils literal notranslate"><span class="pre">DataProduct.config_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.DataProduct.data_type"><code class="docutils literal notranslate"><span class="pre">DataProduct.data_type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.DataProduct.dec"><code class="docutils literal notranslate"><span class="pre">DataProduct.dec</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.DataProduct.delete"><code class="docutils literal notranslate"><span class="pre">DataProduct.delete()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.DataProduct.dp_id"><code class="docutils literal notranslate"><span class="pre">DataProduct.dp_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.DataProduct.dpowner"><code class="docutils literal notranslate"><span class="pre">DataProduct.dpowner</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.DataProduct.dpowner_id"><code class="docutils literal notranslate"><span class="pre">DataProduct.dpowner_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.DataProduct.filename"><code class="docutils literal notranslate"><span class="pre">DataProduct.filename</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.DataProduct.filesplitext"><code class="docutils literal notranslate"><span class="pre">DataProduct.filesplitext</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.DataProduct.filtername"><code class="docutils literal notranslate"><span class="pre">DataProduct.filtername</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.DataProduct.group"><code class="docutils literal notranslate"><span class="pre">DataProduct.group</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.DataProduct.input"><code class="docutils literal notranslate"><span class="pre">DataProduct.input</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.DataProduct.input_id"><code class="docutils literal notranslate"><span class="pre">DataProduct.input_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.DataProduct.make_copy"><code class="docutils literal notranslate"><span class="pre">DataProduct.make_copy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.DataProduct.open"><code class="docutils literal notranslate"><span class="pre">DataProduct.open()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.DataProduct.parents"><code class="docutils literal notranslate"><span class="pre">DataProduct.parents</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.DataProduct.path"><code class="docutils literal notranslate"><span class="pre">DataProduct.path</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.DataProduct.pipeline"><code class="docutils literal notranslate"><span class="pre">DataProduct.pipeline</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.DataProduct.pipeline_id"><code class="docutils literal notranslate"><span class="pre">DataProduct.pipeline_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.DataProduct.pointing_angle"><code class="docutils literal notranslate"><span class="pre">DataProduct.pointing_angle</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.DataProduct.ra"><code class="docutils literal notranslate"><span class="pre">DataProduct.ra</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.DataProduct.relativepath"><code class="docutils literal notranslate"><span class="pre">DataProduct.relativepath</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.DataProduct.remove_data"><code class="docutils literal notranslate"><span class="pre">DataProduct.remove_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.DataProduct.select"><code class="docutils literal notranslate"><span class="pre">DataProduct.select()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.DataProduct.subtype"><code class="docutils literal notranslate"><span class="pre">DataProduct.subtype</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.DataProduct.suffix"><code class="docutils literal notranslate"><span class="pre">DataProduct.suffix</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.DataProduct.symlink"><code class="docutils literal notranslate"><span class="pre">DataProduct.symlink()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.DataProduct.target"><code class="docutils literal notranslate"><span class="pre">DataProduct.target</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.DataProduct.DataProduct.target_id"><code class="docutils literal notranslate"><span class="pre">DataProduct.target_id</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="wpipe.html#module-wpipe.Event">wpipe.Event</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.html#wpipe.Event.Event"><code class="docutils literal notranslate"><span class="pre">Event</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Event.Event.config"><code class="docutils literal notranslate"><span class="pre">Event.config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Event.Event.delete"><code class="docutils literal notranslate"><span class="pre">Event.delete()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Event.Event.event_id"><code class="docutils literal notranslate"><span class="pre">Event.event_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Event.Event.fire"><code class="docutils literal notranslate"><span class="pre">Event.fire()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Event.Event.fired_job"><code class="docutils literal notranslate"><span class="pre">Event.fired_job()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Event.Event.fired_jobs"><code class="docutils literal notranslate"><span class="pre">Event.fired_jobs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Event.Event.jargs"><code class="docutils literal notranslate"><span class="pre">Event.jargs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Event.Event.name"><code class="docutils literal notranslate"><span class="pre">Event.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Event.Event.parent_job"><code class="docutils literal notranslate"><span class="pre">Event.parent_job</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Event.Event.parent_job_id"><code class="docutils literal notranslate"><span class="pre">Event.parent_job_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Event.Event.parents"><code class="docutils literal notranslate"><span class="pre">Event.parents</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Event.Event.pipeline"><code class="docutils literal notranslate"><span class="pre">Event.pipeline</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Event.Event.select"><code class="docutils literal notranslate"><span class="pre">Event.select()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Event.Event.tag"><code class="docutils literal notranslate"><span class="pre">Event.tag</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Event.Event.value"><code class="docutils literal notranslate"><span class="pre">Event.value</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="wpipe.html#module-wpipe.Input">wpipe.Input</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.html#wpipe.Input.Input"><code class="docutils literal notranslate"><span class="pre">Input</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Input.Input.confpath"><code class="docutils literal notranslate"><span class="pre">Input.confpath</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Input.Input.delete"><code class="docutils literal notranslate"><span class="pre">Input.delete()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Input.Input.input_id"><code class="docutils literal notranslate"><span class="pre">Input.input_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Input.Input.make_config"><code class="docutils literal notranslate"><span class="pre">Input.make_config()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Input.Input.name"><code class="docutils literal notranslate"><span class="pre">Input.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Input.Input.parents"><code class="docutils literal notranslate"><span class="pre">Input.parents</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Input.Input.pipeline"><code class="docutils literal notranslate"><span class="pre">Input.pipeline</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Input.Input.pipeline_id"><code class="docutils literal notranslate"><span class="pre">Input.pipeline_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Input.Input.rawspath"><code class="docutils literal notranslate"><span class="pre">Input.rawspath</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Input.Input.remove_data"><code class="docutils literal notranslate"><span class="pre">Input.remove_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Input.Input.reset"><code class="docutils literal notranslate"><span class="pre">Input.reset()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Input.Input.select"><code class="docutils literal notranslate"><span class="pre">Input.select()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Input.Input.target"><code class="docutils literal notranslate"><span class="pre">Input.target()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Input.Input.targets"><code class="docutils literal notranslate"><span class="pre">Input.targets</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="wpipe.html#module-wpipe.Job">wpipe.Job</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.html#wpipe.Job.Job"><code class="docutils literal notranslate"><span class="pre">Job</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.Job.attempt"><code class="docutils literal notranslate"><span class="pre">Job.attempt</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.Job.child_event"><code class="docutils literal notranslate"><span class="pre">Job.child_event()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.Job.child_events"><code class="docutils literal notranslate"><span class="pre">Job.child_events</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.Job.config"><code class="docutils literal notranslate"><span class="pre">Job.config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.Job.config_id"><code class="docutils literal notranslate"><span class="pre">Job.config_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.Job.config_is_none"><code class="docutils literal notranslate"><span class="pre">Job.config_is_none</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.Job.delete"><code class="docutils literal notranslate"><span class="pre">Job.delete()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.Job.endtime"><code class="docutils literal notranslate"><span class="pre">Job.endtime</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.Job.expire"><code class="docutils literal notranslate"><span class="pre">Job.expire()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.Job.firing_event"><code class="docutils literal notranslate"><span class="pre">Job.firing_event</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.Job.firing_event_id"><code class="docutils literal notranslate"><span class="pre">Job.firing_event_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.Job.has_a_node"><code class="docutils literal notranslate"><span class="pre">Job.has_a_node</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.Job.has_completed"><code class="docutils literal notranslate"><span class="pre">Job.has_completed</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.Job.has_expired"><code class="docutils literal notranslate"><span class="pre">Job.has_expired</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.Job.is_active"><code class="docutils literal notranslate"><span class="pre">Job.is_active</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.Job.job_id"><code class="docutils literal notranslate"><span class="pre">Job.job_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.Job.logprint"><code class="docutils literal notranslate"><span class="pre">Job.logprint()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.Job.node"><code class="docutils literal notranslate"><span class="pre">Job.node</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.Job.node_id"><code class="docutils literal notranslate"><span class="pre">Job.node_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.Job.not_submitted"><code class="docutils literal notranslate"><span class="pre">Job.not_submitted</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.Job.parent_job"><code class="docutils literal notranslate"><span class="pre">Job.parent_job</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.Job.parent_job_id"><code class="docutils literal notranslate"><span class="pre">Job.parent_job_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.Job.parents"><code class="docutils literal notranslate"><span class="pre">Job.parents</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.Job.pipeline"><code class="docutils literal notranslate"><span class="pre">Job.pipeline</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.Job.pipeline_id"><code class="docutils literal notranslate"><span class="pre">Job.pipeline_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.Job.reset"><code class="docutils literal notranslate"><span class="pre">Job.reset()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.Job.select"><code class="docutils literal notranslate"><span class="pre">Job.select()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.Job.starttime"><code class="docutils literal notranslate"><span class="pre">Job.starttime</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.Job.state"><code class="docutils literal notranslate"><span class="pre">Job.state</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.Job.target"><code class="docutils literal notranslate"><span class="pre">Job.target</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.Job.target_id"><code class="docutils literal notranslate"><span class="pre">Job.target_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.Job.task"><code class="docutils literal notranslate"><span class="pre">Job.task</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.Job.task_changed"><code class="docutils literal notranslate"><span class="pre">Job.task_changed</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Job.Job.task_id"><code class="docutils literal notranslate"><span class="pre">Job.task_id</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="wpipe.html#module-wpipe.Mask">wpipe.Mask</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.html#wpipe.Mask.Mask"><code class="docutils literal notranslate"><span class="pre">Mask</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Mask.Mask.delete"><code class="docutils literal notranslate"><span class="pre">Mask.delete()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Mask.Mask.mask_id"><code class="docutils literal notranslate"><span class="pre">Mask.mask_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Mask.Mask.name"><code class="docutils literal notranslate"><span class="pre">Mask.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Mask.Mask.parents"><code class="docutils literal notranslate"><span class="pre">Mask.parents</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Mask.Mask.select"><code class="docutils literal notranslate"><span class="pre">Mask.select()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Mask.Mask.source"><code class="docutils literal notranslate"><span class="pre">Mask.source</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Mask.Mask.task"><code class="docutils literal notranslate"><span class="pre">Mask.task</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Mask.Mask.task_id"><code class="docutils literal notranslate"><span class="pre">Mask.task_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Mask.Mask.timestamp"><code class="docutils literal notranslate"><span class="pre">Mask.timestamp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Mask.Mask.update_timestamp"><code class="docutils literal notranslate"><span class="pre">Mask.update_timestamp()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Mask.Mask.value"><code class="docutils literal notranslate"><span class="pre">Mask.value</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="wpipe.html#module-wpipe.Node">wpipe.Node</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.html#wpipe.Node.Node"><code class="docutils literal notranslate"><span class="pre">Node</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Node.Node.delete"><code class="docutils literal notranslate"><span class="pre">Node.delete()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Node.Node.ext_ip"><code class="docutils literal notranslate"><span class="pre">Node.ext_ip</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Node.Node.int_ip"><code class="docutils literal notranslate"><span class="pre">Node.int_ip</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Node.Node.job"><code class="docutils literal notranslate"><span class="pre">Node.job()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Node.Node.jobs"><code class="docutils literal notranslate"><span class="pre">Node.jobs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Node.Node.name"><code class="docutils literal notranslate"><span class="pre">Node.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Node.Node.node_id"><code class="docutils literal notranslate"><span class="pre">Node.node_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Node.Node.parents"><code class="docutils literal notranslate"><span class="pre">Node.parents</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Node.Node.select"><code class="docutils literal notranslate"><span class="pre">Node.select()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Node.Node.timestamp"><code class="docutils literal notranslate"><span class="pre">Node.timestamp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Node.Node.update_timestamp"><code class="docutils literal notranslate"><span class="pre">Node.update_timestamp()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="wpipe.html#module-wpipe.OptOwner">wpipe.OptOwner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.html#wpipe.OptOwner.OptOwner"><code class="docutils literal notranslate"><span class="pre">OptOwner</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.OptOwner.OptOwner.delete"><code class="docutils literal notranslate"><span class="pre">OptOwner.delete()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.OptOwner.OptOwner.option"><code class="docutils literal notranslate"><span class="pre">OptOwner.option()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.OptOwner.OptOwner.options"><code class="docutils literal notranslate"><span class="pre">OptOwner.options</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.OptOwner.OptOwner.optowner_id"><code class="docutils literal notranslate"><span class="pre">OptOwner.optowner_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.OptOwner.OptOwner.timestamp"><code class="docutils literal notranslate"><span class="pre">OptOwner.timestamp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.OptOwner.OptOwner.update_timestamp"><code class="docutils literal notranslate"><span class="pre">OptOwner.update_timestamp()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="wpipe.html#module-wpipe.Option">wpipe.Option</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.html#wpipe.Option.Option"><code class="docutils literal notranslate"><span class="pre">Option</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Option.Option.delete"><code class="docutils literal notranslate"><span class="pre">Option.delete()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Option.Option.name"><code class="docutils literal notranslate"><span class="pre">Option.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Option.Option.option_id"><code class="docutils literal notranslate"><span class="pre">Option.option_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Option.Option.optowner"><code class="docutils literal notranslate"><span class="pre">Option.optowner</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Option.Option.optowner_id"><code class="docutils literal notranslate"><span class="pre">Option.optowner_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Option.Option.parents"><code class="docutils literal notranslate"><span class="pre">Option.parents</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Option.Option.select"><code class="docutils literal notranslate"><span class="pre">Option.select()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Option.Option.timestamp"><code class="docutils literal notranslate"><span class="pre">Option.timestamp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Option.Option.update_timestamp"><code class="docutils literal notranslate"><span class="pre">Option.update_timestamp()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Option.Option.value"><code class="docutils literal notranslate"><span class="pre">Option.value</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="wpipe.html#module-wpipe.Parameter">wpipe.Parameter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.html#wpipe.Parameter.Parameter"><code class="docutils literal notranslate"><span class="pre">Parameter</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Parameter.Parameter.config"><code class="docutils literal notranslate"><span class="pre">Parameter.config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Parameter.Parameter.config_id"><code class="docutils literal notranslate"><span class="pre">Parameter.config_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Parameter.Parameter.delete"><code class="docutils literal notranslate"><span class="pre">Parameter.delete()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Parameter.Parameter.name"><code class="docutils literal notranslate"><span class="pre">Parameter.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Parameter.Parameter.parameter_id"><code class="docutils literal notranslate"><span class="pre">Parameter.parameter_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Parameter.Parameter.parents"><code class="docutils literal notranslate"><span class="pre">Parameter.parents</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Parameter.Parameter.select"><code class="docutils literal notranslate"><span class="pre">Parameter.select()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Parameter.Parameter.timestamp"><code class="docutils literal notranslate"><span class="pre">Parameter.timestamp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Parameter.Parameter.update_timestamp"><code class="docutils literal notranslate"><span class="pre">Parameter.update_timestamp()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Parameter.Parameter.value"><code class="docutils literal notranslate"><span class="pre">Parameter.value</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="wpipe.html#module-wpipe.Pipeline">wpipe.Pipeline</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.Pipeline"><code class="docutils literal notranslate"><span class="pre">Pipeline</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.Pipeline.attach_inputs"><code class="docutils literal notranslate"><span class="pre">Pipeline.attach_inputs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.Pipeline.attach_tasks"><code class="docutils literal notranslate"><span class="pre">Pipeline.attach_tasks()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.Pipeline.clean"><code class="docutils literal notranslate"><span class="pre">Pipeline.clean()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.Pipeline.config_root"><code class="docutils literal notranslate"><span class="pre">Pipeline.config_root</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.Pipeline.data_root"><code class="docutils literal notranslate"><span class="pre">Pipeline.data_root</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.Pipeline.delete"><code class="docutils literal notranslate"><span class="pre">Pipeline.delete()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.Pipeline.description"><code class="docutils literal notranslate"><span class="pre">Pipeline.description</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.Pipeline.diagnose"><code class="docutils literal notranslate"><span class="pre">Pipeline.diagnose()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.Pipeline.dummy_job"><code class="docutils literal notranslate"><span class="pre">Pipeline.dummy_job</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.Pipeline.dummy_task"><code class="docutils literal notranslate"><span class="pre">Pipeline.dummy_task</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.Pipeline.input"><code class="docutils literal notranslate"><span class="pre">Pipeline.input()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.Pipeline.input_root"><code class="docutils literal notranslate"><span class="pre">Pipeline.input_root</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.Pipeline.inputs"><code class="docutils literal notranslate"><span class="pre">Pipeline.inputs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.Pipeline.name"><code class="docutils literal notranslate"><span class="pre">Pipeline.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.Pipeline.nondummy_tasks"><code class="docutils literal notranslate"><span class="pre">Pipeline.nondummy_tasks</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.Pipeline.parents"><code class="docutils literal notranslate"><span class="pre">Pipeline.parents</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.Pipeline.pipe_root"><code class="docutils literal notranslate"><span class="pre">Pipeline.pipe_root</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.Pipeline.pipeline_id"><code class="docutils literal notranslate"><span class="pre">Pipeline.pipeline_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.Pipeline.remove_data"><code class="docutils literal notranslate"><span class="pre">Pipeline.remove_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.Pipeline.reset"><code class="docutils literal notranslate"><span class="pre">Pipeline.reset()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.Pipeline.run"><code class="docutils literal notranslate"><span class="pre">Pipeline.run()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.Pipeline.select"><code class="docutils literal notranslate"><span class="pre">Pipeline.select()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.Pipeline.software_root"><code class="docutils literal notranslate"><span class="pre">Pipeline.software_root</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.Pipeline.task"><code class="docutils literal notranslate"><span class="pre">Pipeline.task()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.Pipeline.tasks"><code class="docutils literal notranslate"><span class="pre">Pipeline.tasks</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.Pipeline.user"><code class="docutils literal notranslate"><span class="pre">Pipeline.user</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.Pipeline.user_id"><code class="docutils literal notranslate"><span class="pre">Pipeline.user_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Pipeline.Pipeline.user_name"><code class="docutils literal notranslate"><span class="pre">Pipeline.user_name</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="wpipe.html#wpipe-simple">wpipe.Simple</a></li>
+<li class="toctree-l1"><a class="reference internal" href="wpipe.html#module-wpipe.Target">wpipe.Target</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.html#wpipe.Target.Target"><code class="docutils literal notranslate"><span class="pre">Target</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Target.Target.configuration"><code class="docutils literal notranslate"><span class="pre">Target.configuration()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Target.Target.configurations"><code class="docutils literal notranslate"><span class="pre">Target.configurations</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Target.Target.configure_target"><code class="docutils literal notranslate"><span class="pre">Target.configure_target()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Target.Target.datapath"><code class="docutils literal notranslate"><span class="pre">Target.datapath</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Target.Target.dataraws"><code class="docutils literal notranslate"><span class="pre">Target.dataraws</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Target.Target.default_conf"><code class="docutils literal notranslate"><span class="pre">Target.default_conf</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Target.Target.delete"><code class="docutils literal notranslate"><span class="pre">Target.delete()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Target.Target.input"><code class="docutils literal notranslate"><span class="pre">Target.input</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Target.Target.input_id"><code class="docutils literal notranslate"><span class="pre">Target.input_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Target.Target.name"><code class="docutils literal notranslate"><span class="pre">Target.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Target.Target.parents"><code class="docutils literal notranslate"><span class="pre">Target.parents</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Target.Target.pipeline"><code class="docutils literal notranslate"><span class="pre">Target.pipeline</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Target.Target.pipeline_id"><code class="docutils literal notranslate"><span class="pre">Target.pipeline_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Target.Target.remove_data"><code class="docutils literal notranslate"><span class="pre">Target.remove_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Target.Target.select"><code class="docutils literal notranslate"><span class="pre">Target.select()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Target.Target.target_id"><code class="docutils literal notranslate"><span class="pre">Target.target_id</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="wpipe.html#module-wpipe.Task">wpipe.Task</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.html#wpipe.Task.Task"><code class="docutils literal notranslate"><span class="pre">Task</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Task.Task.delete"><code class="docutils literal notranslate"><span class="pre">Task.delete()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Task.Task.executable"><code class="docutils literal notranslate"><span class="pre">Task.executable</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Task.Task.is_exclusive"><code class="docutils literal notranslate"><span class="pre">Task.is_exclusive</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Task.Task.job"><code class="docutils literal notranslate"><span class="pre">Task.job()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Task.Task.jobs"><code class="docutils literal notranslate"><span class="pre">Task.jobs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Task.Task.last_modification_timestamp"><code class="docutils literal notranslate"><span class="pre">Task.last_modification_timestamp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Task.Task.mask"><code class="docutils literal notranslate"><span class="pre">Task.mask()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Task.Task.masks"><code class="docutils literal notranslate"><span class="pre">Task.masks</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Task.Task.name"><code class="docutils literal notranslate"><span class="pre">Task.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Task.Task.nruns"><code class="docutils literal notranslate"><span class="pre">Task.nruns</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Task.Task.parents"><code class="docutils literal notranslate"><span class="pre">Task.parents</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Task.Task.pipeline"><code class="docutils literal notranslate"><span class="pre">Task.pipeline</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Task.Task.pipeline_id"><code class="docutils literal notranslate"><span class="pre">Task.pipeline_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Task.Task.register"><code class="docutils literal notranslate"><span class="pre">Task.register()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Task.Task.remove_data"><code class="docutils literal notranslate"><span class="pre">Task.remove_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Task.Task.run_time"><code class="docutils literal notranslate"><span class="pre">Task.run_time</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Task.Task.select"><code class="docutils literal notranslate"><span class="pre">Task.select()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Task.Task.task_id"><code class="docutils literal notranslate"><span class="pre">Task.task_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Task.Task.timestamp"><code class="docutils literal notranslate"><span class="pre">Task.timestamp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.Task.Task.update_timestamp"><code class="docutils literal notranslate"><span class="pre">Task.update_timestamp()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="wpipe.html#module-wpipe.User">wpipe.User</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.html#wpipe.User.User"><code class="docutils literal notranslate"><span class="pre">User</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.User.User.delete"><code class="docutils literal notranslate"><span class="pre">User.delete()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.User.User.name"><code class="docutils literal notranslate"><span class="pre">User.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.User.User.parents"><code class="docutils literal notranslate"><span class="pre">User.parents</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.User.User.pipeline"><code class="docutils literal notranslate"><span class="pre">User.pipeline()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.User.User.pipelines"><code class="docutils literal notranslate"><span class="pre">User.pipelines</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.User.User.select"><code class="docutils literal notranslate"><span class="pre">User.select()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.User.User.timestamp"><code class="docutils literal notranslate"><span class="pre">User.timestamp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.User.User.update_timestamp"><code class="docutils literal notranslate"><span class="pre">User.update_timestamp()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.User.User.user_id"><code class="docutils literal notranslate"><span class="pre">User.user_id</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="wpipe.html#module-wpipe.core">wpipe.core</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.html#wpipe.core.as_int"><code class="docutils literal notranslate"><span class="pre">as_int()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.html#wpipe.core.clean_path"><code class="docutils literal notranslate"><span class="pre">clean_path()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.html#wpipe.core.in_session"><code class="docutils literal notranslate"><span class="pre">in_session()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.html#wpipe.core.initialize_args"><code class="docutils literal notranslate"><span class="pre">initialize_args()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.html#wpipe.core.key_wpipe_separator"><code class="docutils literal notranslate"><span class="pre">key_wpipe_separator()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.html#wpipe.core.make_query_rtn_upd"><code class="docutils literal notranslate"><span class="pre">make_query_rtn_upd()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.html#wpipe.core.make_yield_session_if_not_cached"><code class="docutils literal notranslate"><span class="pre">make_yield_session_if_not_cached()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.html#wpipe.core.remove_path"><code class="docutils literal notranslate"><span class="pre">remove_path()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.html#wpipe.core.return_dict_of_attrs"><code class="docutils literal notranslate"><span class="pre">return_dict_of_attrs()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.html#wpipe.core.split_path"><code class="docutils literal notranslate"><span class="pre">split_path()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.html#wpipe.core.to_json"><code class="docutils literal notranslate"><span class="pre">to_json()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.html#wpipe.core.wpipe_to_sqlintf_connection"><code class="docutils literal notranslate"><span class="pre">wpipe_to_sqlintf_connection()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="wpipe.html#module-wpipe.wingtips">wpipe.wingtips</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.html#wpipe.wingtips.WingTips"><code class="docutils literal notranslate"><span class="pre">WingTips</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.wingtips.WingTips.attach_radec"><code class="docutils literal notranslate"><span class="pre">WingTips.attach_radec()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.wingtips.WingTips.create_wcs"><code class="docutils literal notranslate"><span class="pre">WingTips.create_wcs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.wingtips.WingTips.flux_to_Sb"><code class="docutils literal notranslate"><span class="pre">WingTips.flux_to_Sb()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.wingtips.WingTips.from_scratch"><code class="docutils literal notranslate"><span class="pre">WingTips.from_scratch()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.wingtips.WingTips.get_center"><code class="docutils literal notranslate"><span class="pre">WingTips.get_center()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.wingtips.WingTips.get_counts"><code class="docutils literal notranslate"><span class="pre">WingTips.get_counts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.wingtips.WingTips.get_tabular"><code class="docutils literal notranslate"><span class="pre">WingTips.get_tabular()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.wingtips.WingTips.merge_with"><code class="docutils literal notranslate"><span class="pre">WingTips.merge_with()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.wingtips.WingTips.random_radec"><code class="docutils literal notranslate"><span class="pre">WingTips.random_radec()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.wingtips.WingTips.random_radec_for"><code class="docutils literal notranslate"><span class="pre">WingTips.random_radec_for()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.wingtips.WingTips.read_stips"><code class="docutils literal notranslate"><span class="pre">WingTips.read_stips()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.wingtips.WingTips.read_wcs"><code class="docutils literal notranslate"><span class="pre">WingTips.read_wcs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.wingtips.WingTips.replace_radec"><code class="docutils literal notranslate"><span class="pre">WingTips.replace_radec()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.wingtips.WingTips.sample_radec"><code class="docutils literal notranslate"><span class="pre">WingTips.sample_radec()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.wingtips.WingTips.strip_radec"><code class="docutils literal notranslate"><span class="pre">WingTips.strip_radec()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.html#wpipe.wingtips.WingTips.write_stips"><code class="docutils literal notranslate"><span class="pre">WingTips.write_stips()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="wpipe-sqlintf-subpackage">
+<h2><code class="docutils literal notranslate"><span class="pre">wpipe.sqlintf.*</span></code> Subpackage<a class="headerlink" href="#wpipe-sqlintf-subpackage" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="wpipe.sqlintf.html">Module contents</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.sqlintf.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.sqlintf.html#how-to-use">How to use</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.sqlintf.html#utilities">Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.COMMIT_FLAG"><code class="docutils literal notranslate"><span class="pre">COMMIT_FLAG</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Configuration"><code class="docutils literal notranslate"><span class="pre">Configuration</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Configuration.confpath"><code class="docutils literal notranslate"><span class="pre">Configuration.confpath</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Configuration.datapath"><code class="docutils literal notranslate"><span class="pre">Configuration.datapath</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Configuration.dataproducts"><code class="docutils literal notranslate"><span class="pre">Configuration.dataproducts</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Configuration.description"><code class="docutils literal notranslate"><span class="pre">Configuration.description</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Configuration.id"><code class="docutils literal notranslate"><span class="pre">Configuration.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Configuration.jobs"><code class="docutils literal notranslate"><span class="pre">Configuration.jobs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Configuration.logpath"><code class="docutils literal notranslate"><span class="pre">Configuration.logpath</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Configuration.name"><code class="docutils literal notranslate"><span class="pre">Configuration.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Configuration.parameters"><code class="docutils literal notranslate"><span class="pre">Configuration.parameters</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Configuration.procpath"><code class="docutils literal notranslate"><span class="pre">Configuration.procpath</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Configuration.rawpath"><code class="docutils literal notranslate"><span class="pre">Configuration.rawpath</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Configuration.target"><code class="docutils literal notranslate"><span class="pre">Configuration.target</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Configuration.target_id"><code class="docutils literal notranslate"><span class="pre">Configuration.target_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Configuration.timestamp"><code class="docutils literal notranslate"><span class="pre">Configuration.timestamp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Configuration.type"><code class="docutils literal notranslate"><span class="pre">Configuration.type</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DPOwner"><code class="docutils literal notranslate"><span class="pre">DPOwner</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DPOwner.dataproducts"><code class="docutils literal notranslate"><span class="pre">DPOwner.dataproducts</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DPOwner.id"><code class="docutils literal notranslate"><span class="pre">DPOwner.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DPOwner.timestamp"><code class="docutils literal notranslate"><span class="pre">DPOwner.timestamp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DPOwner.type"><code class="docutils literal notranslate"><span class="pre">DPOwner.type</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DataProduct"><code class="docutils literal notranslate"><span class="pre">DataProduct</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DataProduct.config"><code class="docutils literal notranslate"><span class="pre">DataProduct.config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DataProduct.config_id"><code class="docutils literal notranslate"><span class="pre">DataProduct.config_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DataProduct.data_type"><code class="docutils literal notranslate"><span class="pre">DataProduct.data_type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DataProduct.dec"><code class="docutils literal notranslate"><span class="pre">DataProduct.dec</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DataProduct.dpowner"><code class="docutils literal notranslate"><span class="pre">DataProduct.dpowner</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DataProduct.dpowner_id"><code class="docutils literal notranslate"><span class="pre">DataProduct.dpowner_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DataProduct.filename"><code class="docutils literal notranslate"><span class="pre">DataProduct.filename</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DataProduct.filtername"><code class="docutils literal notranslate"><span class="pre">DataProduct.filtername</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DataProduct.group"><code class="docutils literal notranslate"><span class="pre">DataProduct.group</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DataProduct.id"><code class="docutils literal notranslate"><span class="pre">DataProduct.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DataProduct.input"><code class="docutils literal notranslate"><span class="pre">DataProduct.input</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DataProduct.input_id"><code class="docutils literal notranslate"><span class="pre">DataProduct.input_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DataProduct.options"><code class="docutils literal notranslate"><span class="pre">DataProduct.options</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DataProduct.pipeline"><code class="docutils literal notranslate"><span class="pre">DataProduct.pipeline</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DataProduct.pipeline_id"><code class="docutils literal notranslate"><span class="pre">DataProduct.pipeline_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DataProduct.pointing_angle"><code class="docutils literal notranslate"><span class="pre">DataProduct.pointing_angle</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DataProduct.ra"><code class="docutils literal notranslate"><span class="pre">DataProduct.ra</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DataProduct.relativepath"><code class="docutils literal notranslate"><span class="pre">DataProduct.relativepath</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DataProduct.subtype"><code class="docutils literal notranslate"><span class="pre">DataProduct.subtype</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DataProduct.suffix"><code class="docutils literal notranslate"><span class="pre">DataProduct.suffix</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DataProduct.timestamp"><code class="docutils literal notranslate"><span class="pre">DataProduct.timestamp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DataProduct.type"><code class="docutils literal notranslate"><span class="pre">DataProduct.type</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Event"><code class="docutils literal notranslate"><span class="pre">Event</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Event.fired_jobs"><code class="docutils literal notranslate"><span class="pre">Event.fired_jobs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Event.id"><code class="docutils literal notranslate"><span class="pre">Event.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Event.jargs"><code class="docutils literal notranslate"><span class="pre">Event.jargs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Event.name"><code class="docutils literal notranslate"><span class="pre">Event.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Event.options"><code class="docutils literal notranslate"><span class="pre">Event.options</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Event.parent_job"><code class="docutils literal notranslate"><span class="pre">Event.parent_job</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Event.parent_job_id"><code class="docutils literal notranslate"><span class="pre">Event.parent_job_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Event.tag"><code class="docutils literal notranslate"><span class="pre">Event.tag</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Event.timestamp"><code class="docutils literal notranslate"><span class="pre">Event.timestamp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Event.type"><code class="docutils literal notranslate"><span class="pre">Event.type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Event.value"><code class="docutils literal notranslate"><span class="pre">Event.value</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Input"><code class="docutils literal notranslate"><span class="pre">Input</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Input.confpath"><code class="docutils literal notranslate"><span class="pre">Input.confpath</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Input.dataproducts"><code class="docutils literal notranslate"><span class="pre">Input.dataproducts</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Input.id"><code class="docutils literal notranslate"><span class="pre">Input.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Input.name"><code class="docutils literal notranslate"><span class="pre">Input.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Input.pipeline"><code class="docutils literal notranslate"><span class="pre">Input.pipeline</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Input.pipeline_id"><code class="docutils literal notranslate"><span class="pre">Input.pipeline_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Input.rawspath"><code class="docutils literal notranslate"><span class="pre">Input.rawspath</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Input.targets"><code class="docutils literal notranslate"><span class="pre">Input.targets</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Input.timestamp"><code class="docutils literal notranslate"><span class="pre">Input.timestamp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Input.type"><code class="docutils literal notranslate"><span class="pre">Input.type</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Job"><code class="docutils literal notranslate"><span class="pre">Job</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Job.attempt"><code class="docutils literal notranslate"><span class="pre">Job.attempt</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Job.child_events"><code class="docutils literal notranslate"><span class="pre">Job.child_events</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Job.config"><code class="docutils literal notranslate"><span class="pre">Job.config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Job.config_id"><code class="docutils literal notranslate"><span class="pre">Job.config_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Job.endtime"><code class="docutils literal notranslate"><span class="pre">Job.endtime</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Job.firing_event"><code class="docutils literal notranslate"><span class="pre">Job.firing_event</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Job.firing_event_id"><code class="docutils literal notranslate"><span class="pre">Job.firing_event_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Job.id"><code class="docutils literal notranslate"><span class="pre">Job.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Job.node"><code class="docutils literal notranslate"><span class="pre">Job.node</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Job.node_id"><code class="docutils literal notranslate"><span class="pre">Job.node_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Job.options"><code class="docutils literal notranslate"><span class="pre">Job.options</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Job.starttime"><code class="docutils literal notranslate"><span class="pre">Job.starttime</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Job.state"><code class="docutils literal notranslate"><span class="pre">Job.state</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Job.task"><code class="docutils literal notranslate"><span class="pre">Job.task</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Job.task_id"><code class="docutils literal notranslate"><span class="pre">Job.task_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Job.timestamp"><code class="docutils literal notranslate"><span class="pre">Job.timestamp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Job.type"><code class="docutils literal notranslate"><span class="pre">Job.type</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Mask"><code class="docutils literal notranslate"><span class="pre">Mask</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Mask.id"><code class="docutils literal notranslate"><span class="pre">Mask.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Mask.name"><code class="docutils literal notranslate"><span class="pre">Mask.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Mask.source"><code class="docutils literal notranslate"><span class="pre">Mask.source</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Mask.task"><code class="docutils literal notranslate"><span class="pre">Mask.task</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Mask.task_id"><code class="docutils literal notranslate"><span class="pre">Mask.task_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Mask.timestamp"><code class="docutils literal notranslate"><span class="pre">Mask.timestamp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Mask.value"><code class="docutils literal notranslate"><span class="pre">Mask.value</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Node"><code class="docutils literal notranslate"><span class="pre">Node</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Node.ext_ip"><code class="docutils literal notranslate"><span class="pre">Node.ext_ip</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Node.id"><code class="docutils literal notranslate"><span class="pre">Node.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Node.int_ip"><code class="docutils literal notranslate"><span class="pre">Node.int_ip</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Node.jobs"><code class="docutils literal notranslate"><span class="pre">Node.jobs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Node.name"><code class="docutils literal notranslate"><span class="pre">Node.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Node.timestamp"><code class="docutils literal notranslate"><span class="pre">Node.timestamp</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.OptOwner"><code class="docutils literal notranslate"><span class="pre">OptOwner</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.OptOwner.id"><code class="docutils literal notranslate"><span class="pre">OptOwner.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.OptOwner.options"><code class="docutils literal notranslate"><span class="pre">OptOwner.options</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.OptOwner.timestamp"><code class="docutils literal notranslate"><span class="pre">OptOwner.timestamp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.OptOwner.type"><code class="docutils literal notranslate"><span class="pre">OptOwner.type</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Option"><code class="docutils literal notranslate"><span class="pre">Option</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Option.id"><code class="docutils literal notranslate"><span class="pre">Option.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Option.name"><code class="docutils literal notranslate"><span class="pre">Option.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Option.optowner"><code class="docutils literal notranslate"><span class="pre">Option.optowner</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Option.optowner_id"><code class="docutils literal notranslate"><span class="pre">Option.optowner_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Option.timestamp"><code class="docutils literal notranslate"><span class="pre">Option.timestamp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Option.value"><code class="docutils literal notranslate"><span class="pre">Option.value</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Parameter"><code class="docutils literal notranslate"><span class="pre">Parameter</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Parameter.config"><code class="docutils literal notranslate"><span class="pre">Parameter.config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Parameter.config_id"><code class="docutils literal notranslate"><span class="pre">Parameter.config_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Parameter.id"><code class="docutils literal notranslate"><span class="pre">Parameter.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Parameter.name"><code class="docutils literal notranslate"><span class="pre">Parameter.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Parameter.timestamp"><code class="docutils literal notranslate"><span class="pre">Parameter.timestamp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Parameter.value"><code class="docutils literal notranslate"><span class="pre">Parameter.value</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Pipeline"><code class="docutils literal notranslate"><span class="pre">Pipeline</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Pipeline.config_root"><code class="docutils literal notranslate"><span class="pre">Pipeline.config_root</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Pipeline.data_root"><code class="docutils literal notranslate"><span class="pre">Pipeline.data_root</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Pipeline.dataproducts"><code class="docutils literal notranslate"><span class="pre">Pipeline.dataproducts</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Pipeline.description"><code class="docutils literal notranslate"><span class="pre">Pipeline.description</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Pipeline.id"><code class="docutils literal notranslate"><span class="pre">Pipeline.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Pipeline.input_root"><code class="docutils literal notranslate"><span class="pre">Pipeline.input_root</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Pipeline.inputs"><code class="docutils literal notranslate"><span class="pre">Pipeline.inputs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Pipeline.name"><code class="docutils literal notranslate"><span class="pre">Pipeline.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Pipeline.pipe_root"><code class="docutils literal notranslate"><span class="pre">Pipeline.pipe_root</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Pipeline.software_root"><code class="docutils literal notranslate"><span class="pre">Pipeline.software_root</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Pipeline.tasks"><code class="docutils literal notranslate"><span class="pre">Pipeline.tasks</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Pipeline.timestamp"><code class="docutils literal notranslate"><span class="pre">Pipeline.timestamp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Pipeline.type"><code class="docutils literal notranslate"><span class="pre">Pipeline.type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Pipeline.user"><code class="docutils literal notranslate"><span class="pre">Pipeline.user</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Pipeline.user_id"><code class="docutils literal notranslate"><span class="pre">Pipeline.user_id</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.SESSION"><code class="docutils literal notranslate"><span class="pre">SESSION</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Target"><code class="docutils literal notranslate"><span class="pre">Target</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Target.configurations"><code class="docutils literal notranslate"><span class="pre">Target.configurations</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Target.datapath"><code class="docutils literal notranslate"><span class="pre">Target.datapath</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Target.dataraws"><code class="docutils literal notranslate"><span class="pre">Target.dataraws</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Target.id"><code class="docutils literal notranslate"><span class="pre">Target.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Target.input"><code class="docutils literal notranslate"><span class="pre">Target.input</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Target.input_id"><code class="docutils literal notranslate"><span class="pre">Target.input_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Target.name"><code class="docutils literal notranslate"><span class="pre">Target.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Target.options"><code class="docutils literal notranslate"><span class="pre">Target.options</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Target.timestamp"><code class="docutils literal notranslate"><span class="pre">Target.timestamp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Target.type"><code class="docutils literal notranslate"><span class="pre">Target.type</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Task"><code class="docutils literal notranslate"><span class="pre">Task</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Task.id"><code class="docutils literal notranslate"><span class="pre">Task.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Task.is_exclusive"><code class="docutils literal notranslate"><span class="pre">Task.is_exclusive</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Task.jobs"><code class="docutils literal notranslate"><span class="pre">Task.jobs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Task.masks"><code class="docutils literal notranslate"><span class="pre">Task.masks</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Task.name"><code class="docutils literal notranslate"><span class="pre">Task.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Task.nruns"><code class="docutils literal notranslate"><span class="pre">Task.nruns</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Task.pipeline"><code class="docutils literal notranslate"><span class="pre">Task.pipeline</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Task.pipeline_id"><code class="docutils literal notranslate"><span class="pre">Task.pipeline_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Task.run_time"><code class="docutils literal notranslate"><span class="pre">Task.run_time</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Task.timestamp"><code class="docutils literal notranslate"><span class="pre">Task.timestamp</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.User"><code class="docutils literal notranslate"><span class="pre">User</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.User.id"><code class="docutils literal notranslate"><span class="pre">User.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.User.name"><code class="docutils literal notranslate"><span class="pre">User.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.User.pipelines"><code class="docutils literal notranslate"><span class="pre">User.pipelines</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.User.timestamp"><code class="docutils literal notranslate"><span class="pre">User.timestamp</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.begin_session"><code class="docutils literal notranslate"><span class="pre">begin_session()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.delete"><code class="docutils literal notranslate"><span class="pre">delete()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.hold_commit"><code class="docutils literal notranslate"><span class="pre">hold_commit()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="wpipe.sqlintf.html#module-wpipe.sqlintf.Configuration">wpipe.sqlintf.Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Configuration.Configuration"><code class="docutils literal notranslate"><span class="pre">Configuration</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Configuration.Configuration.confpath"><code class="docutils literal notranslate"><span class="pre">Configuration.confpath</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Configuration.Configuration.datapath"><code class="docutils literal notranslate"><span class="pre">Configuration.datapath</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Configuration.Configuration.dataproducts"><code class="docutils literal notranslate"><span class="pre">Configuration.dataproducts</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Configuration.Configuration.description"><code class="docutils literal notranslate"><span class="pre">Configuration.description</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Configuration.Configuration.id"><code class="docutils literal notranslate"><span class="pre">Configuration.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Configuration.Configuration.jobs"><code class="docutils literal notranslate"><span class="pre">Configuration.jobs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Configuration.Configuration.logpath"><code class="docutils literal notranslate"><span class="pre">Configuration.logpath</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Configuration.Configuration.name"><code class="docutils literal notranslate"><span class="pre">Configuration.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Configuration.Configuration.parameters"><code class="docutils literal notranslate"><span class="pre">Configuration.parameters</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Configuration.Configuration.procpath"><code class="docutils literal notranslate"><span class="pre">Configuration.procpath</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Configuration.Configuration.rawpath"><code class="docutils literal notranslate"><span class="pre">Configuration.rawpath</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Configuration.Configuration.target"><code class="docutils literal notranslate"><span class="pre">Configuration.target</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Configuration.Configuration.target_id"><code class="docutils literal notranslate"><span class="pre">Configuration.target_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Configuration.Configuration.timestamp"><code class="docutils literal notranslate"><span class="pre">Configuration.timestamp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Configuration.Configuration.type"><code class="docutils literal notranslate"><span class="pre">Configuration.type</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="wpipe.sqlintf.html#module-wpipe.sqlintf.DPOwner">wpipe.sqlintf.DPOwner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DPOwner.DPOwner"><code class="docutils literal notranslate"><span class="pre">DPOwner</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DPOwner.DPOwner.dataproducts"><code class="docutils literal notranslate"><span class="pre">DPOwner.dataproducts</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DPOwner.DPOwner.id"><code class="docutils literal notranslate"><span class="pre">DPOwner.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DPOwner.DPOwner.timestamp"><code class="docutils literal notranslate"><span class="pre">DPOwner.timestamp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DPOwner.DPOwner.type"><code class="docutils literal notranslate"><span class="pre">DPOwner.type</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="wpipe.sqlintf.html#module-wpipe.sqlintf.DataProduct">wpipe.sqlintf.DataProduct</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DataProduct.DataProduct"><code class="docutils literal notranslate"><span class="pre">DataProduct</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DataProduct.DataProduct.config"><code class="docutils literal notranslate"><span class="pre">DataProduct.config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DataProduct.DataProduct.config_id"><code class="docutils literal notranslate"><span class="pre">DataProduct.config_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DataProduct.DataProduct.data_type"><code class="docutils literal notranslate"><span class="pre">DataProduct.data_type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DataProduct.DataProduct.dec"><code class="docutils literal notranslate"><span class="pre">DataProduct.dec</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DataProduct.DataProduct.dpowner"><code class="docutils literal notranslate"><span class="pre">DataProduct.dpowner</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DataProduct.DataProduct.dpowner_id"><code class="docutils literal notranslate"><span class="pre">DataProduct.dpowner_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DataProduct.DataProduct.filename"><code class="docutils literal notranslate"><span class="pre">DataProduct.filename</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DataProduct.DataProduct.filtername"><code class="docutils literal notranslate"><span class="pre">DataProduct.filtername</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DataProduct.DataProduct.group"><code class="docutils literal notranslate"><span class="pre">DataProduct.group</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DataProduct.DataProduct.id"><code class="docutils literal notranslate"><span class="pre">DataProduct.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DataProduct.DataProduct.input"><code class="docutils literal notranslate"><span class="pre">DataProduct.input</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DataProduct.DataProduct.input_id"><code class="docutils literal notranslate"><span class="pre">DataProduct.input_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DataProduct.DataProduct.options"><code class="docutils literal notranslate"><span class="pre">DataProduct.options</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DataProduct.DataProduct.pipeline"><code class="docutils literal notranslate"><span class="pre">DataProduct.pipeline</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DataProduct.DataProduct.pipeline_id"><code class="docutils literal notranslate"><span class="pre">DataProduct.pipeline_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DataProduct.DataProduct.pointing_angle"><code class="docutils literal notranslate"><span class="pre">DataProduct.pointing_angle</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DataProduct.DataProduct.ra"><code class="docutils literal notranslate"><span class="pre">DataProduct.ra</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DataProduct.DataProduct.relativepath"><code class="docutils literal notranslate"><span class="pre">DataProduct.relativepath</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DataProduct.DataProduct.subtype"><code class="docutils literal notranslate"><span class="pre">DataProduct.subtype</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DataProduct.DataProduct.suffix"><code class="docutils literal notranslate"><span class="pre">DataProduct.suffix</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DataProduct.DataProduct.timestamp"><code class="docutils literal notranslate"><span class="pre">DataProduct.timestamp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.DataProduct.DataProduct.type"><code class="docutils literal notranslate"><span class="pre">DataProduct.type</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="wpipe.sqlintf.html#module-wpipe.sqlintf.Event">wpipe.sqlintf.Event</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Event.Event"><code class="docutils literal notranslate"><span class="pre">Event</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Event.Event.fired_jobs"><code class="docutils literal notranslate"><span class="pre">Event.fired_jobs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Event.Event.id"><code class="docutils literal notranslate"><span class="pre">Event.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Event.Event.jargs"><code class="docutils literal notranslate"><span class="pre">Event.jargs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Event.Event.name"><code class="docutils literal notranslate"><span class="pre">Event.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Event.Event.options"><code class="docutils literal notranslate"><span class="pre">Event.options</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Event.Event.parent_job"><code class="docutils literal notranslate"><span class="pre">Event.parent_job</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Event.Event.parent_job_id"><code class="docutils literal notranslate"><span class="pre">Event.parent_job_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Event.Event.tag"><code class="docutils literal notranslate"><span class="pre">Event.tag</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Event.Event.timestamp"><code class="docutils literal notranslate"><span class="pre">Event.timestamp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Event.Event.type"><code class="docutils literal notranslate"><span class="pre">Event.type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Event.Event.value"><code class="docutils literal notranslate"><span class="pre">Event.value</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="wpipe.sqlintf.html#module-wpipe.sqlintf.Input">wpipe.sqlintf.Input</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Input.Input"><code class="docutils literal notranslate"><span class="pre">Input</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Input.Input.confpath"><code class="docutils literal notranslate"><span class="pre">Input.confpath</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Input.Input.dataproducts"><code class="docutils literal notranslate"><span class="pre">Input.dataproducts</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Input.Input.id"><code class="docutils literal notranslate"><span class="pre">Input.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Input.Input.name"><code class="docutils literal notranslate"><span class="pre">Input.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Input.Input.pipeline"><code class="docutils literal notranslate"><span class="pre">Input.pipeline</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Input.Input.pipeline_id"><code class="docutils literal notranslate"><span class="pre">Input.pipeline_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Input.Input.rawspath"><code class="docutils literal notranslate"><span class="pre">Input.rawspath</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Input.Input.targets"><code class="docutils literal notranslate"><span class="pre">Input.targets</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Input.Input.timestamp"><code class="docutils literal notranslate"><span class="pre">Input.timestamp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Input.Input.type"><code class="docutils literal notranslate"><span class="pre">Input.type</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="wpipe.sqlintf.html#module-wpipe.sqlintf.Job">wpipe.sqlintf.Job</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Job.Job"><code class="docutils literal notranslate"><span class="pre">Job</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Job.Job.attempt"><code class="docutils literal notranslate"><span class="pre">Job.attempt</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Job.Job.child_events"><code class="docutils literal notranslate"><span class="pre">Job.child_events</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Job.Job.config"><code class="docutils literal notranslate"><span class="pre">Job.config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Job.Job.config_id"><code class="docutils literal notranslate"><span class="pre">Job.config_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Job.Job.endtime"><code class="docutils literal notranslate"><span class="pre">Job.endtime</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Job.Job.firing_event"><code class="docutils literal notranslate"><span class="pre">Job.firing_event</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Job.Job.firing_event_id"><code class="docutils literal notranslate"><span class="pre">Job.firing_event_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Job.Job.id"><code class="docutils literal notranslate"><span class="pre">Job.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Job.Job.node"><code class="docutils literal notranslate"><span class="pre">Job.node</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Job.Job.node_id"><code class="docutils literal notranslate"><span class="pre">Job.node_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Job.Job.options"><code class="docutils literal notranslate"><span class="pre">Job.options</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Job.Job.starttime"><code class="docutils literal notranslate"><span class="pre">Job.starttime</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Job.Job.state"><code class="docutils literal notranslate"><span class="pre">Job.state</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Job.Job.task"><code class="docutils literal notranslate"><span class="pre">Job.task</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Job.Job.task_id"><code class="docutils literal notranslate"><span class="pre">Job.task_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Job.Job.timestamp"><code class="docutils literal notranslate"><span class="pre">Job.timestamp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Job.Job.type"><code class="docutils literal notranslate"><span class="pre">Job.type</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="wpipe.sqlintf.html#module-wpipe.sqlintf.Mask">wpipe.sqlintf.Mask</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Mask.Mask"><code class="docutils literal notranslate"><span class="pre">Mask</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Mask.Mask.id"><code class="docutils literal notranslate"><span class="pre">Mask.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Mask.Mask.name"><code class="docutils literal notranslate"><span class="pre">Mask.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Mask.Mask.source"><code class="docutils literal notranslate"><span class="pre">Mask.source</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Mask.Mask.task"><code class="docutils literal notranslate"><span class="pre">Mask.task</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Mask.Mask.task_id"><code class="docutils literal notranslate"><span class="pre">Mask.task_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Mask.Mask.timestamp"><code class="docutils literal notranslate"><span class="pre">Mask.timestamp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Mask.Mask.value"><code class="docutils literal notranslate"><span class="pre">Mask.value</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="wpipe.sqlintf.html#module-wpipe.sqlintf.Node">wpipe.sqlintf.Node</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Node.Node"><code class="docutils literal notranslate"><span class="pre">Node</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Node.Node.ext_ip"><code class="docutils literal notranslate"><span class="pre">Node.ext_ip</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Node.Node.id"><code class="docutils literal notranslate"><span class="pre">Node.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Node.Node.int_ip"><code class="docutils literal notranslate"><span class="pre">Node.int_ip</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Node.Node.jobs"><code class="docutils literal notranslate"><span class="pre">Node.jobs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Node.Node.name"><code class="docutils literal notranslate"><span class="pre">Node.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Node.Node.timestamp"><code class="docutils literal notranslate"><span class="pre">Node.timestamp</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="wpipe.sqlintf.html#module-wpipe.sqlintf.OptOwner">wpipe.sqlintf.OptOwner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.OptOwner.OptOwner"><code class="docutils literal notranslate"><span class="pre">OptOwner</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.OptOwner.OptOwner.id"><code class="docutils literal notranslate"><span class="pre">OptOwner.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.OptOwner.OptOwner.options"><code class="docutils literal notranslate"><span class="pre">OptOwner.options</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.OptOwner.OptOwner.timestamp"><code class="docutils literal notranslate"><span class="pre">OptOwner.timestamp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.OptOwner.OptOwner.type"><code class="docutils literal notranslate"><span class="pre">OptOwner.type</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="wpipe.sqlintf.html#module-wpipe.sqlintf.Option">wpipe.sqlintf.Option</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Option.Option"><code class="docutils literal notranslate"><span class="pre">Option</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Option.Option.id"><code class="docutils literal notranslate"><span class="pre">Option.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Option.Option.name"><code class="docutils literal notranslate"><span class="pre">Option.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Option.Option.optowner"><code class="docutils literal notranslate"><span class="pre">Option.optowner</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Option.Option.optowner_id"><code class="docutils literal notranslate"><span class="pre">Option.optowner_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Option.Option.timestamp"><code class="docutils literal notranslate"><span class="pre">Option.timestamp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Option.Option.value"><code class="docutils literal notranslate"><span class="pre">Option.value</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="wpipe.sqlintf.html#module-wpipe.sqlintf.Parameter">wpipe.sqlintf.Parameter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Parameter.Parameter"><code class="docutils literal notranslate"><span class="pre">Parameter</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Parameter.Parameter.config"><code class="docutils literal notranslate"><span class="pre">Parameter.config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Parameter.Parameter.config_id"><code class="docutils literal notranslate"><span class="pre">Parameter.config_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Parameter.Parameter.id"><code class="docutils literal notranslate"><span class="pre">Parameter.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Parameter.Parameter.name"><code class="docutils literal notranslate"><span class="pre">Parameter.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Parameter.Parameter.timestamp"><code class="docutils literal notranslate"><span class="pre">Parameter.timestamp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Parameter.Parameter.value"><code class="docutils literal notranslate"><span class="pre">Parameter.value</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="wpipe.sqlintf.html#module-wpipe.sqlintf.Pipeline">wpipe.sqlintf.Pipeline</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Pipeline.Pipeline"><code class="docutils literal notranslate"><span class="pre">Pipeline</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Pipeline.Pipeline.config_root"><code class="docutils literal notranslate"><span class="pre">Pipeline.config_root</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Pipeline.Pipeline.data_root"><code class="docutils literal notranslate"><span class="pre">Pipeline.data_root</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Pipeline.Pipeline.dataproducts"><code class="docutils literal notranslate"><span class="pre">Pipeline.dataproducts</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Pipeline.Pipeline.description"><code class="docutils literal notranslate"><span class="pre">Pipeline.description</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Pipeline.Pipeline.id"><code class="docutils literal notranslate"><span class="pre">Pipeline.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Pipeline.Pipeline.input_root"><code class="docutils literal notranslate"><span class="pre">Pipeline.input_root</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Pipeline.Pipeline.inputs"><code class="docutils literal notranslate"><span class="pre">Pipeline.inputs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Pipeline.Pipeline.name"><code class="docutils literal notranslate"><span class="pre">Pipeline.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Pipeline.Pipeline.pipe_root"><code class="docutils literal notranslate"><span class="pre">Pipeline.pipe_root</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Pipeline.Pipeline.software_root"><code class="docutils literal notranslate"><span class="pre">Pipeline.software_root</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Pipeline.Pipeline.tasks"><code class="docutils literal notranslate"><span class="pre">Pipeline.tasks</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Pipeline.Pipeline.timestamp"><code class="docutils literal notranslate"><span class="pre">Pipeline.timestamp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Pipeline.Pipeline.type"><code class="docutils literal notranslate"><span class="pre">Pipeline.type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Pipeline.Pipeline.user"><code class="docutils literal notranslate"><span class="pre">Pipeline.user</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Pipeline.Pipeline.user_id"><code class="docutils literal notranslate"><span class="pre">Pipeline.user_id</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="wpipe.sqlintf.html#module-wpipe.sqlintf.Target">wpipe.sqlintf.Target</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Target.Target"><code class="docutils literal notranslate"><span class="pre">Target</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Target.Target.configurations"><code class="docutils literal notranslate"><span class="pre">Target.configurations</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Target.Target.datapath"><code class="docutils literal notranslate"><span class="pre">Target.datapath</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Target.Target.dataraws"><code class="docutils literal notranslate"><span class="pre">Target.dataraws</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Target.Target.id"><code class="docutils literal notranslate"><span class="pre">Target.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Target.Target.input"><code class="docutils literal notranslate"><span class="pre">Target.input</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Target.Target.input_id"><code class="docutils literal notranslate"><span class="pre">Target.input_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Target.Target.name"><code class="docutils literal notranslate"><span class="pre">Target.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Target.Target.options"><code class="docutils literal notranslate"><span class="pre">Target.options</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Target.Target.timestamp"><code class="docutils literal notranslate"><span class="pre">Target.timestamp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Target.Target.type"><code class="docutils literal notranslate"><span class="pre">Target.type</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="wpipe.sqlintf.html#module-wpipe.sqlintf.Task">wpipe.sqlintf.Task</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Task.Task"><code class="docutils literal notranslate"><span class="pre">Task</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Task.Task.id"><code class="docutils literal notranslate"><span class="pre">Task.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Task.Task.is_exclusive"><code class="docutils literal notranslate"><span class="pre">Task.is_exclusive</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Task.Task.jobs"><code class="docutils literal notranslate"><span class="pre">Task.jobs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Task.Task.masks"><code class="docutils literal notranslate"><span class="pre">Task.masks</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Task.Task.name"><code class="docutils literal notranslate"><span class="pre">Task.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Task.Task.nruns"><code class="docutils literal notranslate"><span class="pre">Task.nruns</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Task.Task.pipeline"><code class="docutils literal notranslate"><span class="pre">Task.pipeline</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Task.Task.pipeline_id"><code class="docutils literal notranslate"><span class="pre">Task.pipeline_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Task.Task.run_time"><code class="docutils literal notranslate"><span class="pre">Task.run_time</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.Task.Task.timestamp"><code class="docutils literal notranslate"><span class="pre">Task.timestamp</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="wpipe.sqlintf.html#module-wpipe.sqlintf.User">wpipe.sqlintf.User</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.User.User"><code class="docutils literal notranslate"><span class="pre">User</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.User.User.id"><code class="docutils literal notranslate"><span class="pre">User.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.User.User.name"><code class="docutils literal notranslate"><span class="pre">User.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.User.User.pipelines"><code class="docutils literal notranslate"><span class="pre">User.pipelines</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.User.User.timestamp"><code class="docutils literal notranslate"><span class="pre">User.timestamp</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="wpipe.sqlintf.html#module-wpipe.sqlintf.core">wpipe.sqlintf.core</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.core.Base"><code class="docutils literal notranslate"><span class="pre">Base</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.core.Base.get_id"><code class="docutils literal notranslate"><span class="pre">Base.get_id()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.core.Base.metadata"><code class="docutils literal notranslate"><span class="pre">Base.metadata</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.core.Base.registry"><code class="docutils literal notranslate"><span class="pre">Base.registry</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.core.Engine"><code class="docutils literal notranslate"><span class="pre">Engine</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.core.PARSER"><code class="docutils literal notranslate"><span class="pre">PARSER</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="wpipe.sqlintf.html#wpipe.sqlintf.core.Session"><code class="docutils literal notranslate"><span class="pre">Session</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="WINGS Pipeline Documentation and Cook Book" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="wpipe.html" class="btn btn-neutral float-right" title="Module contents" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Benjamin Williams.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

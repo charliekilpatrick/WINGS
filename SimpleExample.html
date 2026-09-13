@@ -1,0 +1,142 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A Simple Example &mdash; WINGS 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=f2a433a1"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            WINGS
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">WINGS API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cookbook.html">WINGS Cook Book</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">WINGS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">A Simple Example</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/SimpleExample.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="a-simple-example">
+<h1>A Simple Example<a class="headerlink" href="#a-simple-example" title="Link to this heading"></a></h1>
+<p>The above <code class="docutils literal notranslate"><span class="pre">=</span></code> for a section seems to be the most appropriate sectioning when using the include directive like in
+cookbook.rst.  Or rather don’t use a high level sectioning than the title in the rst you include this in.</p>
+<p>After using <code class="docutils literal notranslate"><span class="pre">=</span></code> we can work our way down the list of sectioning:  <code class="docutils literal notranslate"><span class="pre">-</span></code> for subsections and <code class="docutils literal notranslate"><span class="pre">^</span></code> for subsubsections.</p>
+<section id="a-subsection">
+<h2>A Subsection<a class="headerlink" href="#a-subsection" title="Link to this heading"></a></h2>
+<p>Notice the tree structure in the left hand panel now.</p>
+<section id="a-subsection-within-this-subsection">
+<h3>A subsection within this subsection<a class="headerlink" href="#a-subsection-within-this-subsection" title="Link to this heading"></a></h3>
+<p>Now we are likely over doing it with a subsubsection cause this nestedness is getting messy.</p>
+</section>
+</section>
+<section id="a-coding-section">
+<h2>A coding section<a class="headerlink" href="#a-coding-section" title="Link to this heading"></a></h2>
+<p>To do an inline code we use tick marks <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">sqlalchemy</span></code>.</p>
+<p>To do a block of code we do the following:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="hll"> <span class="c1"># lets start with some comments</span>
+</span> <span class="c1"># Sweet how can emphasize lines</span>
+<span class="hll"> <span class="kn">import</span><span class="w"> </span><span class="nn">sqlalchemy</span>
+</span> <span class="n">engine</span> <span class="o">=</span> <span class="n">sqlalchemy</span><span class="o">.</span><span class="n">create_engine</span><span class="p">(</span><span class="s2">"mysql+pymysql://root:password@localhost:8000/server"</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Code blocks a easy and they have g reate highlighting.</p>
+<p>Here is a list:</p>
+<ul>
+<li><p>First entry</p></li>
+<li><p>second entry why is this like that</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>second sub-entry</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>third entry</p></li>
+</ul>
+<p>Let’s reference a section in the API documents: <a class="reference internal" href="wpipe.html#module-wpipe.Configuration"><span class="std std-ref">wpipe.Configuration</span></a>.</p>
+<p>With the sphinx.ext.autosectionlabel extension specified in conf.py we can simply reference the section
+itles that are defined in wpipe.rst and wpipe.sqlintf.rst.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Benjamin Williams.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

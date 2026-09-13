@@ -1,0 +1,2171 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Module contents &mdash; WINGS 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=f2a433a1"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="WINGS Cook Book" href="cookbook.html" />
+    <link rel="prev" title="Module contents" href="wpipe.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            WINGS
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">WINGS API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="modules.html#wpipe-package"><code class="docutils literal notranslate"><span class="pre">wpipe.*</span></code> Package</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="modules.html#wpipe-sqlintf-subpackage"><code class="docutils literal notranslate"><span class="pre">wpipe.sqlintf.*</span></code> Subpackage</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Module contents</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#description">Description</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#how-to-use">How to use</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#utilities">Utilities</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#wpipe.sqlintf.COMMIT_FLAG"><code class="docutils literal notranslate"><span class="pre">COMMIT_FLAG</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#wpipe.sqlintf.Configuration"><code class="docutils literal notranslate"><span class="pre">Configuration</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#wpipe.sqlintf.DPOwner"><code class="docutils literal notranslate"><span class="pre">DPOwner</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#wpipe.sqlintf.DataProduct"><code class="docutils literal notranslate"><span class="pre">DataProduct</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#wpipe.sqlintf.Event"><code class="docutils literal notranslate"><span class="pre">Event</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#wpipe.sqlintf.Input"><code class="docutils literal notranslate"><span class="pre">Input</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#wpipe.sqlintf.Job"><code class="docutils literal notranslate"><span class="pre">Job</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#wpipe.sqlintf.Mask"><code class="docutils literal notranslate"><span class="pre">Mask</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#wpipe.sqlintf.Node"><code class="docutils literal notranslate"><span class="pre">Node</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#wpipe.sqlintf.OptOwner"><code class="docutils literal notranslate"><span class="pre">OptOwner</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#wpipe.sqlintf.Option"><code class="docutils literal notranslate"><span class="pre">Option</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#wpipe.sqlintf.Parameter"><code class="docutils literal notranslate"><span class="pre">Parameter</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#wpipe.sqlintf.Pipeline"><code class="docutils literal notranslate"><span class="pre">Pipeline</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#wpipe.sqlintf.SESSION"><code class="docutils literal notranslate"><span class="pre">SESSION</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#wpipe.sqlintf.Target"><code class="docutils literal notranslate"><span class="pre">Target</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#wpipe.sqlintf.Task"><code class="docutils literal notranslate"><span class="pre">Task</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#wpipe.sqlintf.User"><code class="docutils literal notranslate"><span class="pre">User</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#wpipe.sqlintf.begin_session"><code class="docutils literal notranslate"><span class="pre">begin_session()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#wpipe.sqlintf.delete"><code class="docutils literal notranslate"><span class="pre">delete()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#wpipe.sqlintf.hold_commit"><code class="docutils literal notranslate"><span class="pre">hold_commit()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-wpipe.sqlintf.Configuration">wpipe.sqlintf.Configuration</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#wpipe.sqlintf.Configuration.Configuration"><code class="docutils literal notranslate"><span class="pre">Configuration</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-wpipe.sqlintf.DPOwner">wpipe.sqlintf.DPOwner</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#wpipe.sqlintf.DPOwner.DPOwner"><code class="docutils literal notranslate"><span class="pre">DPOwner</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-wpipe.sqlintf.DataProduct">wpipe.sqlintf.DataProduct</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#wpipe.sqlintf.DataProduct.DataProduct"><code class="docutils literal notranslate"><span class="pre">DataProduct</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-wpipe.sqlintf.Event">wpipe.sqlintf.Event</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#wpipe.sqlintf.Event.Event"><code class="docutils literal notranslate"><span class="pre">Event</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-wpipe.sqlintf.Input">wpipe.sqlintf.Input</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#wpipe.sqlintf.Input.Input"><code class="docutils literal notranslate"><span class="pre">Input</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-wpipe.sqlintf.Job">wpipe.sqlintf.Job</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#wpipe.sqlintf.Job.Job"><code class="docutils literal notranslate"><span class="pre">Job</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-wpipe.sqlintf.Mask">wpipe.sqlintf.Mask</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#wpipe.sqlintf.Mask.Mask"><code class="docutils literal notranslate"><span class="pre">Mask</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-wpipe.sqlintf.Node">wpipe.sqlintf.Node</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#wpipe.sqlintf.Node.Node"><code class="docutils literal notranslate"><span class="pre">Node</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-wpipe.sqlintf.OptOwner">wpipe.sqlintf.OptOwner</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#wpipe.sqlintf.OptOwner.OptOwner"><code class="docutils literal notranslate"><span class="pre">OptOwner</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-wpipe.sqlintf.Option">wpipe.sqlintf.Option</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#wpipe.sqlintf.Option.Option"><code class="docutils literal notranslate"><span class="pre">Option</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-wpipe.sqlintf.Parameter">wpipe.sqlintf.Parameter</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#wpipe.sqlintf.Parameter.Parameter"><code class="docutils literal notranslate"><span class="pre">Parameter</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-wpipe.sqlintf.Pipeline">wpipe.sqlintf.Pipeline</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#wpipe.sqlintf.Pipeline.Pipeline"><code class="docutils literal notranslate"><span class="pre">Pipeline</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-wpipe.sqlintf.Target">wpipe.sqlintf.Target</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#wpipe.sqlintf.Target.Target"><code class="docutils literal notranslate"><span class="pre">Target</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-wpipe.sqlintf.Task">wpipe.sqlintf.Task</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#wpipe.sqlintf.Task.Task"><code class="docutils literal notranslate"><span class="pre">Task</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-wpipe.sqlintf.User">wpipe.sqlintf.User</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#wpipe.sqlintf.User.User"><code class="docutils literal notranslate"><span class="pre">User</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-wpipe.sqlintf.core">wpipe.sqlintf.core</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#wpipe.sqlintf.core.Base"><code class="docutils literal notranslate"><span class="pre">Base</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#wpipe.sqlintf.core.Engine"><code class="docutils literal notranslate"><span class="pre">Engine</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#wpipe.sqlintf.core.PARSER"><code class="docutils literal notranslate"><span class="pre">PARSER</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#wpipe.sqlintf.core.Session"><code class="docutils literal notranslate"><span class="pre">Session</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cookbook.html">WINGS Cook Book</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">WINGS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">WINGS API</a></li>
+      <li class="breadcrumb-item active">Module contents</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/wpipe.sqlintf.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-wpipe.sqlintf">
+<span id="module-contents"></span><h1>Module contents<a class="headerlink" href="#module-wpipe.sqlintf" title="Link to this heading"></a></h1>
+<section id="description">
+<h2>Description<a class="headerlink" href="#description" title="Link to this heading"></a></h2>
+<p>Provides the tools to handle the SQL interface with the database.</p>
+</section>
+<section id="how-to-use">
+<h2>How to use<a class="headerlink" href="#how-to-use" title="Link to this heading"></a></h2>
+<p>This subpackage handles the interface with the SQL database for which the
+connection is powered by the third-party module SQLAlchemy. In practice, no
+one should ever need to use this subpackage, it contains the tools to
+initialize the database connection and query it, as well as duplicates of each
+of the Wpipe classes which objects are meant to represent a single row of the
+corresponding database table. Instead, these classes are exploited by their
+Wpipe counterparts to interact with the database.</p>
+</section>
+<section id="utilities">
+<h2>Utilities<a class="headerlink" href="#utilities" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>PARSER</dt><dd><p>pre-instantiated parser powered by the module <cite>argparse</cite></p>
+</dd>
+<dt>SESSION</dt><dd><p>session which SQLAlchemy uses to communicate with the database</p>
+</dd>
+<dt>COMMIT_FLAG</dt><dd><p>boolean flag to control the automatic committing</p>
+</dd>
+<dt>commit</dt><dd><p>Flush and commit pending changes if COMMIT_FLAG is True</p>
+</dd>
+</dl>
+</section>
+<dl class="py data">
+<dt class="sig sig-object py" id="wpipe.sqlintf.COMMIT_FLAG">
+<span class="sig-prename descclassname"><span class="pre">wpipe.sqlintf.</span></span><span class="sig-name descname"><span class="pre">COMMIT_FLAG</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></span><a class="headerlink" href="#wpipe.sqlintf.COMMIT_FLAG" title="Link to this definition"></a></dt>
+<dd><p>flag to control the automatic committing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>boolean</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Configuration">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">wpipe.sqlintf.</span></span><span class="sig-name descname"><span class="pre">Configuration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wpipe.sqlintf.Configuration" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#wpipe.sqlintf.DPOwner.DPOwner" title="wpipe.sqlintf.DPOwner.DPOwner"><code class="xref py py-class docutils literal notranslate"><span class="pre">DPOwner</span></code></a></p>
+<p>A Configuration object represents a row of the <cite>configurations</cite> table.</p>
+<p>DO NOT USE CONSTRUCTOR: constructing a Configuration object adds a new
+row to the database: USE INSTEAD ITS WPIPE COUNTERPART.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Configuration.confpath">
+<span class="sig-name descname"><span class="pre">confpath</span></span><a class="headerlink" href="#wpipe.sqlintf.Configuration.confpath" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Configuration.datapath">
+<span class="sig-name descname"><span class="pre">datapath</span></span><a class="headerlink" href="#wpipe.sqlintf.Configuration.datapath" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Configuration.dataproducts">
+<span class="sig-name descname"><span class="pre">dataproducts</span></span><a class="headerlink" href="#wpipe.sqlintf.Configuration.dataproducts" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Configuration.description">
+<span class="sig-name descname"><span class="pre">description</span></span><a class="headerlink" href="#wpipe.sqlintf.Configuration.description" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Configuration.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#wpipe.sqlintf.Configuration.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Configuration.jobs">
+<span class="sig-name descname"><span class="pre">jobs</span></span><a class="headerlink" href="#wpipe.sqlintf.Configuration.jobs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Configuration.logpath">
+<span class="sig-name descname"><span class="pre">logpath</span></span><a class="headerlink" href="#wpipe.sqlintf.Configuration.logpath" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Configuration.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#wpipe.sqlintf.Configuration.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Configuration.parameters">
+<span class="sig-name descname"><span class="pre">parameters</span></span><a class="headerlink" href="#wpipe.sqlintf.Configuration.parameters" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Configuration.procpath">
+<span class="sig-name descname"><span class="pre">procpath</span></span><a class="headerlink" href="#wpipe.sqlintf.Configuration.procpath" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Configuration.rawpath">
+<span class="sig-name descname"><span class="pre">rawpath</span></span><a class="headerlink" href="#wpipe.sqlintf.Configuration.rawpath" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Configuration.target">
+<span class="sig-name descname"><span class="pre">target</span></span><a class="headerlink" href="#wpipe.sqlintf.Configuration.target" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Configuration.target_id">
+<span class="sig-name descname"><span class="pre">target_id</span></span><a class="headerlink" href="#wpipe.sqlintf.Configuration.target_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Configuration.timestamp">
+<span class="sig-name descname"><span class="pre">timestamp</span></span><a class="headerlink" href="#wpipe.sqlintf.Configuration.timestamp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Configuration.type">
+<span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#wpipe.sqlintf.Configuration.type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DPOwner">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">wpipe.sqlintf.</span></span><span class="sig-name descname"><span class="pre">DPOwner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wpipe.sqlintf.DPOwner" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#wpipe.sqlintf.core.Base" title="sqlalchemy.orm.decl_api.Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Base</span></code></a></p>
+<p>A DPOwner object represents a row of the <cite>dpowners</cite> table.</p>
+<p>DO NOT USE CONSTRUCTOR: constructing a DPOwner object adds a new row
+to the database: USE INSTEAD ITS WPIPE COUNTERPART.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DPOwner.dataproducts">
+<span class="sig-name descname"><span class="pre">dataproducts</span></span><a class="headerlink" href="#wpipe.sqlintf.DPOwner.dataproducts" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DPOwner.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#wpipe.sqlintf.DPOwner.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DPOwner.timestamp">
+<span class="sig-name descname"><span class="pre">timestamp</span></span><a class="headerlink" href="#wpipe.sqlintf.DPOwner.timestamp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DPOwner.type">
+<span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#wpipe.sqlintf.DPOwner.type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DataProduct">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">wpipe.sqlintf.</span></span><span class="sig-name descname"><span class="pre">DataProduct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wpipe.sqlintf.DataProduct" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#wpipe.sqlintf.OptOwner.OptOwner" title="wpipe.sqlintf.OptOwner.OptOwner"><code class="xref py py-class docutils literal notranslate"><span class="pre">OptOwner</span></code></a></p>
+<p>A DataProduct object represents a row of the <cite>dataproducts</cite> table.</p>
+<p>DO NOT USE CONSTRUCTOR: constructing a DataProduct object adds a new
+row to the database: USE INSTEAD ITS WPIPE COUNTERPART.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DataProduct.config">
+<span class="sig-name descname"><span class="pre">config</span></span><a class="headerlink" href="#wpipe.sqlintf.DataProduct.config" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DataProduct.config_id">
+<span class="sig-name descname"><span class="pre">config_id</span></span><a class="headerlink" href="#wpipe.sqlintf.DataProduct.config_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DataProduct.data_type">
+<span class="sig-name descname"><span class="pre">data_type</span></span><a class="headerlink" href="#wpipe.sqlintf.DataProduct.data_type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DataProduct.dec">
+<span class="sig-name descname"><span class="pre">dec</span></span><a class="headerlink" href="#wpipe.sqlintf.DataProduct.dec" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DataProduct.dpowner">
+<span class="sig-name descname"><span class="pre">dpowner</span></span><a class="headerlink" href="#wpipe.sqlintf.DataProduct.dpowner" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DataProduct.dpowner_id">
+<span class="sig-name descname"><span class="pre">dpowner_id</span></span><a class="headerlink" href="#wpipe.sqlintf.DataProduct.dpowner_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DataProduct.filename">
+<span class="sig-name descname"><span class="pre">filename</span></span><a class="headerlink" href="#wpipe.sqlintf.DataProduct.filename" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DataProduct.filtername">
+<span class="sig-name descname"><span class="pre">filtername</span></span><a class="headerlink" href="#wpipe.sqlintf.DataProduct.filtername" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DataProduct.group">
+<span class="sig-name descname"><span class="pre">group</span></span><a class="headerlink" href="#wpipe.sqlintf.DataProduct.group" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DataProduct.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#wpipe.sqlintf.DataProduct.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DataProduct.input">
+<span class="sig-name descname"><span class="pre">input</span></span><a class="headerlink" href="#wpipe.sqlintf.DataProduct.input" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DataProduct.input_id">
+<span class="sig-name descname"><span class="pre">input_id</span></span><a class="headerlink" href="#wpipe.sqlintf.DataProduct.input_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DataProduct.options">
+<span class="sig-name descname"><span class="pre">options</span></span><a class="headerlink" href="#wpipe.sqlintf.DataProduct.options" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DataProduct.pipeline">
+<span class="sig-name descname"><span class="pre">pipeline</span></span><a class="headerlink" href="#wpipe.sqlintf.DataProduct.pipeline" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DataProduct.pipeline_id">
+<span class="sig-name descname"><span class="pre">pipeline_id</span></span><a class="headerlink" href="#wpipe.sqlintf.DataProduct.pipeline_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DataProduct.pointing_angle">
+<span class="sig-name descname"><span class="pre">pointing_angle</span></span><a class="headerlink" href="#wpipe.sqlintf.DataProduct.pointing_angle" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DataProduct.ra">
+<span class="sig-name descname"><span class="pre">ra</span></span><a class="headerlink" href="#wpipe.sqlintf.DataProduct.ra" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DataProduct.relativepath">
+<span class="sig-name descname"><span class="pre">relativepath</span></span><a class="headerlink" href="#wpipe.sqlintf.DataProduct.relativepath" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DataProduct.subtype">
+<span class="sig-name descname"><span class="pre">subtype</span></span><a class="headerlink" href="#wpipe.sqlintf.DataProduct.subtype" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DataProduct.suffix">
+<span class="sig-name descname"><span class="pre">suffix</span></span><a class="headerlink" href="#wpipe.sqlintf.DataProduct.suffix" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DataProduct.timestamp">
+<span class="sig-name descname"><span class="pre">timestamp</span></span><a class="headerlink" href="#wpipe.sqlintf.DataProduct.timestamp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DataProduct.type">
+<span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#wpipe.sqlintf.DataProduct.type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Event">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">wpipe.sqlintf.</span></span><span class="sig-name descname"><span class="pre">Event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wpipe.sqlintf.Event" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#wpipe.sqlintf.OptOwner.OptOwner" title="wpipe.sqlintf.OptOwner.OptOwner"><code class="xref py py-class docutils literal notranslate"><span class="pre">OptOwner</span></code></a></p>
+<p>A Event object represents a row of the <cite>events</cite> table.</p>
+<p>DO NOT USE CONSTRUCTOR: constructing a Event object adds a new row
+to the database: USE INSTEAD ITS WPIPE COUNTERPART.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Event.fired_jobs">
+<span class="sig-name descname"><span class="pre">fired_jobs</span></span><a class="headerlink" href="#wpipe.sqlintf.Event.fired_jobs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Event.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#wpipe.sqlintf.Event.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Event.jargs">
+<span class="sig-name descname"><span class="pre">jargs</span></span><a class="headerlink" href="#wpipe.sqlintf.Event.jargs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Event.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#wpipe.sqlintf.Event.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Event.options">
+<span class="sig-name descname"><span class="pre">options</span></span><a class="headerlink" href="#wpipe.sqlintf.Event.options" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Event.parent_job">
+<span class="sig-name descname"><span class="pre">parent_job</span></span><a class="headerlink" href="#wpipe.sqlintf.Event.parent_job" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Event.parent_job_id">
+<span class="sig-name descname"><span class="pre">parent_job_id</span></span><a class="headerlink" href="#wpipe.sqlintf.Event.parent_job_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Event.tag">
+<span class="sig-name descname"><span class="pre">tag</span></span><a class="headerlink" href="#wpipe.sqlintf.Event.tag" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Event.timestamp">
+<span class="sig-name descname"><span class="pre">timestamp</span></span><a class="headerlink" href="#wpipe.sqlintf.Event.timestamp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Event.type">
+<span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#wpipe.sqlintf.Event.type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Event.value">
+<span class="sig-name descname"><span class="pre">value</span></span><a class="headerlink" href="#wpipe.sqlintf.Event.value" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Input">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">wpipe.sqlintf.</span></span><span class="sig-name descname"><span class="pre">Input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wpipe.sqlintf.Input" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#wpipe.sqlintf.DPOwner.DPOwner" title="wpipe.sqlintf.DPOwner.DPOwner"><code class="xref py py-class docutils literal notranslate"><span class="pre">DPOwner</span></code></a></p>
+<p>A Input object represents a row of the <cite>inputs</cite> table.</p>
+<p>DO NOT USE CONSTRUCTOR: constructing a Input object adds a new row
+to the database: USE INSTEAD ITS WPIPE COUNTERPART.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Input.confpath">
+<span class="sig-name descname"><span class="pre">confpath</span></span><a class="headerlink" href="#wpipe.sqlintf.Input.confpath" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Input.dataproducts">
+<span class="sig-name descname"><span class="pre">dataproducts</span></span><a class="headerlink" href="#wpipe.sqlintf.Input.dataproducts" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Input.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#wpipe.sqlintf.Input.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Input.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#wpipe.sqlintf.Input.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Input.pipeline">
+<span class="sig-name descname"><span class="pre">pipeline</span></span><a class="headerlink" href="#wpipe.sqlintf.Input.pipeline" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Input.pipeline_id">
+<span class="sig-name descname"><span class="pre">pipeline_id</span></span><a class="headerlink" href="#wpipe.sqlintf.Input.pipeline_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Input.rawspath">
+<span class="sig-name descname"><span class="pre">rawspath</span></span><a class="headerlink" href="#wpipe.sqlintf.Input.rawspath" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Input.targets">
+<span class="sig-name descname"><span class="pre">targets</span></span><a class="headerlink" href="#wpipe.sqlintf.Input.targets" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Input.timestamp">
+<span class="sig-name descname"><span class="pre">timestamp</span></span><a class="headerlink" href="#wpipe.sqlintf.Input.timestamp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Input.type">
+<span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#wpipe.sqlintf.Input.type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Job">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">wpipe.sqlintf.</span></span><span class="sig-name descname"><span class="pre">Job</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wpipe.sqlintf.Job" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#wpipe.sqlintf.OptOwner.OptOwner" title="wpipe.sqlintf.OptOwner.OptOwner"><code class="xref py py-class docutils literal notranslate"><span class="pre">OptOwner</span></code></a></p>
+<p>A Job object represents a row of the <cite>jobs</cite> table.</p>
+<p>DO NOT USE CONSTRUCTOR: constructing a Job object adds a new row
+to the database: USE INSTEAD ITS WPIPE COUNTERPART.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Job.attempt">
+<span class="sig-name descname"><span class="pre">attempt</span></span><a class="headerlink" href="#wpipe.sqlintf.Job.attempt" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Job.child_events">
+<span class="sig-name descname"><span class="pre">child_events</span></span><a class="headerlink" href="#wpipe.sqlintf.Job.child_events" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Job.config">
+<span class="sig-name descname"><span class="pre">config</span></span><a class="headerlink" href="#wpipe.sqlintf.Job.config" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Job.config_id">
+<span class="sig-name descname"><span class="pre">config_id</span></span><a class="headerlink" href="#wpipe.sqlintf.Job.config_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Job.endtime">
+<span class="sig-name descname"><span class="pre">endtime</span></span><a class="headerlink" href="#wpipe.sqlintf.Job.endtime" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Job.firing_event">
+<span class="sig-name descname"><span class="pre">firing_event</span></span><a class="headerlink" href="#wpipe.sqlintf.Job.firing_event" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Job.firing_event_id">
+<span class="sig-name descname"><span class="pre">firing_event_id</span></span><a class="headerlink" href="#wpipe.sqlintf.Job.firing_event_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Job.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#wpipe.sqlintf.Job.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Job.node">
+<span class="sig-name descname"><span class="pre">node</span></span><a class="headerlink" href="#wpipe.sqlintf.Job.node" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Job.node_id">
+<span class="sig-name descname"><span class="pre">node_id</span></span><a class="headerlink" href="#wpipe.sqlintf.Job.node_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Job.options">
+<span class="sig-name descname"><span class="pre">options</span></span><a class="headerlink" href="#wpipe.sqlintf.Job.options" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Job.starttime">
+<span class="sig-name descname"><span class="pre">starttime</span></span><a class="headerlink" href="#wpipe.sqlintf.Job.starttime" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Job.state">
+<span class="sig-name descname"><span class="pre">state</span></span><a class="headerlink" href="#wpipe.sqlintf.Job.state" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Job.task">
+<span class="sig-name descname"><span class="pre">task</span></span><a class="headerlink" href="#wpipe.sqlintf.Job.task" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Job.task_id">
+<span class="sig-name descname"><span class="pre">task_id</span></span><a class="headerlink" href="#wpipe.sqlintf.Job.task_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Job.timestamp">
+<span class="sig-name descname"><span class="pre">timestamp</span></span><a class="headerlink" href="#wpipe.sqlintf.Job.timestamp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Job.type">
+<span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#wpipe.sqlintf.Job.type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Mask">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">wpipe.sqlintf.</span></span><span class="sig-name descname"><span class="pre">Mask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wpipe.sqlintf.Mask" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#wpipe.sqlintf.core.Base" title="sqlalchemy.orm.decl_api.Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Base</span></code></a></p>
+<p>A Mask object represents a row of the <cite>masks</cite> table.</p>
+<p>DO NOT USE CONSTRUCTOR: constructing a Mask object adds a new row
+to the database: USE INSTEAD ITS WPIPE COUNTERPART.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Mask.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#wpipe.sqlintf.Mask.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Mask.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#wpipe.sqlintf.Mask.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Mask.source">
+<span class="sig-name descname"><span class="pre">source</span></span><a class="headerlink" href="#wpipe.sqlintf.Mask.source" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Mask.task">
+<span class="sig-name descname"><span class="pre">task</span></span><a class="headerlink" href="#wpipe.sqlintf.Mask.task" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Mask.task_id">
+<span class="sig-name descname"><span class="pre">task_id</span></span><a class="headerlink" href="#wpipe.sqlintf.Mask.task_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Mask.timestamp">
+<span class="sig-name descname"><span class="pre">timestamp</span></span><a class="headerlink" href="#wpipe.sqlintf.Mask.timestamp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Mask.value">
+<span class="sig-name descname"><span class="pre">value</span></span><a class="headerlink" href="#wpipe.sqlintf.Mask.value" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Node">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">wpipe.sqlintf.</span></span><span class="sig-name descname"><span class="pre">Node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wpipe.sqlintf.Node" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#wpipe.sqlintf.core.Base" title="sqlalchemy.orm.decl_api.Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Base</span></code></a></p>
+<p>A Node object represents a row of the <cite>nodes</cite> table.</p>
+<p>DO NOT USE CONSTRUCTOR: constructing a Node object adds a new row
+to the database: USE INSTEAD ITS WPIPE COUNTERPART.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Node.ext_ip">
+<span class="sig-name descname"><span class="pre">ext_ip</span></span><a class="headerlink" href="#wpipe.sqlintf.Node.ext_ip" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Node.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#wpipe.sqlintf.Node.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Node.int_ip">
+<span class="sig-name descname"><span class="pre">int_ip</span></span><a class="headerlink" href="#wpipe.sqlintf.Node.int_ip" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Node.jobs">
+<span class="sig-name descname"><span class="pre">jobs</span></span><a class="headerlink" href="#wpipe.sqlintf.Node.jobs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Node.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#wpipe.sqlintf.Node.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Node.timestamp">
+<span class="sig-name descname"><span class="pre">timestamp</span></span><a class="headerlink" href="#wpipe.sqlintf.Node.timestamp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="wpipe.sqlintf.OptOwner">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">wpipe.sqlintf.</span></span><span class="sig-name descname"><span class="pre">OptOwner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wpipe.sqlintf.OptOwner" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#wpipe.sqlintf.core.Base" title="sqlalchemy.orm.decl_api.Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Base</span></code></a></p>
+<p>A OptOwner object represents a row of the <cite>optowners</cite> table.</p>
+<p>DO NOT USE CONSTRUCTOR: constructing a OptOwner object adds a new row
+to the database: USE INSTEAD ITS WPIPE COUNTERPART.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.OptOwner.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#wpipe.sqlintf.OptOwner.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.OptOwner.options">
+<span class="sig-name descname"><span class="pre">options</span></span><a class="headerlink" href="#wpipe.sqlintf.OptOwner.options" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.OptOwner.timestamp">
+<span class="sig-name descname"><span class="pre">timestamp</span></span><a class="headerlink" href="#wpipe.sqlintf.OptOwner.timestamp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.OptOwner.type">
+<span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#wpipe.sqlintf.OptOwner.type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Option">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">wpipe.sqlintf.</span></span><span class="sig-name descname"><span class="pre">Option</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wpipe.sqlintf.Option" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#wpipe.sqlintf.core.Base" title="sqlalchemy.orm.decl_api.Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Base</span></code></a></p>
+<p>A Option object represents a row of the <cite>options</cite> table.</p>
+<p>DO NOT USE CONSTRUCTOR: constructing a Option object adds a new row
+to the database: USE INSTEAD ITS WPIPE COUNTERPART.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Option.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#wpipe.sqlintf.Option.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Option.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#wpipe.sqlintf.Option.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Option.optowner">
+<span class="sig-name descname"><span class="pre">optowner</span></span><a class="headerlink" href="#wpipe.sqlintf.Option.optowner" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Option.optowner_id">
+<span class="sig-name descname"><span class="pre">optowner_id</span></span><a class="headerlink" href="#wpipe.sqlintf.Option.optowner_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Option.timestamp">
+<span class="sig-name descname"><span class="pre">timestamp</span></span><a class="headerlink" href="#wpipe.sqlintf.Option.timestamp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Option.value">
+<span class="sig-name descname"><span class="pre">value</span></span><a class="headerlink" href="#wpipe.sqlintf.Option.value" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Parameter">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">wpipe.sqlintf.</span></span><span class="sig-name descname"><span class="pre">Parameter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wpipe.sqlintf.Parameter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#wpipe.sqlintf.core.Base" title="sqlalchemy.orm.decl_api.Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Base</span></code></a></p>
+<p>A Parameter object represents a row of the <cite>parameters</cite> table.</p>
+<p>DO NOT USE CONSTRUCTOR: constructing a Parameter object adds a new row
+to the database: USE INSTEAD ITS WPIPE COUNTERPART.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Parameter.config">
+<span class="sig-name descname"><span class="pre">config</span></span><a class="headerlink" href="#wpipe.sqlintf.Parameter.config" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Parameter.config_id">
+<span class="sig-name descname"><span class="pre">config_id</span></span><a class="headerlink" href="#wpipe.sqlintf.Parameter.config_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Parameter.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#wpipe.sqlintf.Parameter.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Parameter.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#wpipe.sqlintf.Parameter.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Parameter.timestamp">
+<span class="sig-name descname"><span class="pre">timestamp</span></span><a class="headerlink" href="#wpipe.sqlintf.Parameter.timestamp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Parameter.value">
+<span class="sig-name descname"><span class="pre">value</span></span><a class="headerlink" href="#wpipe.sqlintf.Parameter.value" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Pipeline">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">wpipe.sqlintf.</span></span><span class="sig-name descname"><span class="pre">Pipeline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wpipe.sqlintf.Pipeline" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#wpipe.sqlintf.DPOwner.DPOwner" title="wpipe.sqlintf.DPOwner.DPOwner"><code class="xref py py-class docutils literal notranslate"><span class="pre">DPOwner</span></code></a></p>
+<p>A Pipeline object represents a row of the <cite>pipelines</cite> table.</p>
+<p>DO NOT USE CONSTRUCTOR: constructing a Pipeline object adds a new row
+to the database: USE INSTEAD ITS WPIPE COUNTERPART.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Pipeline.config_root">
+<span class="sig-name descname"><span class="pre">config_root</span></span><a class="headerlink" href="#wpipe.sqlintf.Pipeline.config_root" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Pipeline.data_root">
+<span class="sig-name descname"><span class="pre">data_root</span></span><a class="headerlink" href="#wpipe.sqlintf.Pipeline.data_root" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Pipeline.dataproducts">
+<span class="sig-name descname"><span class="pre">dataproducts</span></span><a class="headerlink" href="#wpipe.sqlintf.Pipeline.dataproducts" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Pipeline.description">
+<span class="sig-name descname"><span class="pre">description</span></span><a class="headerlink" href="#wpipe.sqlintf.Pipeline.description" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Pipeline.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#wpipe.sqlintf.Pipeline.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Pipeline.input_root">
+<span class="sig-name descname"><span class="pre">input_root</span></span><a class="headerlink" href="#wpipe.sqlintf.Pipeline.input_root" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Pipeline.inputs">
+<span class="sig-name descname"><span class="pre">inputs</span></span><a class="headerlink" href="#wpipe.sqlintf.Pipeline.inputs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Pipeline.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#wpipe.sqlintf.Pipeline.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Pipeline.pipe_root">
+<span class="sig-name descname"><span class="pre">pipe_root</span></span><a class="headerlink" href="#wpipe.sqlintf.Pipeline.pipe_root" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Pipeline.software_root">
+<span class="sig-name descname"><span class="pre">software_root</span></span><a class="headerlink" href="#wpipe.sqlintf.Pipeline.software_root" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Pipeline.tasks">
+<span class="sig-name descname"><span class="pre">tasks</span></span><a class="headerlink" href="#wpipe.sqlintf.Pipeline.tasks" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Pipeline.timestamp">
+<span class="sig-name descname"><span class="pre">timestamp</span></span><a class="headerlink" href="#wpipe.sqlintf.Pipeline.timestamp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Pipeline.type">
+<span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#wpipe.sqlintf.Pipeline.type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Pipeline.user">
+<span class="sig-name descname"><span class="pre">user</span></span><a class="headerlink" href="#wpipe.sqlintf.Pipeline.user" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Pipeline.user_id">
+<span class="sig-name descname"><span class="pre">user_id</span></span><a class="headerlink" href="#wpipe.sqlintf.Pipeline.user_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="wpipe.sqlintf.SESSION">
+<span class="sig-prename descclassname"><span class="pre">wpipe.sqlintf.</span></span><span class="sig-name descname"><span class="pre">SESSION</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#wpipe.sqlintf.SESSION" title="Link to this definition"></a></dt>
+<dd><p>placeholder (manages database operations via the engine).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>sqlalchemy.orm.session.Session object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Target">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">wpipe.sqlintf.</span></span><span class="sig-name descname"><span class="pre">Target</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wpipe.sqlintf.Target" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#wpipe.sqlintf.OptOwner.OptOwner" title="wpipe.sqlintf.OptOwner.OptOwner"><code class="xref py py-class docutils literal notranslate"><span class="pre">OptOwner</span></code></a></p>
+<p>A Target object represents a row of the <cite>targets</cite> table.</p>
+<p>DO NOT USE CONSTRUCTOR: constructing a Target object adds a new row
+to the database: USE INSTEAD ITS WPIPE COUNTERPART.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Target.configurations">
+<span class="sig-name descname"><span class="pre">configurations</span></span><a class="headerlink" href="#wpipe.sqlintf.Target.configurations" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Target.datapath">
+<span class="sig-name descname"><span class="pre">datapath</span></span><a class="headerlink" href="#wpipe.sqlintf.Target.datapath" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Target.dataraws">
+<span class="sig-name descname"><span class="pre">dataraws</span></span><a class="headerlink" href="#wpipe.sqlintf.Target.dataraws" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Target.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#wpipe.sqlintf.Target.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Target.input">
+<span class="sig-name descname"><span class="pre">input</span></span><a class="headerlink" href="#wpipe.sqlintf.Target.input" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Target.input_id">
+<span class="sig-name descname"><span class="pre">input_id</span></span><a class="headerlink" href="#wpipe.sqlintf.Target.input_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Target.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#wpipe.sqlintf.Target.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Target.options">
+<span class="sig-name descname"><span class="pre">options</span></span><a class="headerlink" href="#wpipe.sqlintf.Target.options" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Target.timestamp">
+<span class="sig-name descname"><span class="pre">timestamp</span></span><a class="headerlink" href="#wpipe.sqlintf.Target.timestamp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Target.type">
+<span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#wpipe.sqlintf.Target.type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Task">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">wpipe.sqlintf.</span></span><span class="sig-name descname"><span class="pre">Task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wpipe.sqlintf.Task" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#wpipe.sqlintf.core.Base" title="sqlalchemy.orm.decl_api.Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Base</span></code></a></p>
+<p>A Task object represents a row of the <cite>tasks</cite> table.</p>
+<p>DO NOT USE CONSTRUCTOR: constructing a Task object adds a new row
+to the database: USE INSTEAD ITS WPIPE COUNTERPART.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Task.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#wpipe.sqlintf.Task.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Task.is_exclusive">
+<span class="sig-name descname"><span class="pre">is_exclusive</span></span><a class="headerlink" href="#wpipe.sqlintf.Task.is_exclusive" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Task.jobs">
+<span class="sig-name descname"><span class="pre">jobs</span></span><a class="headerlink" href="#wpipe.sqlintf.Task.jobs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Task.masks">
+<span class="sig-name descname"><span class="pre">masks</span></span><a class="headerlink" href="#wpipe.sqlintf.Task.masks" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Task.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#wpipe.sqlintf.Task.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Task.nruns">
+<span class="sig-name descname"><span class="pre">nruns</span></span><a class="headerlink" href="#wpipe.sqlintf.Task.nruns" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Task.pipeline">
+<span class="sig-name descname"><span class="pre">pipeline</span></span><a class="headerlink" href="#wpipe.sqlintf.Task.pipeline" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Task.pipeline_id">
+<span class="sig-name descname"><span class="pre">pipeline_id</span></span><a class="headerlink" href="#wpipe.sqlintf.Task.pipeline_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Task.run_time">
+<span class="sig-name descname"><span class="pre">run_time</span></span><a class="headerlink" href="#wpipe.sqlintf.Task.run_time" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Task.timestamp">
+<span class="sig-name descname"><span class="pre">timestamp</span></span><a class="headerlink" href="#wpipe.sqlintf.Task.timestamp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="wpipe.sqlintf.User">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">wpipe.sqlintf.</span></span><span class="sig-name descname"><span class="pre">User</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wpipe.sqlintf.User" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#wpipe.sqlintf.core.Base" title="sqlalchemy.orm.decl_api.Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Base</span></code></a></p>
+<p>A User object represents a row of the <cite>users</cite> table.</p>
+<p>DO NOT USE CONSTRUCTOR: constructing a User object adds a new row
+to the database: USE INSTEAD ITS WPIPE COUNTERPART.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.User.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#wpipe.sqlintf.User.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.User.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#wpipe.sqlintf.User.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.User.pipelines">
+<span class="sig-name descname"><span class="pre">pipelines</span></span><a class="headerlink" href="#wpipe.sqlintf.User.pipelines" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.User.timestamp">
+<span class="sig-name descname"><span class="pre">timestamp</span></span><a class="headerlink" href="#wpipe.sqlintf.User.timestamp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="wpipe.sqlintf.begin_session">
+<span class="sig-prename descclassname"><span class="pre">wpipe.sqlintf.</span></span><span class="sig-name descname"><span class="pre">begin_session</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">local_kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wpipe.sqlintf.begin_session" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="wpipe.sqlintf.delete">
+<span class="sig-prename descclassname"><span class="pre">wpipe.sqlintf.</span></span><span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entry</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wpipe.sqlintf.delete" title="Link to this definition"></a></dt>
+<dd><p>Delete entry from the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>entry</strong> (<em>sqlintf object</em>) – Proxy of entry to delete.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="wpipe.sqlintf.hold_commit">
+<span class="sig-prename descclassname"><span class="pre">wpipe.sqlintf.</span></span><span class="sig-name descname"><span class="pre">hold_commit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wpipe.sqlintf.hold_commit" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-wpipe.sqlintf.Configuration">
+<span id="wpipe-sqlintf-configuration"></span><h1>wpipe.sqlintf.Configuration<a class="headerlink" href="#module-wpipe.sqlintf.Configuration" title="Link to this heading"></a></h1>
+<p>Contains the sqlintf.Configuration class definition</p>
+<p>Please note that this module is private. The sqlintf.Configuration class is
+available in the <code class="docutils literal notranslate"><span class="pre">wpipe.sqlintf</span></code> namespace - use that instead.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Configuration.Configuration">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">wpipe.sqlintf.Configuration.</span></span><span class="sig-name descname"><span class="pre">Configuration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wpipe.sqlintf.Configuration.Configuration" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#wpipe.sqlintf.DPOwner.DPOwner" title="wpipe.sqlintf.DPOwner.DPOwner"><code class="xref py py-class docutils literal notranslate"><span class="pre">DPOwner</span></code></a></p>
+<p>A Configuration object represents a row of the <cite>configurations</cite> table.</p>
+<p>DO NOT USE CONSTRUCTOR: constructing a Configuration object adds a new
+row to the database: USE INSTEAD ITS WPIPE COUNTERPART.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Configuration.Configuration.confpath">
+<span class="sig-name descname"><span class="pre">confpath</span></span><a class="headerlink" href="#wpipe.sqlintf.Configuration.Configuration.confpath" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Configuration.Configuration.datapath">
+<span class="sig-name descname"><span class="pre">datapath</span></span><a class="headerlink" href="#wpipe.sqlintf.Configuration.Configuration.datapath" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Configuration.Configuration.dataproducts">
+<span class="sig-name descname"><span class="pre">dataproducts</span></span><a class="headerlink" href="#wpipe.sqlintf.Configuration.Configuration.dataproducts" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Configuration.Configuration.description">
+<span class="sig-name descname"><span class="pre">description</span></span><a class="headerlink" href="#wpipe.sqlintf.Configuration.Configuration.description" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Configuration.Configuration.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#wpipe.sqlintf.Configuration.Configuration.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Configuration.Configuration.jobs">
+<span class="sig-name descname"><span class="pre">jobs</span></span><a class="headerlink" href="#wpipe.sqlintf.Configuration.Configuration.jobs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Configuration.Configuration.logpath">
+<span class="sig-name descname"><span class="pre">logpath</span></span><a class="headerlink" href="#wpipe.sqlintf.Configuration.Configuration.logpath" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Configuration.Configuration.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#wpipe.sqlintf.Configuration.Configuration.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Configuration.Configuration.parameters">
+<span class="sig-name descname"><span class="pre">parameters</span></span><a class="headerlink" href="#wpipe.sqlintf.Configuration.Configuration.parameters" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Configuration.Configuration.procpath">
+<span class="sig-name descname"><span class="pre">procpath</span></span><a class="headerlink" href="#wpipe.sqlintf.Configuration.Configuration.procpath" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Configuration.Configuration.rawpath">
+<span class="sig-name descname"><span class="pre">rawpath</span></span><a class="headerlink" href="#wpipe.sqlintf.Configuration.Configuration.rawpath" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Configuration.Configuration.target">
+<span class="sig-name descname"><span class="pre">target</span></span><a class="headerlink" href="#wpipe.sqlintf.Configuration.Configuration.target" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Configuration.Configuration.target_id">
+<span class="sig-name descname"><span class="pre">target_id</span></span><a class="headerlink" href="#wpipe.sqlintf.Configuration.Configuration.target_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Configuration.Configuration.timestamp">
+<span class="sig-name descname"><span class="pre">timestamp</span></span><a class="headerlink" href="#wpipe.sqlintf.Configuration.Configuration.timestamp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Configuration.Configuration.type">
+<span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#wpipe.sqlintf.Configuration.Configuration.type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-wpipe.sqlintf.DPOwner">
+<span id="wpipe-sqlintf-dpowner"></span><h1>wpipe.sqlintf.DPOwner<a class="headerlink" href="#module-wpipe.sqlintf.DPOwner" title="Link to this heading"></a></h1>
+<p>Contains the sqlintf.DPOwner class definition</p>
+<p>Please note that this module is private. The sqlintf.DPOwner class is
+available in the <code class="docutils literal notranslate"><span class="pre">wpipe.sqlintf</span></code> namespace - use that instead.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DPOwner.DPOwner">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">wpipe.sqlintf.DPOwner.</span></span><span class="sig-name descname"><span class="pre">DPOwner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wpipe.sqlintf.DPOwner.DPOwner" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#wpipe.sqlintf.core.Base" title="sqlalchemy.orm.decl_api.Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Base</span></code></a></p>
+<p>A DPOwner object represents a row of the <cite>dpowners</cite> table.</p>
+<p>DO NOT USE CONSTRUCTOR: constructing a DPOwner object adds a new row
+to the database: USE INSTEAD ITS WPIPE COUNTERPART.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DPOwner.DPOwner.dataproducts">
+<span class="sig-name descname"><span class="pre">dataproducts</span></span><a class="headerlink" href="#wpipe.sqlintf.DPOwner.DPOwner.dataproducts" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DPOwner.DPOwner.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#wpipe.sqlintf.DPOwner.DPOwner.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DPOwner.DPOwner.timestamp">
+<span class="sig-name descname"><span class="pre">timestamp</span></span><a class="headerlink" href="#wpipe.sqlintf.DPOwner.DPOwner.timestamp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DPOwner.DPOwner.type">
+<span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#wpipe.sqlintf.DPOwner.DPOwner.type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-wpipe.sqlintf.DataProduct">
+<span id="wpipe-sqlintf-dataproduct"></span><h1>wpipe.sqlintf.DataProduct<a class="headerlink" href="#module-wpipe.sqlintf.DataProduct" title="Link to this heading"></a></h1>
+<p>Contains the sqlintf.DataProduct class definition</p>
+<p>Please note that this module is private. The sqlintf.DataProduct class is
+available in the <code class="docutils literal notranslate"><span class="pre">wpipe.sqlintf</span></code> namespace - use that instead.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DataProduct.DataProduct">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">wpipe.sqlintf.DataProduct.</span></span><span class="sig-name descname"><span class="pre">DataProduct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wpipe.sqlintf.DataProduct.DataProduct" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#wpipe.sqlintf.OptOwner.OptOwner" title="wpipe.sqlintf.OptOwner.OptOwner"><code class="xref py py-class docutils literal notranslate"><span class="pre">OptOwner</span></code></a></p>
+<p>A DataProduct object represents a row of the <cite>dataproducts</cite> table.</p>
+<p>DO NOT USE CONSTRUCTOR: constructing a DataProduct object adds a new
+row to the database: USE INSTEAD ITS WPIPE COUNTERPART.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DataProduct.DataProduct.config">
+<span class="sig-name descname"><span class="pre">config</span></span><a class="headerlink" href="#wpipe.sqlintf.DataProduct.DataProduct.config" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DataProduct.DataProduct.config_id">
+<span class="sig-name descname"><span class="pre">config_id</span></span><a class="headerlink" href="#wpipe.sqlintf.DataProduct.DataProduct.config_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DataProduct.DataProduct.data_type">
+<span class="sig-name descname"><span class="pre">data_type</span></span><a class="headerlink" href="#wpipe.sqlintf.DataProduct.DataProduct.data_type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DataProduct.DataProduct.dec">
+<span class="sig-name descname"><span class="pre">dec</span></span><a class="headerlink" href="#wpipe.sqlintf.DataProduct.DataProduct.dec" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DataProduct.DataProduct.dpowner">
+<span class="sig-name descname"><span class="pre">dpowner</span></span><a class="headerlink" href="#wpipe.sqlintf.DataProduct.DataProduct.dpowner" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DataProduct.DataProduct.dpowner_id">
+<span class="sig-name descname"><span class="pre">dpowner_id</span></span><a class="headerlink" href="#wpipe.sqlintf.DataProduct.DataProduct.dpowner_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DataProduct.DataProduct.filename">
+<span class="sig-name descname"><span class="pre">filename</span></span><a class="headerlink" href="#wpipe.sqlintf.DataProduct.DataProduct.filename" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DataProduct.DataProduct.filtername">
+<span class="sig-name descname"><span class="pre">filtername</span></span><a class="headerlink" href="#wpipe.sqlintf.DataProduct.DataProduct.filtername" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DataProduct.DataProduct.group">
+<span class="sig-name descname"><span class="pre">group</span></span><a class="headerlink" href="#wpipe.sqlintf.DataProduct.DataProduct.group" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DataProduct.DataProduct.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#wpipe.sqlintf.DataProduct.DataProduct.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DataProduct.DataProduct.input">
+<span class="sig-name descname"><span class="pre">input</span></span><a class="headerlink" href="#wpipe.sqlintf.DataProduct.DataProduct.input" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DataProduct.DataProduct.input_id">
+<span class="sig-name descname"><span class="pre">input_id</span></span><a class="headerlink" href="#wpipe.sqlintf.DataProduct.DataProduct.input_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DataProduct.DataProduct.options">
+<span class="sig-name descname"><span class="pre">options</span></span><a class="headerlink" href="#wpipe.sqlintf.DataProduct.DataProduct.options" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DataProduct.DataProduct.pipeline">
+<span class="sig-name descname"><span class="pre">pipeline</span></span><a class="headerlink" href="#wpipe.sqlintf.DataProduct.DataProduct.pipeline" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DataProduct.DataProduct.pipeline_id">
+<span class="sig-name descname"><span class="pre">pipeline_id</span></span><a class="headerlink" href="#wpipe.sqlintf.DataProduct.DataProduct.pipeline_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DataProduct.DataProduct.pointing_angle">
+<span class="sig-name descname"><span class="pre">pointing_angle</span></span><a class="headerlink" href="#wpipe.sqlintf.DataProduct.DataProduct.pointing_angle" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DataProduct.DataProduct.ra">
+<span class="sig-name descname"><span class="pre">ra</span></span><a class="headerlink" href="#wpipe.sqlintf.DataProduct.DataProduct.ra" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DataProduct.DataProduct.relativepath">
+<span class="sig-name descname"><span class="pre">relativepath</span></span><a class="headerlink" href="#wpipe.sqlintf.DataProduct.DataProduct.relativepath" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DataProduct.DataProduct.subtype">
+<span class="sig-name descname"><span class="pre">subtype</span></span><a class="headerlink" href="#wpipe.sqlintf.DataProduct.DataProduct.subtype" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DataProduct.DataProduct.suffix">
+<span class="sig-name descname"><span class="pre">suffix</span></span><a class="headerlink" href="#wpipe.sqlintf.DataProduct.DataProduct.suffix" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DataProduct.DataProduct.timestamp">
+<span class="sig-name descname"><span class="pre">timestamp</span></span><a class="headerlink" href="#wpipe.sqlintf.DataProduct.DataProduct.timestamp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.DataProduct.DataProduct.type">
+<span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#wpipe.sqlintf.DataProduct.DataProduct.type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-wpipe.sqlintf.Event">
+<span id="wpipe-sqlintf-event"></span><h1>wpipe.sqlintf.Event<a class="headerlink" href="#module-wpipe.sqlintf.Event" title="Link to this heading"></a></h1>
+<p>Contains the sqlintf.Event class definition</p>
+<p>Please note that this module is private. The sqlintf.Event class is
+available in the <code class="docutils literal notranslate"><span class="pre">wpipe.sqlintf</span></code> namespace - use that instead.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Event.Event">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">wpipe.sqlintf.Event.</span></span><span class="sig-name descname"><span class="pre">Event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wpipe.sqlintf.Event.Event" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#wpipe.sqlintf.OptOwner.OptOwner" title="wpipe.sqlintf.OptOwner.OptOwner"><code class="xref py py-class docutils literal notranslate"><span class="pre">OptOwner</span></code></a></p>
+<p>A Event object represents a row of the <cite>events</cite> table.</p>
+<p>DO NOT USE CONSTRUCTOR: constructing a Event object adds a new row
+to the database: USE INSTEAD ITS WPIPE COUNTERPART.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Event.Event.fired_jobs">
+<span class="sig-name descname"><span class="pre">fired_jobs</span></span><a class="headerlink" href="#wpipe.sqlintf.Event.Event.fired_jobs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Event.Event.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#wpipe.sqlintf.Event.Event.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Event.Event.jargs">
+<span class="sig-name descname"><span class="pre">jargs</span></span><a class="headerlink" href="#wpipe.sqlintf.Event.Event.jargs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Event.Event.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#wpipe.sqlintf.Event.Event.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Event.Event.options">
+<span class="sig-name descname"><span class="pre">options</span></span><a class="headerlink" href="#wpipe.sqlintf.Event.Event.options" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Event.Event.parent_job">
+<span class="sig-name descname"><span class="pre">parent_job</span></span><a class="headerlink" href="#wpipe.sqlintf.Event.Event.parent_job" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Event.Event.parent_job_id">
+<span class="sig-name descname"><span class="pre">parent_job_id</span></span><a class="headerlink" href="#wpipe.sqlintf.Event.Event.parent_job_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Event.Event.tag">
+<span class="sig-name descname"><span class="pre">tag</span></span><a class="headerlink" href="#wpipe.sqlintf.Event.Event.tag" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Event.Event.timestamp">
+<span class="sig-name descname"><span class="pre">timestamp</span></span><a class="headerlink" href="#wpipe.sqlintf.Event.Event.timestamp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Event.Event.type">
+<span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#wpipe.sqlintf.Event.Event.type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Event.Event.value">
+<span class="sig-name descname"><span class="pre">value</span></span><a class="headerlink" href="#wpipe.sqlintf.Event.Event.value" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-wpipe.sqlintf.Input">
+<span id="wpipe-sqlintf-input"></span><h1>wpipe.sqlintf.Input<a class="headerlink" href="#module-wpipe.sqlintf.Input" title="Link to this heading"></a></h1>
+<p>Contains the sqlintf.Input class definition</p>
+<p>Please note that this module is private. The sqlintf.Input class is
+available in the <code class="docutils literal notranslate"><span class="pre">wpipe.sqlintf</span></code> namespace - use that instead.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Input.Input">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">wpipe.sqlintf.Input.</span></span><span class="sig-name descname"><span class="pre">Input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wpipe.sqlintf.Input.Input" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#wpipe.sqlintf.DPOwner.DPOwner" title="wpipe.sqlintf.DPOwner.DPOwner"><code class="xref py py-class docutils literal notranslate"><span class="pre">DPOwner</span></code></a></p>
+<p>A Input object represents a row of the <cite>inputs</cite> table.</p>
+<p>DO NOT USE CONSTRUCTOR: constructing a Input object adds a new row
+to the database: USE INSTEAD ITS WPIPE COUNTERPART.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Input.Input.confpath">
+<span class="sig-name descname"><span class="pre">confpath</span></span><a class="headerlink" href="#wpipe.sqlintf.Input.Input.confpath" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Input.Input.dataproducts">
+<span class="sig-name descname"><span class="pre">dataproducts</span></span><a class="headerlink" href="#wpipe.sqlintf.Input.Input.dataproducts" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Input.Input.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#wpipe.sqlintf.Input.Input.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Input.Input.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#wpipe.sqlintf.Input.Input.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Input.Input.pipeline">
+<span class="sig-name descname"><span class="pre">pipeline</span></span><a class="headerlink" href="#wpipe.sqlintf.Input.Input.pipeline" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Input.Input.pipeline_id">
+<span class="sig-name descname"><span class="pre">pipeline_id</span></span><a class="headerlink" href="#wpipe.sqlintf.Input.Input.pipeline_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Input.Input.rawspath">
+<span class="sig-name descname"><span class="pre">rawspath</span></span><a class="headerlink" href="#wpipe.sqlintf.Input.Input.rawspath" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Input.Input.targets">
+<span class="sig-name descname"><span class="pre">targets</span></span><a class="headerlink" href="#wpipe.sqlintf.Input.Input.targets" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Input.Input.timestamp">
+<span class="sig-name descname"><span class="pre">timestamp</span></span><a class="headerlink" href="#wpipe.sqlintf.Input.Input.timestamp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Input.Input.type">
+<span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#wpipe.sqlintf.Input.Input.type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-wpipe.sqlintf.Job">
+<span id="wpipe-sqlintf-job"></span><h1>wpipe.sqlintf.Job<a class="headerlink" href="#module-wpipe.sqlintf.Job" title="Link to this heading"></a></h1>
+<p>Contains the sqlintf.Job class definition</p>
+<p>Please note that this module is private. The sqlintf.Job class is
+available in the <code class="docutils literal notranslate"><span class="pre">wpipe.sqlintf</span></code> namespace - use that instead.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Job.Job">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">wpipe.sqlintf.Job.</span></span><span class="sig-name descname"><span class="pre">Job</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wpipe.sqlintf.Job.Job" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#wpipe.sqlintf.OptOwner.OptOwner" title="wpipe.sqlintf.OptOwner.OptOwner"><code class="xref py py-class docutils literal notranslate"><span class="pre">OptOwner</span></code></a></p>
+<p>A Job object represents a row of the <cite>jobs</cite> table.</p>
+<p>DO NOT USE CONSTRUCTOR: constructing a Job object adds a new row
+to the database: USE INSTEAD ITS WPIPE COUNTERPART.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Job.Job.attempt">
+<span class="sig-name descname"><span class="pre">attempt</span></span><a class="headerlink" href="#wpipe.sqlintf.Job.Job.attempt" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Job.Job.child_events">
+<span class="sig-name descname"><span class="pre">child_events</span></span><a class="headerlink" href="#wpipe.sqlintf.Job.Job.child_events" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Job.Job.config">
+<span class="sig-name descname"><span class="pre">config</span></span><a class="headerlink" href="#wpipe.sqlintf.Job.Job.config" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Job.Job.config_id">
+<span class="sig-name descname"><span class="pre">config_id</span></span><a class="headerlink" href="#wpipe.sqlintf.Job.Job.config_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Job.Job.endtime">
+<span class="sig-name descname"><span class="pre">endtime</span></span><a class="headerlink" href="#wpipe.sqlintf.Job.Job.endtime" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Job.Job.firing_event">
+<span class="sig-name descname"><span class="pre">firing_event</span></span><a class="headerlink" href="#wpipe.sqlintf.Job.Job.firing_event" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Job.Job.firing_event_id">
+<span class="sig-name descname"><span class="pre">firing_event_id</span></span><a class="headerlink" href="#wpipe.sqlintf.Job.Job.firing_event_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Job.Job.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#wpipe.sqlintf.Job.Job.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Job.Job.node">
+<span class="sig-name descname"><span class="pre">node</span></span><a class="headerlink" href="#wpipe.sqlintf.Job.Job.node" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Job.Job.node_id">
+<span class="sig-name descname"><span class="pre">node_id</span></span><a class="headerlink" href="#wpipe.sqlintf.Job.Job.node_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Job.Job.options">
+<span class="sig-name descname"><span class="pre">options</span></span><a class="headerlink" href="#wpipe.sqlintf.Job.Job.options" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Job.Job.starttime">
+<span class="sig-name descname"><span class="pre">starttime</span></span><a class="headerlink" href="#wpipe.sqlintf.Job.Job.starttime" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Job.Job.state">
+<span class="sig-name descname"><span class="pre">state</span></span><a class="headerlink" href="#wpipe.sqlintf.Job.Job.state" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Job.Job.task">
+<span class="sig-name descname"><span class="pre">task</span></span><a class="headerlink" href="#wpipe.sqlintf.Job.Job.task" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Job.Job.task_id">
+<span class="sig-name descname"><span class="pre">task_id</span></span><a class="headerlink" href="#wpipe.sqlintf.Job.Job.task_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Job.Job.timestamp">
+<span class="sig-name descname"><span class="pre">timestamp</span></span><a class="headerlink" href="#wpipe.sqlintf.Job.Job.timestamp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Job.Job.type">
+<span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#wpipe.sqlintf.Job.Job.type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-wpipe.sqlintf.Mask">
+<span id="wpipe-sqlintf-mask"></span><h1>wpipe.sqlintf.Mask<a class="headerlink" href="#module-wpipe.sqlintf.Mask" title="Link to this heading"></a></h1>
+<p>Contains the sqlintf.Mask class definition</p>
+<p>Please note that this module is private. The sqlintf.Mask class is
+available in the <code class="docutils literal notranslate"><span class="pre">wpipe.sqlintf</span></code> namespace - use that instead.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Mask.Mask">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">wpipe.sqlintf.Mask.</span></span><span class="sig-name descname"><span class="pre">Mask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wpipe.sqlintf.Mask.Mask" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#wpipe.sqlintf.core.Base" title="sqlalchemy.orm.decl_api.Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Base</span></code></a></p>
+<p>A Mask object represents a row of the <cite>masks</cite> table.</p>
+<p>DO NOT USE CONSTRUCTOR: constructing a Mask object adds a new row
+to the database: USE INSTEAD ITS WPIPE COUNTERPART.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Mask.Mask.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#wpipe.sqlintf.Mask.Mask.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Mask.Mask.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#wpipe.sqlintf.Mask.Mask.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Mask.Mask.source">
+<span class="sig-name descname"><span class="pre">source</span></span><a class="headerlink" href="#wpipe.sqlintf.Mask.Mask.source" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Mask.Mask.task">
+<span class="sig-name descname"><span class="pre">task</span></span><a class="headerlink" href="#wpipe.sqlintf.Mask.Mask.task" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Mask.Mask.task_id">
+<span class="sig-name descname"><span class="pre">task_id</span></span><a class="headerlink" href="#wpipe.sqlintf.Mask.Mask.task_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Mask.Mask.timestamp">
+<span class="sig-name descname"><span class="pre">timestamp</span></span><a class="headerlink" href="#wpipe.sqlintf.Mask.Mask.timestamp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Mask.Mask.value">
+<span class="sig-name descname"><span class="pre">value</span></span><a class="headerlink" href="#wpipe.sqlintf.Mask.Mask.value" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-wpipe.sqlintf.Node">
+<span id="wpipe-sqlintf-node"></span><h1>wpipe.sqlintf.Node<a class="headerlink" href="#module-wpipe.sqlintf.Node" title="Link to this heading"></a></h1>
+<p>Contains the sqlintf.Node class definition</p>
+<p>Please note that this module is private. The sqlintf.Node class is
+available in the <code class="docutils literal notranslate"><span class="pre">wpipe.sqlintf</span></code> namespace - use that instead.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Node.Node">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">wpipe.sqlintf.Node.</span></span><span class="sig-name descname"><span class="pre">Node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wpipe.sqlintf.Node.Node" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#wpipe.sqlintf.core.Base" title="sqlalchemy.orm.decl_api.Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Base</span></code></a></p>
+<p>A Node object represents a row of the <cite>nodes</cite> table.</p>
+<p>DO NOT USE CONSTRUCTOR: constructing a Node object adds a new row
+to the database: USE INSTEAD ITS WPIPE COUNTERPART.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Node.Node.ext_ip">
+<span class="sig-name descname"><span class="pre">ext_ip</span></span><a class="headerlink" href="#wpipe.sqlintf.Node.Node.ext_ip" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Node.Node.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#wpipe.sqlintf.Node.Node.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Node.Node.int_ip">
+<span class="sig-name descname"><span class="pre">int_ip</span></span><a class="headerlink" href="#wpipe.sqlintf.Node.Node.int_ip" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Node.Node.jobs">
+<span class="sig-name descname"><span class="pre">jobs</span></span><a class="headerlink" href="#wpipe.sqlintf.Node.Node.jobs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Node.Node.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#wpipe.sqlintf.Node.Node.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Node.Node.timestamp">
+<span class="sig-name descname"><span class="pre">timestamp</span></span><a class="headerlink" href="#wpipe.sqlintf.Node.Node.timestamp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-wpipe.sqlintf.OptOwner">
+<span id="wpipe-sqlintf-optowner"></span><h1>wpipe.sqlintf.OptOwner<a class="headerlink" href="#module-wpipe.sqlintf.OptOwner" title="Link to this heading"></a></h1>
+<p>Contains the sqlintf.OptOwner class definition</p>
+<p>Please note that this module is private. The sqlintf.OptOwner class is
+available in the <code class="docutils literal notranslate"><span class="pre">wpipe.sqlintf</span></code> namespace - use that instead.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="wpipe.sqlintf.OptOwner.OptOwner">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">wpipe.sqlintf.OptOwner.</span></span><span class="sig-name descname"><span class="pre">OptOwner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wpipe.sqlintf.OptOwner.OptOwner" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#wpipe.sqlintf.core.Base" title="sqlalchemy.orm.decl_api.Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Base</span></code></a></p>
+<p>A OptOwner object represents a row of the <cite>optowners</cite> table.</p>
+<p>DO NOT USE CONSTRUCTOR: constructing a OptOwner object adds a new row
+to the database: USE INSTEAD ITS WPIPE COUNTERPART.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.OptOwner.OptOwner.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#wpipe.sqlintf.OptOwner.OptOwner.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.OptOwner.OptOwner.options">
+<span class="sig-name descname"><span class="pre">options</span></span><a class="headerlink" href="#wpipe.sqlintf.OptOwner.OptOwner.options" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.OptOwner.OptOwner.timestamp">
+<span class="sig-name descname"><span class="pre">timestamp</span></span><a class="headerlink" href="#wpipe.sqlintf.OptOwner.OptOwner.timestamp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.OptOwner.OptOwner.type">
+<span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#wpipe.sqlintf.OptOwner.OptOwner.type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-wpipe.sqlintf.Option">
+<span id="wpipe-sqlintf-option"></span><h1>wpipe.sqlintf.Option<a class="headerlink" href="#module-wpipe.sqlintf.Option" title="Link to this heading"></a></h1>
+<p>Contains the sqlintf.Option class definition</p>
+<p>Please note that this module is private. The sqlintf.Option class is
+available in the <code class="docutils literal notranslate"><span class="pre">wpipe.sqlintf</span></code> namespace - use that instead.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Option.Option">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">wpipe.sqlintf.Option.</span></span><span class="sig-name descname"><span class="pre">Option</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wpipe.sqlintf.Option.Option" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#wpipe.sqlintf.core.Base" title="sqlalchemy.orm.decl_api.Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Base</span></code></a></p>
+<p>A Option object represents a row of the <cite>options</cite> table.</p>
+<p>DO NOT USE CONSTRUCTOR: constructing a Option object adds a new row
+to the database: USE INSTEAD ITS WPIPE COUNTERPART.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Option.Option.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#wpipe.sqlintf.Option.Option.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Option.Option.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#wpipe.sqlintf.Option.Option.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Option.Option.optowner">
+<span class="sig-name descname"><span class="pre">optowner</span></span><a class="headerlink" href="#wpipe.sqlintf.Option.Option.optowner" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Option.Option.optowner_id">
+<span class="sig-name descname"><span class="pre">optowner_id</span></span><a class="headerlink" href="#wpipe.sqlintf.Option.Option.optowner_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Option.Option.timestamp">
+<span class="sig-name descname"><span class="pre">timestamp</span></span><a class="headerlink" href="#wpipe.sqlintf.Option.Option.timestamp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Option.Option.value">
+<span class="sig-name descname"><span class="pre">value</span></span><a class="headerlink" href="#wpipe.sqlintf.Option.Option.value" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-wpipe.sqlintf.Parameter">
+<span id="wpipe-sqlintf-parameter"></span><h1>wpipe.sqlintf.Parameter<a class="headerlink" href="#module-wpipe.sqlintf.Parameter" title="Link to this heading"></a></h1>
+<p>Contains the sqlintf.Parameter class definition</p>
+<p>Please note that this module is private. The sqlintf.Parameter class is
+available in the <code class="docutils literal notranslate"><span class="pre">wpipe.sqlintf</span></code> namespace - use that instead.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Parameter.Parameter">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">wpipe.sqlintf.Parameter.</span></span><span class="sig-name descname"><span class="pre">Parameter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wpipe.sqlintf.Parameter.Parameter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#wpipe.sqlintf.core.Base" title="sqlalchemy.orm.decl_api.Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Base</span></code></a></p>
+<p>A Parameter object represents a row of the <cite>parameters</cite> table.</p>
+<p>DO NOT USE CONSTRUCTOR: constructing a Parameter object adds a new row
+to the database: USE INSTEAD ITS WPIPE COUNTERPART.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Parameter.Parameter.config">
+<span class="sig-name descname"><span class="pre">config</span></span><a class="headerlink" href="#wpipe.sqlintf.Parameter.Parameter.config" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Parameter.Parameter.config_id">
+<span class="sig-name descname"><span class="pre">config_id</span></span><a class="headerlink" href="#wpipe.sqlintf.Parameter.Parameter.config_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Parameter.Parameter.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#wpipe.sqlintf.Parameter.Parameter.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Parameter.Parameter.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#wpipe.sqlintf.Parameter.Parameter.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Parameter.Parameter.timestamp">
+<span class="sig-name descname"><span class="pre">timestamp</span></span><a class="headerlink" href="#wpipe.sqlintf.Parameter.Parameter.timestamp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Parameter.Parameter.value">
+<span class="sig-name descname"><span class="pre">value</span></span><a class="headerlink" href="#wpipe.sqlintf.Parameter.Parameter.value" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-wpipe.sqlintf.Pipeline">
+<span id="wpipe-sqlintf-pipeline"></span><h1>wpipe.sqlintf.Pipeline<a class="headerlink" href="#module-wpipe.sqlintf.Pipeline" title="Link to this heading"></a></h1>
+<p>Contains the sqlintf.Pipeline class definition</p>
+<p>Please note that this module is private. The sqlintf.Pipeline class is
+available in the <code class="docutils literal notranslate"><span class="pre">wpipe.sqlintf</span></code> namespace - use that instead.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Pipeline.Pipeline">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">wpipe.sqlintf.Pipeline.</span></span><span class="sig-name descname"><span class="pre">Pipeline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wpipe.sqlintf.Pipeline.Pipeline" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#wpipe.sqlintf.DPOwner.DPOwner" title="wpipe.sqlintf.DPOwner.DPOwner"><code class="xref py py-class docutils literal notranslate"><span class="pre">DPOwner</span></code></a></p>
+<p>A Pipeline object represents a row of the <cite>pipelines</cite> table.</p>
+<p>DO NOT USE CONSTRUCTOR: constructing a Pipeline object adds a new row
+to the database: USE INSTEAD ITS WPIPE COUNTERPART.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Pipeline.Pipeline.config_root">
+<span class="sig-name descname"><span class="pre">config_root</span></span><a class="headerlink" href="#wpipe.sqlintf.Pipeline.Pipeline.config_root" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Pipeline.Pipeline.data_root">
+<span class="sig-name descname"><span class="pre">data_root</span></span><a class="headerlink" href="#wpipe.sqlintf.Pipeline.Pipeline.data_root" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Pipeline.Pipeline.dataproducts">
+<span class="sig-name descname"><span class="pre">dataproducts</span></span><a class="headerlink" href="#wpipe.sqlintf.Pipeline.Pipeline.dataproducts" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Pipeline.Pipeline.description">
+<span class="sig-name descname"><span class="pre">description</span></span><a class="headerlink" href="#wpipe.sqlintf.Pipeline.Pipeline.description" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Pipeline.Pipeline.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#wpipe.sqlintf.Pipeline.Pipeline.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Pipeline.Pipeline.input_root">
+<span class="sig-name descname"><span class="pre">input_root</span></span><a class="headerlink" href="#wpipe.sqlintf.Pipeline.Pipeline.input_root" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Pipeline.Pipeline.inputs">
+<span class="sig-name descname"><span class="pre">inputs</span></span><a class="headerlink" href="#wpipe.sqlintf.Pipeline.Pipeline.inputs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Pipeline.Pipeline.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#wpipe.sqlintf.Pipeline.Pipeline.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Pipeline.Pipeline.pipe_root">
+<span class="sig-name descname"><span class="pre">pipe_root</span></span><a class="headerlink" href="#wpipe.sqlintf.Pipeline.Pipeline.pipe_root" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Pipeline.Pipeline.software_root">
+<span class="sig-name descname"><span class="pre">software_root</span></span><a class="headerlink" href="#wpipe.sqlintf.Pipeline.Pipeline.software_root" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Pipeline.Pipeline.tasks">
+<span class="sig-name descname"><span class="pre">tasks</span></span><a class="headerlink" href="#wpipe.sqlintf.Pipeline.Pipeline.tasks" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Pipeline.Pipeline.timestamp">
+<span class="sig-name descname"><span class="pre">timestamp</span></span><a class="headerlink" href="#wpipe.sqlintf.Pipeline.Pipeline.timestamp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Pipeline.Pipeline.type">
+<span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#wpipe.sqlintf.Pipeline.Pipeline.type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Pipeline.Pipeline.user">
+<span class="sig-name descname"><span class="pre">user</span></span><a class="headerlink" href="#wpipe.sqlintf.Pipeline.Pipeline.user" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Pipeline.Pipeline.user_id">
+<span class="sig-name descname"><span class="pre">user_id</span></span><a class="headerlink" href="#wpipe.sqlintf.Pipeline.Pipeline.user_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-wpipe.sqlintf.Target">
+<span id="wpipe-sqlintf-target"></span><h1>wpipe.sqlintf.Target<a class="headerlink" href="#module-wpipe.sqlintf.Target" title="Link to this heading"></a></h1>
+<p>Contains the sqlintf.Target class definition</p>
+<p>Please note that this module is private. The sqlintf.Target class is
+available in the <code class="docutils literal notranslate"><span class="pre">wpipe.sqlintf</span></code> namespace - use that instead.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Target.Target">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">wpipe.sqlintf.Target.</span></span><span class="sig-name descname"><span class="pre">Target</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wpipe.sqlintf.Target.Target" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#wpipe.sqlintf.OptOwner.OptOwner" title="wpipe.sqlintf.OptOwner.OptOwner"><code class="xref py py-class docutils literal notranslate"><span class="pre">OptOwner</span></code></a></p>
+<p>A Target object represents a row of the <cite>targets</cite> table.</p>
+<p>DO NOT USE CONSTRUCTOR: constructing a Target object adds a new row
+to the database: USE INSTEAD ITS WPIPE COUNTERPART.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Target.Target.configurations">
+<span class="sig-name descname"><span class="pre">configurations</span></span><a class="headerlink" href="#wpipe.sqlintf.Target.Target.configurations" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Target.Target.datapath">
+<span class="sig-name descname"><span class="pre">datapath</span></span><a class="headerlink" href="#wpipe.sqlintf.Target.Target.datapath" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Target.Target.dataraws">
+<span class="sig-name descname"><span class="pre">dataraws</span></span><a class="headerlink" href="#wpipe.sqlintf.Target.Target.dataraws" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Target.Target.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#wpipe.sqlintf.Target.Target.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Target.Target.input">
+<span class="sig-name descname"><span class="pre">input</span></span><a class="headerlink" href="#wpipe.sqlintf.Target.Target.input" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Target.Target.input_id">
+<span class="sig-name descname"><span class="pre">input_id</span></span><a class="headerlink" href="#wpipe.sqlintf.Target.Target.input_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Target.Target.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#wpipe.sqlintf.Target.Target.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Target.Target.options">
+<span class="sig-name descname"><span class="pre">options</span></span><a class="headerlink" href="#wpipe.sqlintf.Target.Target.options" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Target.Target.timestamp">
+<span class="sig-name descname"><span class="pre">timestamp</span></span><a class="headerlink" href="#wpipe.sqlintf.Target.Target.timestamp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Target.Target.type">
+<span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#wpipe.sqlintf.Target.Target.type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-wpipe.sqlintf.Task">
+<span id="wpipe-sqlintf-task"></span><h1>wpipe.sqlintf.Task<a class="headerlink" href="#module-wpipe.sqlintf.Task" title="Link to this heading"></a></h1>
+<p>Contains the sqlintf.Task class definition</p>
+<p>Please note that this module is private. The sqlintf.Task class is
+available in the <code class="docutils literal notranslate"><span class="pre">wpipe.sqlintf</span></code> namespace - use that instead.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Task.Task">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">wpipe.sqlintf.Task.</span></span><span class="sig-name descname"><span class="pre">Task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wpipe.sqlintf.Task.Task" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#wpipe.sqlintf.core.Base" title="sqlalchemy.orm.decl_api.Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Base</span></code></a></p>
+<p>A Task object represents a row of the <cite>tasks</cite> table.</p>
+<p>DO NOT USE CONSTRUCTOR: constructing a Task object adds a new row
+to the database: USE INSTEAD ITS WPIPE COUNTERPART.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Task.Task.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#wpipe.sqlintf.Task.Task.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Task.Task.is_exclusive">
+<span class="sig-name descname"><span class="pre">is_exclusive</span></span><a class="headerlink" href="#wpipe.sqlintf.Task.Task.is_exclusive" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Task.Task.jobs">
+<span class="sig-name descname"><span class="pre">jobs</span></span><a class="headerlink" href="#wpipe.sqlintf.Task.Task.jobs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Task.Task.masks">
+<span class="sig-name descname"><span class="pre">masks</span></span><a class="headerlink" href="#wpipe.sqlintf.Task.Task.masks" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Task.Task.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#wpipe.sqlintf.Task.Task.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Task.Task.nruns">
+<span class="sig-name descname"><span class="pre">nruns</span></span><a class="headerlink" href="#wpipe.sqlintf.Task.Task.nruns" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Task.Task.pipeline">
+<span class="sig-name descname"><span class="pre">pipeline</span></span><a class="headerlink" href="#wpipe.sqlintf.Task.Task.pipeline" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Task.Task.pipeline_id">
+<span class="sig-name descname"><span class="pre">pipeline_id</span></span><a class="headerlink" href="#wpipe.sqlintf.Task.Task.pipeline_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Task.Task.run_time">
+<span class="sig-name descname"><span class="pre">run_time</span></span><a class="headerlink" href="#wpipe.sqlintf.Task.Task.run_time" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.Task.Task.timestamp">
+<span class="sig-name descname"><span class="pre">timestamp</span></span><a class="headerlink" href="#wpipe.sqlintf.Task.Task.timestamp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-wpipe.sqlintf.User">
+<span id="wpipe-sqlintf-user"></span><h1>wpipe.sqlintf.User<a class="headerlink" href="#module-wpipe.sqlintf.User" title="Link to this heading"></a></h1>
+<p>Contains the sqlintf.User class definition</p>
+<p>Please note that this module is private. The sqlintf.User class is
+available in the <code class="docutils literal notranslate"><span class="pre">wpipe.sqlintf</span></code> namespace - use that instead.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="wpipe.sqlintf.User.User">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">wpipe.sqlintf.User.</span></span><span class="sig-name descname"><span class="pre">User</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wpipe.sqlintf.User.User" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#wpipe.sqlintf.core.Base" title="sqlalchemy.orm.decl_api.Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Base</span></code></a></p>
+<p>A User object represents a row of the <cite>users</cite> table.</p>
+<p>DO NOT USE CONSTRUCTOR: constructing a User object adds a new row
+to the database: USE INSTEAD ITS WPIPE COUNTERPART.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.User.User.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#wpipe.sqlintf.User.User.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.User.User.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#wpipe.sqlintf.User.User.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.User.User.pipelines">
+<span class="sig-name descname"><span class="pre">pipelines</span></span><a class="headerlink" href="#wpipe.sqlintf.User.User.pipelines" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.User.User.timestamp">
+<span class="sig-name descname"><span class="pre">timestamp</span></span><a class="headerlink" href="#wpipe.sqlintf.User.User.timestamp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-wpipe.sqlintf.core">
+<span id="wpipe-sqlintf-core"></span><h1>wpipe.sqlintf.core<a class="headerlink" href="#module-wpipe.sqlintf.core" title="Link to this heading"></a></h1>
+<p>Contains the core import statements and developing tools of sqlintf</p>
+<p>Please note that this module is private. All functions and objects
+are available in the main <code class="docutils literal notranslate"><span class="pre">wpipe.sqlintf</span></code> namespace - use that instead.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="wpipe.sqlintf.core.Base">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">wpipe.sqlintf.core.</span></span><span class="sig-name descname"><span class="pre">Base</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wpipe.sqlintf.core.Base" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>sqlalchemy.ext.declarative.api.Base class: Base class to sqlintf classes.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="wpipe.sqlintf.core.Base.get_id">
+<span class="sig-name descname"><span class="pre">get_id</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wpipe.sqlintf.core.Base.get_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.core.Base.metadata">
+<span class="sig-name descname"><span class="pre">metadata</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">MetaData()</span></span><a class="headerlink" href="#wpipe.sqlintf.core.Base.metadata" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wpipe.sqlintf.core.Base.registry">
+<span class="sig-name descname"><span class="pre">registry</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;sqlalchemy.orm.decl_api.registry</span> <span class="pre">object&gt;</span></span><a class="headerlink" href="#wpipe.sqlintf.core.Base.registry" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="wpipe.sqlintf.core.Engine">
+<span class="sig-prename descclassname"><span class="pre">wpipe.sqlintf.core.</span></span><span class="sig-name descname"><span class="pre">Engine</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Engine(mysql+pymysql://root:***&#64;127.0.0.1:8000/wpipe)</span></span><a class="headerlink" href="#wpipe.sqlintf.core.Engine" title="Link to this definition"></a></dt>
+<dd><p>handles the connection to the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>sqlalchemy.engine.base.Engine object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="wpipe.sqlintf.core.PARSER">
+<span class="sig-prename descclassname"><span class="pre">wpipe.sqlintf.core.</span></span><span class="sig-name descname"><span class="pre">PARSER</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">ArgumentParser(prog='sphinx-build',</span> <span class="pre">usage=None,</span> <span class="pre">description=None,</span> <span class="pre">formatter_class=&lt;class</span> <span class="pre">'argparse.HelpFormatter'&gt;,</span> <span class="pre">conflict_handler='error',</span> <span class="pre">add_help=True)</span></span><a class="headerlink" href="#wpipe.sqlintf.core.PARSER" title="Link to this definition"></a></dt>
+<dd><p>pre-instantiated parser.</p>
+<p>For usage, call object-method PARSER.print_help in interpreter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>argparse.ArgumentParser object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="wpipe.sqlintf.core.Session">
+<span class="sig-prename descclassname"><span class="pre">wpipe.sqlintf.core.</span></span><span class="sig-name descname"><span class="pre">Session</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">sessionmaker(class_='Session',</span> <span class="pre">bind=Engine(mysql+pymysql://root:***&#64;127.0.0.1:8000/wpipe),</span> <span class="pre">autoflush=True,</span> <span class="pre">autocommit=False,</span> <span class="pre">expire_on_commit=True)</span></span><a class="headerlink" href="#wpipe.sqlintf.core.Session" title="Link to this definition"></a></dt>
+<dd><p>initiates new sessions bound to the engine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>sqlalchemy.orm.session.Session class</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="wpipe.html" class="btn btn-neutral float-left" title="Module contents" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="cookbook.html" class="btn btn-neutral float-right" title="WINGS Cook Book" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Benjamin Williams.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
