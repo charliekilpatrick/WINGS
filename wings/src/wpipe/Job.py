@@ -5,7 +5,6 @@ Contains the Job class definition
 Please note that this module is private. The Job class is
 available in the main ``wpipe`` namespace - use that instead.
 """
-from .constants import LOGPRINT_TIMESTAMP
 from .core import sys, logging, datetime, pd, si
 from .core import make_yield_session_if_not_cached, make_query_rtn_upd
 from .core import initialize_args, wpipe_to_sqlintf_connection, in_session
@@ -21,10 +20,9 @@ JOBSUBMSTATE = "Submitted"
 JOBCOMPSTATE = "Completed"
 JOBEXPISTATE = "Expired"
 
-CLASS_NAME = split_path(__file__)[1]
 KEYID_ATTR = 'job_id'
-UNIQ_ATTRS = getattr(si, CLASS_NAME).__UNIQ_ATTRS__
-CLASS_LOW = CLASS_NAME.lower()
+UNIQ_ATTRS = ['task_id', 'config_id', 'firing_event_id', 'attempt']
+CLASS_LOW = split_path(__file__)[1].lower()
 
 
 def _in_session(**local_kw):
@@ -274,16 +272,11 @@ class Job(OptOwner):
         if cls._to_cache:
             cls._to_cache[CLASS_LOW] = cls._inst
             cls.__cache__.loc[len(cls.__cache__)] = cls._to_cache
-            del cls._to_cache
         new_cls_inst = cls._inst
         delattr(cls, '_inst')
         if old_cls_inst is not None:
             cls._inst = old_cls_inst
         return new_cls_inst
-    
-    @classmethod
-    def _return_cached_instances(cls):
-        return [getattr(obj, '_%s' % CLASS_LOW) for obj in cls.__cache__[CLASS_LOW]]
 
     @_in_session()
     def __init__(self, *args, **kwargs):
@@ -301,12 +294,6 @@ class Job(OptOwner):
         if not hasattr(self, '_optowner'):
             self._optowner = self._job
         super(Job, self).__init__(kwargs.get('options', {}))
-
-    @_in_session()
-    def __repr__(self):
-        cls = self.__class__.__name__
-        description = ', '.join([(f"{prop}={getattr(self, prop)}") for prop in [KEYID_ATTR]+UNIQ_ATTRS])
-        return f'{cls}({description})'
 
     @classmethod
     def select(cls, *args, **kwargs):
@@ -359,7 +346,7 @@ class Job(OptOwner):
     @state.setter
     @_in_session()
     def state(self, state):
-        self._job.state = state[:256]
+        self._job.state = state
         self.update_timestamp()
         # self._job.timestamp = datetime.datetime.utcnow()
         # self._session.commit()
@@ -615,9 +602,8 @@ class Job(OptOwner):
         """
         if log_text is not None:
             with self._log_dp.open("a") as log:
-                if LOGPRINT_TIMESTAMP:
-                    log.write(f"{datetime.datetime.utcnow().isoformat()}: ")
-                log.write(f"{log_text}\n")
+                log.write(log_text)
+                log.write('\n')
         return self._log_dp
 
     @_in_session()

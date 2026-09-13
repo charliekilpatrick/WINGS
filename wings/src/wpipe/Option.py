@@ -12,10 +12,9 @@ from .core import split_path
 
 __all__ = ['Option']
 
-CLASS_NAME = split_path(__file__)[1]
 KEYID_ATTR = 'option_id'
-UNIQ_ATTRS = getattr(si, CLASS_NAME).__UNIQ_ATTRS__
-CLASS_LOW = CLASS_NAME.lower()
+UNIQ_ATTRS = ['optowner_id', 'name']
+CLASS_LOW = split_path(__file__)[1].lower()
 
 
 def _in_session(**local_kw):
@@ -87,10 +86,6 @@ class Option:
     @classmethod
     def _check_in_cache(cls, kind, loc):
         return _check_in_cache(cls, kind, loc)
-    
-    @classmethod
-    def _return_cached_instances(cls):
-        return [getattr(obj, '_%s' % CLASS_LOW) for obj in cls.__cache__[CLASS_LOW]]
 
     @classmethod
     def _sqlintf_instance_argument(cls):
@@ -145,7 +140,6 @@ class Option:
         if cls._to_cache:
             cls._to_cache[CLASS_LOW] = cls._inst
             cls.__cache__.loc[len(cls.__cache__)] = cls._to_cache
-            del cls._to_cache
         new_cls_inst = cls._inst
         delattr(cls, '_inst')
         if old_cls_inst is not None:
@@ -156,12 +150,6 @@ class Option:
     def __init__(self, *args, **kwargs):
         pass
         # self.update_timestamp()
-
-    @_in_session()
-    def __repr__(self):
-        cls = self.__class__.__name__
-        description = ', '.join([(f"{prop}={getattr(self, prop)}") for prop in [KEYID_ATTR]+UNIQ_ATTRS])
-        return f'{cls}({description})'
 
     @classmethod
     def select(cls, *args, **kwargs):

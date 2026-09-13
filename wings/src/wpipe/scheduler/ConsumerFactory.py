@@ -1,9 +1,7 @@
-from typing import Callable, Tuple
+from typing import Callable
 import os
-
-from wpipe.scheduler.Utils import has_pbs_or_slurm, no_function_returned_related_to_scheduler
-from . import pbsconsumer, sendJobToPbs
-from . import slurmconsumer, sendJobToSlurm
+from . import pbsconsumer
+from . import slurmconsumer
 
 
 def get_consumer_factory() -> Callable:
@@ -11,25 +9,18 @@ def get_consumer_factory() -> Callable:
     We check for Slurm or PBS schedulers in the environment and return the associated consumer.  If the system
     has both we return the PBS consumer.
     """
-    has_pbs, has_slurm = has_pbs_or_slurm()
+    has_pbs = os.system("which qsub") == 0
+    has_slurm = os.system("which slurm") == 0
+
+    if has_pbs and has_slurm:
+        print("WARNING: Found both PBS and Slurm... continuing with PBS...")
 
     if has_pbs:
         return pbsconsumer
     if has_slurm:
         return slurmconsumer
-
-    no_function_returned_related_to_scheduler()
-
-
-def get_send_job_factory() -> Callable:
-    has_pbs, has_slurm = has_pbs_or_slurm()
-
-    if has_pbs:
-        return sendJobToPbs
-    if has_slurm:
-        return sendJobToSlurm
-
-    no_function_returned_related_to_scheduler()
+    raise RuntimeError("Wasn't able to give a consumer when were expected to use one ...\n "
+                       "please define the WPIPE_NO_SCHEDULER environment variable for no scheduler")
 
 
 if __name__ == "__main__":

@@ -34,28 +34,25 @@ parallel --jobs {{pbs.njobs}} --sshloginfile $PBS_NODEFILE --workdir $PWD < {{pb
 
 """
 
-        return Template(templateString)
-        
     @staticmethod
     def getSlurmFileTemplate():
         templateString = \
             """#!/bin/bash
 ## Job Name
-#SBATCH --job-name={{slurm.jobid}}
+#SBATCH --job-name=
 ## Allocation Definition 
 #SBATCH --account={{slurm.account}}
 #SBATCH --partition={{slurm.partition}}
 ## Resources
 ## Nodes
-#SBATCH --nodes={{slurm.nnodes}} --ntasks-per-node={{slurm.njobs}} --cpus-per-task={{slurm.ncpus}} 
+#SBATCH --nodes={{slurm.nnodes}} --ntasks-per-node={{slurm.njobs}} 
 ## Walltime (4 hours)
 #SBATCH --time={{slurm.walltime}}
 ## Memory per node
 #SBATCH --mem={{slurm.mem}}
 ## Specify the working directory for this job
-#SBATCH --chdir={{slurm.pipe_root}}
+#SBATCH --chdir={{slurm.workingdir}}
 module load parallel-20170722 
-conda activate astroconda
 cat {{slurm.executables_list_path}} | parallel
 
 """

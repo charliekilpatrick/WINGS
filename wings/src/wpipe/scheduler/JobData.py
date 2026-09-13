@@ -8,7 +8,6 @@ available in the ``wpipe.scheduler`` namespace - use that instead.
 import os
 from .. import si
 from .PbsScheduler import DEFAULT_NODE_MODEL, DEFAULT_WALLTIME
-from .SlurmScheduler import DEFAULT_MEMORY, DEFAULT_WALLTIME, DEFAULT_ACCOUNT, DEFAULT_PARTITION, DEFAULT_NCPUS
 
 __all__ = ['JobData']
 
@@ -45,18 +44,6 @@ class JobData:
         except KeyError:
             self._walltime = DEFAULT_WALLTIME
         try:
-            self._memory = str(event_options['memory'])
-        except KeyError:
-            self._memory = DEFAULT_MEMORY
-        try:
-            self._slurm_partition = str(event_options['partition'])
-        except KeyError:
-            self._slurm_partition = DEFAULT_PARTITION
-        try:
-            self._slurm_account= str(event_options['account'])
-        except KeyError:
-            self._slurm_account = DEFAULT_ACCOUNT
-        try:
             self._job_openmp = bool(event_options['job_openmp'])
         except KeyError:
             self._job_openmp = False
@@ -64,10 +51,7 @@ class JobData:
             self._job_condaenv = str(event_options['conda_environment'])
         except KeyError:
             self._job_condaenv = os.environ.get('CONDA_DEFAULT_ENV', '')
-        try:
-            self._ncpus = str(event_options['ncpus'])
-        except:
-            self._ncpus = DEFAULT_NCPUS
+
     # These are required
     def validate(self):
         errors = ""
@@ -124,18 +108,6 @@ class JobData:
 
     def getWalltime(self):
         return self._walltime
-
-    def getMemory(self):
-        return self._memory
-
-    def getNcpus(self):
-        return self._ncpus
-
-    def getAccount(self):
-        return self._slurm_account
-
-    def getPartition(self):
-        return self._slurm_partition
 
     def getJobOpenMP(self):
         return self._job_openmp

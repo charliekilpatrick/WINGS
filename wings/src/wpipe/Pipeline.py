@@ -15,10 +15,9 @@ from .DPOwner import DPOwner
 
 __all__ = ['Pipeline']
 
-CLASS_NAME = split_path(__file__)[1]
 KEYID_ATTR = 'pipeline_id'
-UNIQ_ATTRS = getattr(si, CLASS_NAME).__UNIQ_ATTRS__
-CLASS_LOW = CLASS_NAME.lower()
+UNIQ_ATTRS = ['user_id', 'pipe_root']
+CLASS_LOW = split_path(__file__)[1].lower()
 
 
 def _in_session(**local_kw):
@@ -192,10 +191,6 @@ class Pipeline(DPOwner):
             for _session in cls._check_in_cache(kind='keyid',
                                                 loc=getattr(cls, '_%s' % CLASS_LOW).get_id()):
                 pass
-    
-    @classmethod
-    def _return_cached_instances(cls):
-        return [getattr(obj, '_%s' % CLASS_LOW) for obj in cls.__cache__[CLASS_LOW]]
 
     def __new__(cls, *args, **kwargs):
         if hasattr(cls, '_inst'):
@@ -292,7 +287,6 @@ class Pipeline(DPOwner):
         if cls._to_cache:
             cls._to_cache[CLASS_LOW] = cls._inst
             cls.__cache__.loc[len(cls.__cache__)] = cls._to_cache
-            del cls._to_cache
         new_cls_inst = cls._inst
         delattr(cls, '_inst')
         if old_cls_inst is not None:
@@ -314,12 +308,6 @@ class Pipeline(DPOwner):
         if not hasattr(self, '_dummy_job'):
             self._dummy_job = self.dummy_task.job()
         super(Pipeline, self).__init__()
-
-    @_in_session()
-    def __repr__(self):
-        cls = self.__class__.__name__
-        description = ', '.join([(f"{prop}={getattr(self, prop)}") for prop in [KEYID_ATTR]+UNIQ_ATTRS])
-        return f'{cls}({description})'
 
     @classmethod
     def select(cls, *args, **kwargs):
@@ -356,18 +344,17 @@ class Pipeline(DPOwner):
         """
         str: Name of the pipeline.
         """
-        return self._pipeline.name
-        # self._session.refresh(self._pipeline)
-        # return _query_return_and_update_cached_row(self, 'name')
+        self._session.refresh(self._pipeline)
+        return _query_return_and_update_cached_row(self, 'name')
 
-    # @name.setter
-    # @_in_session()
-    # def name(self, name):
-    #     self._pipeline.name = name
-    #     _temp = _query_return_and_update_cached_row(self, 'name')
-    #     self.update_timestamp()
-    #     # self._pipeline.timestamp = datetime.datetime.utcnow()
-    #     # self._session.commit()
+    @name.setter
+    @_in_session()
+    def name(self, name):
+        self._pipeline.name = name
+        _temp = _query_return_and_update_cached_row(self, 'name')
+        self.update_timestamp()
+        # self._pipeline.timestamp = datetime.datetime.utcnow()
+        # self._session.commit()
 
     @property
     @_in_session()
@@ -383,9 +370,7 @@ class Pipeline(DPOwner):
         """
         str: Path to the pipeline directory.
         """
-        self._session.refresh(self._pipeline)
-        return _query_return_and_update_cached_row(self, 'pipe_root')
-        # return self._pipeline.pipe_root
+        return self._pipeline.pipe_root
 
     @property
     @_in_session()
