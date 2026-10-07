@@ -11,12 +11,20 @@
   {% csrf_token %}
   <div class="campaign-hero">
     <div>
+      <p class="crumb">
+        <a href="{% url 'home_page' %}">Programs</a>
+        {% if program %}
+        / <a href="{% url 'program_campaign' program.program_id %}">{{ program.short_name }}</a>
+        {% endif %}
+        / {{ campaign.target.display_name }}
+      </p>
       <h1>{{ campaign.target.display_name }}</h1>
       <ul class="meta-list">
         <li><span class="k">Name</span><span>{{ campaign.target.name }}</span></li>
         {% if campaign.target.host %}
         <li><span class="k">Host</span><span>{{ campaign.target.host }}</span></li>
         {% endif %}
+        <li><span class="k">Field</span><span>{% if campaign.target.field_role == 'parallel' %}Parallel{% else %}Prime{% endif %}</span></li>
         {% if campaign.target.distance_display %}
         <li><span class="k">Distance</span><span>{{ campaign.target.distance_display }}</span></li>
         {% endif %}
@@ -88,20 +96,19 @@
   <div class="card" style="margin-bottom:1.25rem;">
     <h2>Images ({{ campaign.n_images }})</h2>
     <div class="table-wrap">
-      <table class="table campaign-table">
+      <table class="table campaign-table" data-sortable>
         <thead>
           <tr>
-            <th>File</th>
-            <th>Telescope</th>
-            <th>Instrument</th>
-            <th>Filter</th>
-            <th>Product</th>
-            <th>Exp. (s)</th>
-            <th>Date</th>
-            <th>RA</th>
-            <th>Dec</th>
-            <th>Size</th>
-            <th>ObsID</th>
+            <th data-sort="text">File</th>
+            <th data-sort="text">Telescope</th>
+            <th data-sort="text">Instrument</th>
+            <th data-sort="text">Filter</th>
+            <th data-sort="number">Exp. (s)</th>
+            <th data-sort="text">Date/Time</th>
+            <th data-sort="number">RA</th>
+            <th data-sort="number">Dec</th>
+            <th data-sort="text">Size</th>
+            <th data-sort="text">ObsID</th>
           </tr>
         </thead>
         <tbody>
@@ -111,7 +118,6 @@
             <td>{{ image.telescope }}</td>
             <td>{{ image.instrument }}</td>
             <td>{{ image.filter }}</td>
-            <td>{{ image.product }}</td>
             <td>{% if image.exptime %}{{ image.exptime|floatformat:1 }}{% else %}—{% endif %}</td>
             <td>{{ image.date_obs|default:"—" }}</td>
             <td>{% if image.ra %}{{ image.ra|floatformat:5 }}{% else %}—{% endif %}</td>
@@ -120,7 +126,7 @@
             <td>{{ image.obsid }}</td>
           </tr>
           {% empty %}
-          <tr><td colspan="11">No downloaded science images yet.</td></tr>
+          <tr><td colspan="10">No downloaded science images yet.</td></tr>
           {% endfor %}
         </tbody>
       </table>

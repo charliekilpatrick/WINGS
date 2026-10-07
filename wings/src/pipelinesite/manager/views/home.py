@@ -1,5 +1,5 @@
-from manager.views.campaign import campaign_home
+from manager.views.programs import programs_home
 
 
 def home(request):
-    return campaign_home(request)
+    return programs_home(request)

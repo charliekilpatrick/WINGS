@@ -95,14 +95,9 @@ cd wings/src/pipelinesite
 ./run_demo.sh
 ```
 
-Then open http://127.0.0.1:8000/. The demo uses SQLite (`PIPELINESITE_DEMO=1`) and does not need the live wpipe MySQL database.
+Then open http://127.0.0.1:8000/. Sign in is required. `setup_demo` creates a Django admin user `admin` / `admin` if it does not already exist. Staff/admin accounts see an Admin tab where they can add users and campaign targets. The home page lists HST programs (currently GO 18338 and GO 18440). Each program has its own campaign table. The demo uses SQLite (`PIPELINESITE_DEMO=1`) and does not need the live wpipe MySQL database.
 
-Sync newly archived GO 18338 targets into the campaign table:
-
-```bash
-cd wings/src/pipelinesite
-PIPELINESITE_DEMO=1 .venv/bin/python manage.py sync_program_targets
-```
+Program campaign tables come from the current Phase II APT files. Reductions for GO 18338 and GO 18440 live under `/data/ckilpatrick/go18338/<target>/` and `/data/ckilpatrick/go18440/<target>/`. GO 18338 parallel fields use a `par` suffix (`ngc0157/` vs `ngc0157par/`).
 
 ## Documentation
 

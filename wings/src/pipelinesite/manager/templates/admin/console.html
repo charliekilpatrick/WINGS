@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_head %}
+<title>Admin — {{ program_short }}</title>
+<link rel="stylesheet" href="{% static 'manager/campaign.css' %}">
+{% endblock %}
+
+{% block body %}
+<div class="campaign-wrap">
+  <p class="crumb"><a href="{% url 'home_page' %}">Programs</a> / Admin</p>
+  <h1>Admin</h1>
+  <p class="campaign-sub">Add users and campaign targets. Only admin accounts can open this page.</p>
+
+  {% if messages %}
+  {% for message in messages %}
+  <p class="alert-plain">{{ message }}</p>
+  {% endfor %}
+  {% endif %}
+
+  <div class="admin-grid">
+    <div class="card">
+      <h2>Add user</h2>
+      <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="add_user">
+        <label>Username <input class="form-control" type="text" name="username" required></label>
+        <label>Email <input class="form-control" type="email" name="email"></label>
+        <label>Password <input class="form-control" type="password" name="password" required></label>
+        <label class="check-row">
+          <input type="checkbox" name="is_admin" value="1">
+          Admin account
+        </label>
+        <button type="submit" class="btn btn-accent">Add user</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>Add target</h2>
+      <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="add_target">
+        <label>
+          Program
+          <select class="form-control" name="program_id">
+            {% for program in programs %}
+            <option value="{{ program.program_id }}">{{ program.short_name }}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <label>Name / slug <input class="form-control" type="text" name="name" placeholder="ngc1234" required></label>
+        <label>Display name <input class="form-control" type="text" name="display_name" placeholder="NGC 1234"></label>
+        <label>Host <input class="form-control" type="text" name="host" placeholder="NGC 1234"></label>
+        <label>
+          Field
+          <select class="form-control" name="field_role">
+            <option value="prime">Prime</option>
+            <option value="parallel">Parallel</option>
+          </select>
+        </label>
+        <label>RA <input class="form-control" type="text" name="ra" placeholder="10.5 or 00:42:00.0" required></label>
+        <label>Dec <input class="form-control" type="text" name="dec" placeholder="-8.4 or -08:23:46.7" required></label>
+        <label>Radius (arcmin) <input class="form-control" type="text" name="radius_arcmin" value="5.0"></label>
+        <label>Notes <input class="form-control" type="text" name="notes"></label>
+        <button type="submit" class="btn btn-accent">Add target</button>
+      </form>
+    </div>
+  </div>
+
+  <h2>Users</h2>
+  <div class="table-wrap">
+    <table class="table campaign-table">
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Email</th>
+          <th>Admin</th>
+          <th>Active</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for person in admin_users %}
+        <tr>
+          <td>{{ person.username }}</td>
+          <td>{{ person.email|default:"—" }}</td>
+          <td>{% if person.is_staff %}Yes{% else %}No{% endif %}</td>
+          <td>{% if person.is_active %}Yes{% else %}No{% endif %}</td>
+          <td>
+            <form method="post" class="inline-form">
+              {% csrf_token %}
+              <input type="hidden" name="action" value="update_user">
+              <input type="hidden" name="username" value="{{ person.username }}">
+              <label>
+                <input type="checkbox" name="is_admin" value="1"{% if person.is_staff %} checked{% endif %}>
+                Admin
+              </label>
+              <label>
+                <input type="checkbox" name="active" value="1"{% if person.is_active %} checked{% endif %}>
+                Active
+              </label>
+              <button type="submit" class="btn">Save</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Targets</h2>
+  <div class="table-wrap">
+    <table class="table campaign-table">
+      <thead>
+        <tr>
+          <th>Target</th>
+          <th>Program</th>
+          <th>Field</th>
+          <th>Host</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in admin_targets %}
+        <tr>
+          <td><a href="{% url 'manager:target_detail' row.name %}">{{ row.display_name }}</a></td>
+          <td>GO {{ row.program_id }}</td>
+          <td>{% if row.field_role == 'parallel' %}Parallel{% else %}Prime{% endif %}</td>
+          <td>{{ row.host|default:"—" }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

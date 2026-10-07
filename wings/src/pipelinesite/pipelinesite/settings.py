@@ -90,10 +90,8 @@ ST123_CUT_SHARP_MAX = float(os.environ.get('ST123_CUT_SHARP_MAX', '0.3'))
 ST123_CUT_CROWD_MAX = float(os.environ.get('ST123_CUT_CROWD_MAX', '0.5'))
 ST123_CUT_SNR_MIN = os.environ.get('ST123_CUT_SNR_MIN') or None
 ST123_DATA_ROOT = os.environ.get('ST123_DATA_ROOT', '/data/ckilpatrick/HST')
-ST123_CAMPAIGN_REGISTRY = os.environ.get(
-    'ST123_CAMPAIGN_REGISTRY',
-    str(Path(ST123_DATA_ROOT) / '.pipelinesite' / 'campaign_targets.json'),
-)
+ST123_OUTPUT_ROOT = os.environ.get('ST123_OUTPUT_ROOT', '/data/ckilpatrick')
+ST123_CAMPAIGN_REGISTRY = os.environ.get('ST123_CAMPAIGN_REGISTRY') or ''
 GLADEPLUS_DIR = os.environ.get('GLADEPLUS_DIR', '/data/ckilpatrick/catalogs/GLADE+')
 
 
@@ -124,7 +122,12 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'manager.middleware.LoginRequiredMiddleware',
 ]
+
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/accounts/login/'
 
 ROOT_URLCONF = 'pipelinesite.urls'
 

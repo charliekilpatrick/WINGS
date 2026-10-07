@@ -86,3 +86,66 @@ class ProgramSyncTests(SimpleTestCase):
                 names = [spec.name for spec in campaign_targets()]
             self.assertIn('ngc7814', names)
             self.assertNotIn('ngc157', names)
+
+    def test_program_registries_stay_separate(self):
+        from manager.st123.config import campaign_registry_path
+        from manager.st123.program_sync import sync_program_targets
+
+        path_18338 = campaign_registry_path('18338')
+        path_18440 = campaign_registry_path('18440')
+        self.assertNotEqual(path_18338, path_18440)
+        self.assertTrue(str(path_18338).endswith('go18338/.pipelinesite/campaign_targets.json'))
+        self.assertTrue(str(path_18440).endswith('go18440/.pipelinesite/campaign_targets.json'))
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            dest = root / 'go18440-registry.json'
+            result = sync_program_targets(
+                program='18440',
+                registry_path=dest,
+                root=root,
+                visit_html=_VISIT_HTML,
+                mast_rows=[
+                    {
+                        'target_name': 'NGC7814',
+                        'key': 'NGC7814',
+                        'ra': 10.0,
+                        'dec': 16.0,
+                        'instruments': ('WFC3',),
+                        'obs_id': 'iexx01',
+                        'public': True,
+                    }
+                ],
+                create_dirs=False,
+                resolve_sky=lambda name: None,
+            )
+            self.assertEqual(Path(result['registry']), dest)
+            self.assertTrue(dest.is_file())
+            self.assertFalse((root / '.pipelinesite' / 'campaign_targets.json').exists())
+
+    def test_18440_lists_planned_visits_with_resolved_coords(self):
+        from manager.st123.program_sync import lookup_host_name, sync_program_targets
+
+        self.assertEqual(lookup_host_name('NGC1291-1'), 'NGC 1291')
+        coords = {
+            'NGC 7814': (10.6847, 16.1456),
+            'NGC 157': (8.5946, -8.3963),
+        }
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            result = sync_program_targets(
+                program='18440',
+                registry_path=root / 'campaign_targets_18440.json',
+                root=root,
+                visit_html=_VISIT_HTML,
+                mast_rows=[],
+                create_dirs=True,
+                resolve_sky=lambda name: coords.get(lookup_host_name(name)),
+            )
+            names = [row['name'] for row in result['targets'] if row['ready']]
+            self.assertEqual(sorted(names), ['ngc157', 'ngc7814'])
+            self.assertEqual(result['n_ready'], 2)
+            self.assertIn('F336W', result['targets'][0]['filters'])
+            self.assertTrue((root / 'ngc157').is_dir())
+            self.assertTrue((root / 'ngc7814').is_dir())

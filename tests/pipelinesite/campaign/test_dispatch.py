@@ -1,5 +1,6 @@
 from unittest.mock import patch
 
+from django.contrib.auth import get_user_model
 from django.test import SimpleTestCase, TestCase, override_settings
 
 from manager.st123.config import EXAMPLE_TARGET, NGC1494_TARGET
@@ -48,6 +49,10 @@ class DispatchGateTests(SimpleTestCase):
 
 
 class DispatchViewTests(TestCase):
+    def setUp(self):
+        user = get_user_model().objects.create_user('viewer', password='secret')
+        self.client.force_login(user)
+
     @patch('manager.st123.inventory.dispatch_availability')
     def test_target_page_disables_dispatch_when_blocked(self, gate):
         gate.return_value = {
@@ -58,7 +63,7 @@ class DispatchViewTests(TestCase):
             'max_jobs': 1,
             'jobs': [],
         }
-        page = self.client.get('/manager/targets/ngc1494')
+        page = self.client.get('/manager/targets/ngc0157')
         self.assertEqual(page.status_code, 200)
         self.assertContains(page, 'A job is already running for NGC 1494')
         self.assertContains(page, 'disabled')
@@ -67,11 +72,11 @@ class DispatchViewTests(TestCase):
     @patch('manager.views.campaign.spawn_job')
     def test_ajax_second_click_is_rejected(self, spawn):
         spawn.side_effect = RuntimeError(
-            'A job is already running for NGC 1494. Wait for it to finish.'
+            'A job is already running for NGC 157. Wait for it to finish.'
         )
         resp = self.client.post(
-            '/manager/targets/ngc1494/dispatch',
-            {'target': 'ngc1494'},
+            '/manager/targets/ngc0157/dispatch',
+            {'target': 'ngc0157'},
             HTTP_X_REQUESTED_WITH='XMLHttpRequest',
         )
         self.assertEqual(resp.status_code, 409)

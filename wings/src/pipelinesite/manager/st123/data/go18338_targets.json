@@ -1,0 +1,5019 @@
+{
+  "program_id": "18338",
+  "source": "phase2-apt",
+  "updated_at": "2026-10-06T20:11:17+00:00",
+  "n_targets": 190,
+  "n_prime": 121,
+  "n_parallel": 69,
+  "targets": [
+    {
+      "name": "eso138-010",
+      "display_name": "ESO 138-010",
+      "host": "ESO 138",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 254.76190000000003,
+      "dec": -60.216100000000004,
+      "ra_sex": "16:59:02.856",
+      "dec_sex": "-60:12:57.96",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 94.",
+      "visits": [
+        "94"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "eso305-009",
+      "display_name": "ESO 305-009",
+      "host": "ESO 305",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 77.0283,
+      "dec": -38.312,
+      "ra_sex": "05:08:06.792",
+      "dec_sex": "-38:18:43.20",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 26.",
+      "visits": [
+        "26"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "eso305-009par",
+      "display_name": "ESO 305-009 parallel",
+      "host": "ESO 305",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 77.12073436528605,
+      "dec": -38.38313497222222,
+      "ra_sex": "05:08:28.976",
+      "dec_sex": "-38:22:59.29",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits 26.",
+      "visits": [
+        "26"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "eso318-024",
+      "display_name": "ESO 318-024",
+      "host": "ESO 318",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 164.4666,
+      "dec": -39.440599999999996,
+      "ra_sex": "10:57:51.984",
+      "dec_sex": "-39:26:26.16",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits B8.",
+      "visits": [
+        "B8"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "eso318-024par",
+      "display_name": "ESO 318-024 parallel",
+      "host": "ESO 318",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 164.56051408141172,
+      "dec": -39.51173497222222,
+      "ra_sex": "10:58:14.523",
+      "dec_sex": "-39:30:42.25",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits B8.",
+      "visits": [
+        "B8"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "eso375-071",
+      "display_name": "ESO 375-071",
+      "host": "ESO 375",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 159.0397,
+      "dec": -37.2395,
+      "ra_sex": "10:36:09.528",
+      "dec_sex": "-37:14:22.20",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits B7.",
+      "visits": [
+        "B7"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "eso375-071par",
+      "display_name": "ESO 375-071 parallel",
+      "host": "ESO 375",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 159.13080303850288,
+      "dec": -37.310634972222225,
+      "ra_sex": "10:36:31.393",
+      "dec_sex": "-37:18:38.29",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits B7.",
+      "visits": [
+        "B7"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "eso384-002",
+      "display_name": "ESO 384-002",
+      "host": "ESO 384",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 207.8287,
+      "dec": -33.8079,
+      "ra_sex": "13:51:18.888",
+      "dec_sex": "-33:48:28.44",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 80.",
+      "visits": [
+        "80"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "eso384-002par",
+      "display_name": "ESO 384-002 parallel",
+      "host": "ESO 384",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 207.9159880350312,
+      "dec": -33.87903497222222,
+      "ra_sex": "13:51:39.837",
+      "dec_sex": "-33:52:44.53",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits 80.",
+      "visits": [
+        "80"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "eso431-002",
+      "display_name": "ESO 431-002",
+      "host": "ESO 431",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 124.43020000000001,
+      "dec": -30.1304,
+      "ra_sex": "08:17:43.248",
+      "dec_sex": "-30:07:49.44",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 28.",
+      "visits": [
+        "28"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "eso431-002par",
+      "display_name": "ESO 431-002 parallel",
+      "host": "ESO 431",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 124.52457810332356,
+      "dec": -30.06992108880753,
+      "ra_sex": "08:18:05.899",
+      "dec_sex": "-30:04:11.72",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits 28.",
+      "visits": [
+        "28"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 279.02
+    },
+    {
+      "name": "eso434-033",
+      "display_name": "ESO 434-033",
+      "host": "ESO 434",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 146.2008,
+      "dec": -31.8256,
+      "ra_sex": "09:44:48.192",
+      "dec_sex": "-31:49:32.16",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits B5.",
+      "visits": [
+        "B5"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "eso434-033par",
+      "display_name": "ESO 434-033 parallel",
+      "host": "ESO 434",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 146.2861618480428,
+      "dec": -31.896734972222223,
+      "ra_sex": "09:45:08.679",
+      "dec_sex": "-31:53:48.25",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits B5.",
+      "visits": [
+        "B5"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "eso481-014",
+      "display_name": "ESO 481-014",
+      "host": "ESO 481",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 48.419399999999996,
+      "dec": -25.1902,
+      "ra_sex": "03:13:40.656",
+      "dec_sex": "-25:11:24.72",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits B2.",
+      "visits": [
+        "B2"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "eso481-014par",
+      "display_name": "ESO 481-014 parallel",
+      "host": "ESO 481",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 48.49955064243231,
+      "dec": -25.261334972222222,
+      "ra_sex": "03:13:59.892",
+      "dec_sex": "-25:15:40.81",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits B2.",
+      "visits": [
+        "B2"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "eso494-026",
+      "display_name": "ESO 494-026",
+      "host": "ESO 494",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 121.546,
+      "dec": -27.528,
+      "ra_sex": "08:06:11.040",
+      "dec_sex": "-27:31:40.80",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 27.",
+      "visits": [
+        "27"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "eso565-003",
+      "display_name": "ESO 565-003",
+      "host": "ESO 565",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 140.7922,
+      "dec": -20.1676,
+      "ra_sex": "09:23:10.128",
+      "dec_sex": "-20:10:03.36",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 30.",
+      "visits": [
+        "30"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "eso576-050",
+      "display_name": "ESO 576-050",
+      "host": "ESO 576",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 201.1741,
+      "dec": -19.6959,
+      "ra_sex": "13:24:41.784",
+      "dec_sex": "-19:41:45.24",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 76.",
+      "visits": [
+        "76"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "eso576-050par",
+      "display_name": "ESO 576-050 parallel",
+      "host": "ESO 576",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 201.25113528049124,
+      "dec": -19.767034972222223,
+      "ra_sex": "13:25:00.272",
+      "dec_sex": "-19:46:01.33",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits 76.",
+      "visits": [
+        "76"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ic2032",
+      "display_name": "IC 2032",
+      "host": "IC 2032",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 61.76579999999999,
+      "dec": -55.3243,
+      "ra_sex": "04:07:03.792",
+      "dec_sex": "-55:19:27.48",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits B3.",
+      "visits": [
+        "B3"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ic2032par",
+      "display_name": "IC 2032 parallel",
+      "host": "IC 2032",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 61.893281772839295,
+      "dec": -55.395434972222226,
+      "ra_sex": "04:07:34.388",
+      "dec_sex": "-55:23:43.57",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits B3.",
+      "visits": [
+        "B3"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ic2035",
+      "display_name": "IC 2035",
+      "host": "IC 2035",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 62.25790000000001,
+      "dec": -45.5176,
+      "ra_sex": "04:09:01.896",
+      "dec_sex": "-45:31:03.36",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 21.",
+      "visits": [
+        "21"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ic2035par",
+      "display_name": "IC 2035 parallel",
+      "host": "IC 2035",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 62.36140981380382,
+      "dec": -45.58873497222223,
+      "ra_sex": "04:09:26.738",
+      "dec_sex": "-45:35:19.45",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits 21.",
+      "visits": [
+        "21"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ic2507",
+      "display_name": "IC 2507",
+      "host": "IC 2507",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 146.13719999999998,
+      "dec": -31.791800000000002,
+      "ra_sex": "09:44:32.928",
+      "dec_sex": "-31:47:30.48",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits B4.",
+      "visits": [
+        "B4"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ic2507par",
+      "display_name": "IC 2507 parallel",
+      "host": "IC 2507",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 146.22253062064695,
+      "dec": -31.862934972222224,
+      "ra_sex": "09:44:53.407",
+      "dec_sex": "-31:51:46.57",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits B4.",
+      "visits": [
+        "B4"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ic4901",
+      "display_name": "IC 4901",
+      "host": "IC 4901",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 298.59569999999997,
+      "dec": -58.7139,
+      "ra_sex": "19:54:22.968",
+      "dec_sex": "-58:42:50.04",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 97.",
+      "visits": [
+        "97"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ic4901par",
+      "display_name": "IC 4901 parallel",
+      "host": "IC 4901",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 298.7353623472936,
+      "dec": -58.78503497222223,
+      "ra_sex": "19:54:56.487",
+      "dec_sex": "-58:47:06.13",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits 97.",
+      "visits": [
+        "97"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ic5240",
+      "display_name": "IC 5240",
+      "host": "IC 5240",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 340.4683,
+      "dec": -44.7673,
+      "ra_sex": "22:41:52.392",
+      "dec_sex": "-44:46:02.28",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits A4.",
+      "visits": [
+        "A4"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ic5240par",
+      "display_name": "IC 5240 parallel",
+      "host": "IC 5240",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 340.57045646071225,
+      "dec": -44.838434972222224,
+      "ra_sex": "22:42:16.910",
+      "dec_sex": "-44:50:18.37",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits A4.",
+      "visits": [
+        "A4"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ic5267",
+      "display_name": "IC 5267",
+      "host": "IC 5267",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 344.3064,
+      "dec": -43.3961,
+      "ra_sex": "22:57:13.536",
+      "dec_sex": "-43:23:45.96",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits A6.",
+      "visits": [
+        "A6"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ic5267par",
+      "display_name": "IC 5267 parallel",
+      "host": "IC 5267",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 344.40621580748575,
+      "dec": -43.46723497222222,
+      "ra_sex": "22:57:37.492",
+      "dec_sex": "-43:28:02.05",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits A6.",
+      "visits": [
+        "A6"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ngc0157",
+      "display_name": "NGC 157",
+      "host": "NGC 157",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 8.694099999999999,
+      "dec": -8.3963,
+      "ra_sex": "00:34:46.584",
+      "dec_sex": "-08:23:46.68",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 02.",
+      "visits": [
+        "02"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc0157par",
+      "display_name": "NGC 157 parallel",
+      "host": "NGC 157",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 8.767414103378796,
+      "dec": -8.467434972222222,
+      "ra_sex": "00:35:04.179",
+      "dec_sex": "-08:28:02.77",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits 02.",
+      "visits": [
+        "02"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ngc0210",
+      "display_name": "NGC 210",
+      "host": "NGC 210",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 10.146,
+      "dec": -13.8728,
+      "ra_sex": "00:40:35.040",
+      "dec_sex": "-13:52:22.08",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 03.",
+      "visits": [
+        "03"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc0210par",
+      "display_name": "NGC 210 parallel",
+      "host": "NGC 210",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 10.220707492054714,
+      "dec": -13.943934972222221,
+      "ra_sex": "00:40:52.970",
+      "dec_sex": "-13:56:38.17",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits 03.",
+      "visits": [
+        "03"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ngc0255",
+      "display_name": "NGC 255",
+      "host": "NGC 255",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 11.947,
+      "dec": -11.4687,
+      "ra_sex": "00:47:47.280",
+      "dec_sex": "-11:28:07.32",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 04.",
+      "visits": [
+        "04"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc0255par",
+      "display_name": "NGC 255 parallel",
+      "host": "NGC 255",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 12.021005947472894,
+      "dec": -11.539834972222222,
+      "ra_sex": "00:48:05.041",
+      "dec_sex": "-11:32:23.41",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits 04.",
+      "visits": [
+        "04"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ngc0337a",
+      "display_name": "NGC 337A",
+      "host": "NGC 337A",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 15.3913,
+      "dec": -7.5882,
+      "ra_sex": "01:01:33.912",
+      "dec_sex": "-07:35:17.52",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 05.",
+      "visits": [
+        "05"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc0337apar",
+      "display_name": "NGC 337A parallel",
+      "host": "NGC 337A",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 15.464469064815603,
+      "dec": -7.659334972222222,
+      "ra_sex": "01:01:51.473",
+      "dec_sex": "-07:39:33.61",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits 05.",
+      "visits": [
+        "05"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ngc0450",
+      "display_name": "NGC 450",
+      "host": "NGC 450",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 18.8767,
+      "dec": -0.8609,
+      "ra_sex": "01:15:30.408",
+      "dec_sex": "-00:51:39.24",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 06.",
+      "visits": [
+        "06"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc0578",
+      "display_name": "NGC 578",
+      "host": "NGC 578",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 22.6189,
+      "dec": -22.6672,
+      "ra_sex": "01:30:28.536",
+      "dec_sex": "-22:40:01.92",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 07.",
+      "visits": [
+        "07"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc0578par",
+      "display_name": "NGC 578 parallel",
+      "host": "NGC 578",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 22.69749941413156,
+      "dec": -22.738334972222223,
+      "ra_sex": "01:30:47.400",
+      "dec_sex": "-22:44:18.01",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits 07.",
+      "visits": [
+        "07"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ngc0972",
+      "display_name": "NGC 972",
+      "host": "NGC 972",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 38.555699999999995,
+      "dec": 29.3112,
+      "ra_sex": "02:34:13.368",
+      "dec_sex": "+29:18:40.32",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 09.",
+      "visits": [
+        "09"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc1022",
+      "display_name": "NGC 1022",
+      "host": "NGC 1022",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 39.6363,
+      "dec": -6.6774000000000004,
+      "ra_sex": "02:38:32.712",
+      "dec_sex": "-06:40:38.64",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 10.",
+      "visits": [
+        "10"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc1073",
+      "display_name": "NGC 1073",
+      "host": "NGC 1073",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 40.9177,
+      "dec": 1.3758000000000001,
+      "ra_sex": "02:43:40.248",
+      "dec_sex": "+01:22:32.88",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 11.",
+      "visits": [
+        "11"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc1179",
+      "display_name": "NGC 1179",
+      "host": "NGC 1179",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 45.66029999999999,
+      "dec": -18.8978,
+      "ra_sex": "03:02:38.472",
+      "dec_sex": "-18:53:52.08",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 13.",
+      "visits": [
+        "13"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc1179par",
+      "display_name": "NGC 1179 parallel",
+      "host": "NGC 1179",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 45.73696047409452,
+      "dec": -18.968934972222222,
+      "ra_sex": "03:02:56.871",
+      "dec_sex": "-18:58:08.17",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits 13.",
+      "visits": [
+        "13"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ngc1187",
+      "display_name": "NGC 1187",
+      "host": "NGC 1187",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 45.6567,
+      "dec": -22.8672,
+      "ra_sex": "03:02:37.608",
+      "dec_sex": "-22:52:01.92",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 12.",
+      "visits": [
+        "12"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc1187par",
+      "display_name": "NGC 1187 parallel",
+      "host": "NGC 1187",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 45.73541464576645,
+      "dec": -22.938334972222222,
+      "ra_sex": "03:02:56.500",
+      "dec_sex": "-22:56:18.01",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits 12.",
+      "visits": [
+        "12"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ngc1201",
+      "display_name": "NGC 1201",
+      "host": "NGC 1201",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 46.033500000000004,
+      "dec": -26.0697,
+      "ra_sex": "03:04:08.040",
+      "dec_sex": "-26:04:10.92",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits B0.",
+      "visits": [
+        "B0"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc1255",
+      "display_name": "NGC 1255",
+      "host": "NGC 1255",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 48.3832,
+      "dec": -25.725199999999997,
+      "ra_sex": "03:13:31.968",
+      "dec_sex": "-25:43:30.72",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 14.",
+      "visits": [
+        "14"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc1255par",
+      "display_name": "NGC 1255 parallel",
+      "host": "NGC 1255",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 48.46370773280723,
+      "dec": -25.79633497222222,
+      "ra_sex": "03:13:51.290",
+      "dec_sex": "-25:47:46.81",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits 14.",
+      "visits": [
+        "14"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ngc1350",
+      "display_name": "NGC 1350",
+      "host": "NGC 1350",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 52.7845,
+      "dec": -33.6287,
+      "ra_sex": "03:31:08.280",
+      "dec_sex": "-33:37:43.32",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 15.",
+      "visits": [
+        "15"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc1350par",
+      "display_name": "NGC 1350 parallel",
+      "host": "NGC 1350",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 52.73498279298226,
+      "dec": -33.72154723908511,
+      "ra_sex": "03:30:56.396",
+      "dec_sex": "-33:43:17.57",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits 15.",
+      "visits": [
+        "15"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 69.5
+    },
+    {
+      "name": "ngc1367",
+      "display_name": "NGC 1367",
+      "host": "NGC 1367",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 53.755300000000005,
+      "dec": -24.933200000000003,
+      "ra_sex": "03:35:01.272",
+      "dec_sex": "-24:55:59.52",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 16.",
+      "visits": [
+        "16"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc1436",
+      "display_name": "NGC 1436",
+      "host": "NGC 1436",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 55.9044,
+      "dec": -35.853,
+      "ra_sex": "03:43:37.056",
+      "dec_sex": "-35:51:10.80",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 17.",
+      "visits": [
+        "17"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc1436par",
+      "display_name": "NGC 1436 parallel",
+      "host": "NGC 1436",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 55.99388340980046,
+      "dec": -35.92413497222223,
+      "ra_sex": "03:43:58.532",
+      "dec_sex": "-35:55:26.89",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits 17.",
+      "visits": [
+        "17"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ngc1553",
+      "display_name": "NGC 1553",
+      "host": "NGC 1553",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 64.0437,
+      "dec": -55.78,
+      "ra_sex": "04:16:10.488",
+      "dec_sex": "-55:46:48.00",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 23.",
+      "visits": [
+        "23"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc1574",
+      "display_name": "NGC 1574",
+      "host": "NGC 1574",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 65.4951,
+      "dec": -56.9748,
+      "ra_sex": "04:21:58.824",
+      "dec_sex": "-56:58:29.28",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 24.",
+      "visits": [
+        "24"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc1574par",
+      "display_name": "NGC 1574 parallel",
+      "host": "NGC 1574",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 65.62817754319715,
+      "dec": -57.04593497222223,
+      "ra_sex": "04:22:30.763",
+      "dec_sex": "-57:02:45.37",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits 24.",
+      "visits": [
+        "24"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ngc1617",
+      "display_name": "NGC 1617",
+      "host": "NGC 1617",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 67.91560000000001,
+      "dec": -54.6019,
+      "ra_sex": "04:31:39.744",
+      "dec_sex": "-54:36:06.84",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 25.",
+      "visits": [
+        "25"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc2685",
+      "display_name": "NGC 2685",
+      "host": "NGC 2685",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 133.8949,
+      "dec": 58.7337,
+      "ra_sex": "08:55:34.776",
+      "dec_sex": "+58:44:01.32",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 29.",
+      "visits": [
+        "29"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc2950",
+      "display_name": "NGC 2950",
+      "host": "NGC 2950",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 145.6462,
+      "dec": 58.8512,
+      "ra_sex": "09:42:35.088",
+      "dec_sex": "+58:51:04.32",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 31.",
+      "visits": [
+        "31"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc2985",
+      "display_name": "NGC 2985",
+      "host": "NGC 2985",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 147.59230000000002,
+      "dec": 72.2791,
+      "ra_sex": "09:50:22.152",
+      "dec_sex": "+72:16:44.76",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 32.",
+      "visits": [
+        "32"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc3104",
+      "display_name": "NGC 3104",
+      "host": "NGC 3104",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 150.98790000000002,
+      "dec": 40.7558,
+      "ra_sex": "10:03:57.096",
+      "dec_sex": "+40:45:20.88",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits B6.",
+      "visits": [
+        "B6"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc3104par",
+      "display_name": "NGC 3104 parallel",
+      "host": "NGC 3104",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 151.0836470767849,
+      "dec": 40.684665027777775,
+      "ra_sex": "10:04:20.075",
+      "dec_sex": "+40:41:04.79",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits B6.",
+      "visits": [
+        "B6"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ngc3169",
+      "display_name": "NGC 3169",
+      "host": "NGC 3169",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 153.56169999999997,
+      "dec": 3.4664,
+      "ra_sex": "10:14:14.808",
+      "dec_sex": "+03:27:59.04",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 33.",
+      "visits": [
+        "33"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc3319",
+      "display_name": "NGC 3319",
+      "host": "NGC 3319",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 159.7894,
+      "dec": 41.6868,
+      "ra_sex": "10:39:09.456",
+      "dec_sex": "+41:41:12.48",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 34.",
+      "visits": [
+        "34"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc3486",
+      "display_name": "NGC 3486",
+      "host": "NGC 3486",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 165.1005,
+      "dec": 28.974899999999998,
+      "ra_sex": "11:00:24.120",
+      "dec_sex": "+28:58:29.64",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 36.",
+      "visits": [
+        "36"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc3489",
+      "display_name": "NGC 3489",
+      "host": "NGC 3489",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 165.0774,
+      "dec": 13.901200000000001,
+      "ra_sex": "11:00:18.576",
+      "dec_sex": "+13:54:04.32",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 35.",
+      "visits": [
+        "35"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc3631",
+      "display_name": "NGC 3631",
+      "host": "NGC 3631",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 170.2653,
+      "dec": 53.171,
+      "ra_sex": "11:21:03.672",
+      "dec_sex": "+53:10:15.60",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 37.",
+      "visits": [
+        "37"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc3673",
+      "display_name": "NGC 3673",
+      "host": "NGC 3673",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 171.3036,
+      "dec": -26.7366,
+      "ra_sex": "11:25:12.864",
+      "dec_sex": "-26:44:11.76",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 38.",
+      "visits": [
+        "38"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc3673par",
+      "display_name": "NGC 3673 parallel",
+      "host": "NGC 3673",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 171.38481105125817,
+      "dec": -26.80773497222222,
+      "ra_sex": "11:25:32.355",
+      "dec_sex": "-26:48:27.85",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits 38.",
+      "visits": [
+        "38"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ngc3686",
+      "display_name": "NGC 3686",
+      "host": "NGC 3686",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 171.933,
+      "dec": 17.2241,
+      "ra_sex": "11:27:43.920",
+      "dec_sex": "+17:13:26.76",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 39.",
+      "visits": [
+        "39"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc3686par",
+      "display_name": "NGC 3686 parallel",
+      "host": "NGC 3686",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 172.0089336331963,
+      "dec": 17.15296502777778,
+      "ra_sex": "11:28:02.144",
+      "dec_sex": "+17:09:10.67",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits 39.",
+      "visits": [
+        "39"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ngc3726",
+      "display_name": "NGC 3726",
+      "host": "NGC 3726",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 173.3382,
+      "dec": 47.0291,
+      "ra_sex": "11:33:21.168",
+      "dec_sex": "+47:01:44.76",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 40.",
+      "visits": [
+        "40"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc3726par",
+      "display_name": "NGC 3726 parallel",
+      "host": "NGC 3726",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 173.4446047114504,
+      "dec": 46.957965027777774,
+      "ra_sex": "11:33:46.705",
+      "dec_sex": "+46:57:28.67",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits 40.",
+      "visits": [
+        "40"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ngc3769",
+      "display_name": "NGC 3769",
+      "host": "NGC 3769",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 174.43380000000002,
+      "dec": 47.8931,
+      "ra_sex": "11:37:44.112",
+      "dec_sex": "+47:53:35.16",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits B9.",
+      "visits": [
+        "B9"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc3769par",
+      "display_name": "NGC 3769 parallel",
+      "host": "NGC 3769",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 174.54196790196946,
+      "dec": 47.82196502777777,
+      "ra_sex": "11:38:10.072",
+      "dec_sex": "+47:49:19.07",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits B9.",
+      "visits": [
+        "B9"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ngc3887",
+      "display_name": "NGC 3887",
+      "host": "NGC 3887",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 176.7691,
+      "dec": -16.8547,
+      "ra_sex": "11:47:04.584",
+      "dec_sex": "-16:51:16.92",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 42.",
+      "visits": [
+        "42"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc3893",
+      "display_name": "NGC 3893",
+      "host": "NGC 3893",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 177.1591,
+      "dec": 48.710800000000006,
+      "ra_sex": "11:48:38.184",
+      "dec_sex": "+48:42:38.88",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 43.",
+      "visits": [
+        "43"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc3893par",
+      "display_name": "NGC 3893 parallel",
+      "host": "NGC 3893",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 177.26901467958098,
+      "dec": 48.63966502777778,
+      "ra_sex": "11:49:04.564",
+      "dec_sex": "+48:38:22.79",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits 43.",
+      "visits": [
+        "43"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ngc3898",
+      "display_name": "NGC 3898",
+      "host": "NGC 3898",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 177.3135,
+      "dec": 56.0835,
+      "ra_sex": "11:49:15.240",
+      "dec_sex": "+56:05:00.60",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 44.",
+      "visits": [
+        "44"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc3941",
+      "display_name": "NGC 3941",
+      "host": "NGC 3941",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 178.2306,
+      "dec": 36.9864,
+      "ra_sex": "11:52:55.344",
+      "dec_sex": "+36:59:11.04",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 41.",
+      "visits": [
+        "41"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc3941par",
+      "display_name": "NGC 3941 parallel",
+      "host": "NGC 3941",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 178.32139903920083,
+      "dec": 36.91526502777778,
+      "ra_sex": "11:53:17.136",
+      "dec_sex": "+36:54:54.95",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits 41.",
+      "visits": [
+        "41"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ngc3949",
+      "display_name": "NGC 3949",
+      "host": "NGC 3949",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 178.42379999999997,
+      "dec": 47.8588,
+      "ra_sex": "11:53:41.712",
+      "dec_sex": "+47:51:31.68",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 45.",
+      "visits": [
+        "45"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc3981",
+      "display_name": "NGC 3981",
+      "host": "NGC 3981",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 179.0277,
+      "dec": -19.8953,
+      "ra_sex": "11:56:06.648",
+      "dec_sex": "-19:53:43.08",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 46.",
+      "visits": [
+        "46"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc3981par",
+      "display_name": "NGC 3981 parallel",
+      "host": "NGC 3981",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 179.10483183872037,
+      "dec": -19.96643497222222,
+      "ra_sex": "11:56:25.160",
+      "dec_sex": "-19:57:59.17",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits 46.",
+      "visits": [
+        "46"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ngc3998",
+      "display_name": "NGC 3998",
+      "host": "NGC 3998",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 179.48399999999998,
+      "dec": 55.4536,
+      "ra_sex": "11:57:56.160",
+      "dec_sex": "+55:27:12.96",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 47.",
+      "visits": [
+        "47"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc4067",
+      "display_name": "NGC 4067",
+      "host": "NGC 4067",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 181.048,
+      "dec": 10.8544,
+      "ra_sex": "12:04:11.520",
+      "dec_sex": "+10:51:15.84",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 48.",
+      "visits": [
+        "48"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc4067par",
+      "display_name": "NGC 4067 parallel",
+      "host": "NGC 4067",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 181.12184955555261,
+      "dec": 10.783265027777778,
+      "ra_sex": "12:04:29.244",
+      "dec_sex": "+10:46:59.75",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits 48.",
+      "visits": [
+        "48"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ngc4088",
+      "display_name": "NGC 4088",
+      "host": "NGC 4088",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 181.3905,
+      "dec": 50.5395,
+      "ra_sex": "12:05:33.720",
+      "dec_sex": "+50:32:22.20",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits C0.",
+      "visits": [
+        "C0"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc4102",
+      "display_name": "NGC 4102",
+      "host": "NGC 4102",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 181.5982,
+      "dec": 52.7109,
+      "ra_sex": "12:06:23.568",
+      "dec_sex": "+52:42:39.24",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 49.",
+      "visits": [
+        "49"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc4119",
+      "display_name": "NGC 4119",
+      "host": "NGC 4119",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 182.04,
+      "dec": 10.379000000000001,
+      "ra_sex": "12:08:09.600",
+      "dec_sex": "+10:22:44.40",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 50.",
+      "visits": [
+        "50"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc4119par",
+      "display_name": "NGC 4119 parallel",
+      "host": "NGC 4119",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 182.11373478594192,
+      "dec": 10.30786502777778,
+      "ra_sex": "12:08:27.296",
+      "dec_sex": "+10:18:28.31",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits 50.",
+      "visits": [
+        "50"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ngc4123",
+      "display_name": "NGC 4123",
+      "host": "NGC 4123",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 182.0463,
+      "dec": 2.8782,
+      "ra_sex": "12:08:11.112",
+      "dec_sex": "+02:52:41.52",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 51.",
+      "visits": [
+        "51"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc4145",
+      "display_name": "NGC 4145",
+      "host": "NGC 4145",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 182.5092,
+      "dec": 39.8805,
+      "ra_sex": "12:10:02.208",
+      "dec_sex": "+39:52:49.80",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 52.",
+      "visits": [
+        "52"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc4145par",
+      "display_name": "NGC 4145 parallel",
+      "host": "NGC 4145",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 182.49358090825126,
+      "dec": 39.981380519481476,
+      "ra_sex": "12:09:58.459",
+      "dec_sex": "+39:58:52.97",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits 52.",
+      "visits": [
+        "52"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 218.78
+    },
+    {
+      "name": "ngc4203",
+      "display_name": "NGC 4203",
+      "host": "NGC 4203",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 183.7708,
+      "dec": 33.197199999999995,
+      "ra_sex": "12:15:04.992",
+      "dec_sex": "+33:11:49.92",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 53.",
+      "visits": [
+        "53"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc4245",
+      "display_name": "NGC 4245",
+      "host": "NGC 4245",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 184.4031,
+      "dec": 29.6079,
+      "ra_sex": "12:17:36.744",
+      "dec_sex": "+29:36:28.44",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 54.",
+      "visits": [
+        "54"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc4251",
+      "display_name": "NGC 4251",
+      "host": "NGC 4251",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 184.5348,
+      "dec": 28.1753,
+      "ra_sex": "12:18:08.352",
+      "dec_sex": "+28:10:31.08",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 55.",
+      "visits": [
+        "55"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc4251par",
+      "display_name": "NGC 4251 parallel",
+      "host": "NGC 4251",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 184.61707762066172,
+      "dec": 28.10416502777778,
+      "ra_sex": "12:18:28.099",
+      "dec_sex": "+28:06:14.99",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits 55.",
+      "visits": [
+        "55"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ngc4267",
+      "display_name": "NGC 4267",
+      "host": "NGC 4267",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 184.9389,
+      "dec": 12.798399999999999,
+      "ra_sex": "12:19:45.336",
+      "dec_sex": "+12:47:54.24",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 56.",
+      "visits": [
+        "56"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc4267par",
+      "display_name": "NGC 4267 parallel",
+      "host": "NGC 4267",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 185.01327614055037,
+      "dec": 12.727265027777777,
+      "ra_sex": "12:20:03.186",
+      "dec_sex": "+12:43:38.15",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits 56.",
+      "visits": [
+        "56"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ngc4293",
+      "display_name": "NGC 4293",
+      "host": "NGC 4293",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 185.3034,
+      "dec": 18.3826,
+      "ra_sex": "12:21:12.816",
+      "dec_sex": "+18:22:57.36",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 57.",
+      "visits": [
+        "57"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc4293par",
+      "display_name": "NGC 4293 parallel",
+      "host": "NGC 4293",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 185.3798283022226,
+      "dec": 18.31146502777778,
+      "ra_sex": "12:21:31.159",
+      "dec_sex": "+18:18:41.27",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits 57.",
+      "visits": [
+        "57"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ngc4305",
+      "display_name": "NGC 4305",
+      "host": "NGC 4305",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 185.515,
+      "dec": 12.7409,
+      "ra_sex": "12:22:03.600",
+      "dec_sex": "+12:44:27.24",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 58.",
+      "visits": [
+        "58"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc4305par",
+      "display_name": "NGC 4305 parallel",
+      "host": "NGC 4305",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 185.58935922597252,
+      "dec": 12.669765027777778,
+      "ra_sex": "12:22:21.446",
+      "dec_sex": "+12:40:11.15",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits 58.",
+      "visits": [
+        "58"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ngc4350",
+      "display_name": "NGC 4350",
+      "host": "NGC 4350",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 185.9908,
+      "dec": 16.6935,
+      "ra_sex": "12:23:57.792",
+      "dec_sex": "+16:41:36.60",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 59.",
+      "visits": [
+        "59"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc4350par",
+      "display_name": "NGC 4350 parallel",
+      "host": "NGC 4350",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 186.0665194970422,
+      "dec": 16.62236502777778,
+      "ra_sex": "12:24:15.965",
+      "dec_sex": "+16:37:20.51",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits 59.",
+      "visits": [
+        "59"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ngc4371",
+      "display_name": "NGC 4371",
+      "host": "NGC 4371",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 186.2308,
+      "dec": 11.7043,
+      "ra_sex": "12:24:55.392",
+      "dec_sex": "+11:42:15.48",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 60.",
+      "visits": [
+        "60"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc4429",
+      "display_name": "NGC 4429",
+      "host": "NGC 4429",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 186.86069999999998,
+      "dec": 11.1075,
+      "ra_sex": "12:27:26.568",
+      "dec_sex": "+11:06:27.00",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 61.",
+      "visits": [
+        "61"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc4435",
+      "display_name": "NGC 4435",
+      "host": "NGC 4435",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 186.9186,
+      "dec": 13.078899999999999,
+      "ra_sex": "12:27:40.464",
+      "dec_sex": "+13:04:44.04",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 62.",
+      "visits": [
+        "62"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc4459",
+      "display_name": "NGC 4459",
+      "host": "NGC 4459",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 187.25009999999997,
+      "dec": 13.9786,
+      "ra_sex": "12:29:00.024",
+      "dec_sex": "+13:58:42.96",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 63.",
+      "visits": [
+        "63"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc4477",
+      "display_name": "NGC 4477",
+      "host": "NGC 4477",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 187.5091,
+      "dec": 13.6364,
+      "ra_sex": "12:30:02.184",
+      "dec_sex": "+13:38:11.04",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 64.",
+      "visits": [
+        "64"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc4501",
+      "display_name": "NGC 4501",
+      "host": "NGC 4501",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 187.9966,
+      "dec": 14.420399999999999,
+      "ra_sex": "12:31:59.184",
+      "dec_sex": "+14:25:13.44",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 65.",
+      "visits": [
+        "65"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc4503",
+      "display_name": "NGC 4503",
+      "host": "NGC 4503",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 188.0257,
+      "dec": 11.1764,
+      "ra_sex": "12:32:06.168",
+      "dec_sex": "+11:10:35.04",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 66.",
+      "visits": [
+        "66"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc4519",
+      "display_name": "NGC 4519",
+      "host": "NGC 4519",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 188.3761,
+      "dec": 8.6544,
+      "ra_sex": "12:33:30.264",
+      "dec_sex": "+08:39:15.84",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 67.",
+      "visits": [
+        "67"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc4546",
+      "display_name": "NGC 4546",
+      "host": "NGC 4546",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 188.87290000000002,
+      "dec": -3.7933,
+      "ra_sex": "12:35:29.496",
+      "dec_sex": "-03:47:35.88",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 68.",
+      "visits": [
+        "68"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc4546par",
+      "display_name": "NGC 4546 parallel",
+      "host": "NGC 4546",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 188.94558754861242,
+      "dec": -3.864434972222222,
+      "ra_sex": "12:35:46.941",
+      "dec_sex": "-03:51:51.97",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits 68.",
+      "visits": [
+        "68"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ngc4606",
+      "display_name": "NGC 4606",
+      "host": "NGC 4606",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 190.2394,
+      "dec": 11.9113,
+      "ra_sex": "12:40:57.456",
+      "dec_sex": "+11:54:40.68",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 69.",
+      "visits": [
+        "69"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc4638",
+      "display_name": "NGC 4638",
+      "host": "NGC 4638",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 190.6975,
+      "dec": 11.442400000000001,
+      "ra_sex": "12:42:47.400",
+      "dec_sex": "+11:26:32.64",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 70.",
+      "visits": [
+        "70"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc4638par",
+      "display_name": "NGC 4638 parallel",
+      "host": "NGC 4638",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 190.77149906389226,
+      "dec": 11.37126502777778,
+      "ra_sex": "12:43:05.160",
+      "dec_sex": "+11:22:16.55",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits 70.",
+      "visits": [
+        "70"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ngc4754",
+      "display_name": "NGC 4754",
+      "host": "NGC 4754",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 193.0731,
+      "dec": 11.313600000000001,
+      "ra_sex": "12:52:17.544",
+      "dec_sex": "+11:18:48.96",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 71.",
+      "visits": [
+        "71"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc4754par",
+      "display_name": "NGC 4754 parallel",
+      "host": "NGC 4754",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 193.1470655961282,
+      "dec": 11.24246502777778,
+      "ra_sex": "12:52:35.296",
+      "dec_sex": "+11:14:32.87",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits 71.",
+      "visits": [
+        "71"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ngc4930",
+      "display_name": "NGC 4930",
+      "host": "NGC 4930",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 196.0216,
+      "dec": -41.4113,
+      "ra_sex": "13:04:05.184",
+      "dec_sex": "-41:24:40.68",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 72.",
+      "visits": [
+        "72"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc4930par",
+      "display_name": "NGC 4930 parallel",
+      "host": "NGC 4930",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 196.11830690506847,
+      "dec": -41.48243497222222,
+      "ra_sex": "13:04:28.394",
+      "dec_sex": "-41:28:56.77",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits 72.",
+      "visits": [
+        "72"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ngc4945a",
+      "display_name": "NGC 4945A",
+      "host": "NGC 4945A",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 196.642,
+      "dec": -49.689099999999996,
+      "ra_sex": "13:06:34.080",
+      "dec_sex": "-49:41:20.76",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 73.",
+      "visits": [
+        "73"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc4945apar",
+      "display_name": "NGC 4945A parallel",
+      "host": "NGC 4945A",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 196.75411067791745,
+      "dec": -49.76023497222222,
+      "ra_sex": "13:07:00.987",
+      "dec_sex": "-49:45:36.85",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits 73.",
+      "visits": [
+        "73"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ngc5054",
+      "display_name": "NGC 5054",
+      "host": "NGC 5054",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 199.24360000000001,
+      "dec": -16.6347,
+      "ra_sex": "13:16:58.464",
+      "dec_sex": "-16:38:04.92",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 74.",
+      "visits": [
+        "74"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc5054par",
+      "display_name": "NGC 5054 parallel",
+      "host": "NGC 5054",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 199.31929624033495,
+      "dec": -16.70583497222222,
+      "ra_sex": "13:17:16.631",
+      "dec_sex": "-16:42:21.01",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits 74.",
+      "visits": [
+        "74"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ngc5112",
+      "display_name": "NGC 5112",
+      "host": "NGC 5112",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 200.4852,
+      "dec": 38.7346,
+      "ra_sex": "13:21:56.448",
+      "dec_sex": "+38:44:04.56",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 75.",
+      "visits": [
+        "75"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc5247",
+      "display_name": "NGC 5247",
+      "host": "NGC 5247",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 204.5136,
+      "dec": -17.884,
+      "ra_sex": "13:38:03.264",
+      "dec_sex": "-17:53:02.40",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 78.",
+      "visits": [
+        "78"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc5300",
+      "display_name": "NGC 5300",
+      "host": "NGC 5300",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 207.0669,
+      "dec": 3.9509000000000003,
+      "ra_sex": "13:48:16.056",
+      "dec_sex": "+03:57:03.24",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 79.",
+      "visits": [
+        "79"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc5334",
+      "display_name": "NGC 5334",
+      "host": "NGC 5334",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 208.2268,
+      "dec": -1.1145,
+      "ra_sex": "13:52:54.432",
+      "dec_sex": "-01:06:52.20",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 81.",
+      "visits": [
+        "81"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc5363",
+      "display_name": "NGC 5363",
+      "host": "NGC 5363",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 209.0301,
+      "dec": 5.2547,
+      "ra_sex": "13:56:07.224",
+      "dec_sex": "+05:15:16.92",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 82.",
+      "visits": [
+        "82"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc5363par",
+      "display_name": "NGC 5363 parallel",
+      "host": "NGC 5363",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 209.10293439806378,
+      "dec": 5.183565027777777,
+      "ra_sex": "13:56:24.704",
+      "dec_sex": "+05:11:00.83",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits 82.",
+      "visits": [
+        "82"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ngc5364",
+      "display_name": "NGC 5364",
+      "host": "NGC 5364",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 209.0496,
+      "dec": 5.0151,
+      "ra_sex": "13:56:11.904",
+      "dec_sex": "+05:00:54.36",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 83.",
+      "visits": [
+        "83"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc5364par",
+      "display_name": "NGC 5364 parallel",
+      "host": "NGC 5364",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 209.122407033153,
+      "dec": 4.943965027777778,
+      "ra_sex": "13:56:29.378",
+      "dec_sex": "+04:56:38.27",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits 83.",
+      "visits": [
+        "83"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ngc5556",
+      "display_name": "NGC 5556",
+      "host": "NGC 5556",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 215.142,
+      "dec": -29.2418,
+      "ra_sex": "14:20:34.080",
+      "dec_sex": "-29:14:30.48",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 84.",
+      "visits": [
+        "84"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc5665",
+      "display_name": "NGC 5665",
+      "host": "NGC 5665",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 218.1075,
+      "dec": 8.0784,
+      "ra_sex": "14:32:25.800",
+      "dec_sex": "+08:04:42.24",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 85.",
+      "visits": [
+        "85"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc5665par",
+      "display_name": "NGC 5665 parallel",
+      "host": "NGC 5665",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 218.18075523883664,
+      "dec": 8.007265027777779,
+      "ra_sex": "14:32:43.381",
+      "dec_sex": "+08:00:26.15",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits 85.",
+      "visits": [
+        "85"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ngc5669",
+      "display_name": "NGC 5669",
+      "host": "NGC 5669",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 218.1822,
+      "dec": 9.891,
+      "ra_sex": "14:32:43.728",
+      "dec_sex": "+09:53:27.60",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 86.",
+      "visits": [
+        "86"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc5669par",
+      "display_name": "NGC 5669 parallel",
+      "host": "NGC 5669",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 218.25582260840633,
+      "dec": 9.819865027777778,
+      "ra_sex": "14:33:01.397",
+      "dec_sex": "+09:49:11.51",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits 86.",
+      "visits": [
+        "86"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ngc5866",
+      "display_name": "NGC 5866",
+      "host": "NGC 5866",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 226.6231,
+      "dec": 55.7633,
+      "ra_sex": "15:06:29.544",
+      "dec_sex": "+55:45:47.88",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 87.",
+      "visits": [
+        "87"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc5921",
+      "display_name": "NGC 5921",
+      "host": "NGC 5921",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 230.48499999999999,
+      "dec": 5.0706,
+      "ra_sex": "15:21:56.400",
+      "dec_sex": "+05:04:14.16",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 88.",
+      "visits": [
+        "88"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc5921par",
+      "display_name": "NGC 5921 parallel",
+      "host": "NGC 5921",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 230.55781325671688,
+      "dec": 4.999465027777777,
+      "ra_sex": "15:22:13.875",
+      "dec_sex": "+04:59:58.07",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits 88.",
+      "visits": [
+        "88"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ngc6140",
+      "display_name": "NGC 6140",
+      "host": "NGC 6140",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 245.2399,
+      "dec": 65.3897,
+      "ra_sex": "16:20:57.576",
+      "dec_sex": "+65:23:22.92",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 89.",
+      "visits": [
+        "89"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc6215",
+      "display_name": "NGC 6215",
+      "host": "NGC 6215",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 252.7792,
+      "dec": -58.9931,
+      "ra_sex": "16:51:07.008",
+      "dec_sex": "-58:59:35.16",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 92.",
+      "visits": [
+        "92"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc6215par",
+      "display_name": "NGC 6215 parallel",
+      "host": "NGC 6215",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 252.91999303261923,
+      "dec": -59.06423497222222,
+      "ra_sex": "16:51:40.798",
+      "dec_sex": "-59:03:51.25",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits 92.",
+      "visits": [
+        "92"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ngc6221",
+      "display_name": "NGC 6221",
+      "host": "NGC 6221",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 253.1922,
+      "dec": -59.217800000000004,
+      "ra_sex": "16:52:46.128",
+      "dec_sex": "-59:13:04.08",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 93.",
+      "visits": [
+        "93"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc6221par",
+      "display_name": "NGC 6221 parallel",
+      "host": "NGC 6221",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 253.33391885202713,
+      "dec": -59.28893497222223,
+      "ra_sex": "16:53:20.141",
+      "dec_sex": "-59:17:20.17",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits 93.",
+      "visits": [
+        "93"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ngc6684",
+      "display_name": "NGC 6684",
+      "host": "NGC 6684",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 282.24100000000004,
+      "dec": -65.1734,
+      "ra_sex": "18:48:57.840",
+      "dec_sex": "-65:10:24.24",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 95.",
+      "visits": [
+        "95"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc7177",
+      "display_name": "NGC 7177",
+      "host": "NGC 7177",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 330.1719,
+      "dec": 17.7381,
+      "ra_sex": "22:00:41.256",
+      "dec_sex": "+17:44:17.16",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 99.",
+      "visits": [
+        "99"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc7205",
+      "display_name": "NGC 7205",
+      "host": "NGC 7205",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 332.1429,
+      "dec": -57.4426,
+      "ra_sex": "22:08:34.296",
+      "dec_sex": "-57:26:33.36",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits A1.",
+      "visits": [
+        "A1"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc7205par",
+      "display_name": "NGC 7205 parallel",
+      "host": "NGC 7205",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 332.27767483713563,
+      "dec": -57.513734972222224,
+      "ra_sex": "22:09:06.642",
+      "dec_sex": "-57:30:49.45",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits A1.",
+      "visits": [
+        "A1"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ngc7418",
+      "display_name": "NGC 7418",
+      "host": "NGC 7418",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 344.15049999999997,
+      "dec": -37.0301,
+      "ra_sex": "22:56:36.120",
+      "dec_sex": "-37:01:48.36",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits A5.",
+      "visits": [
+        "A5"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc7418par",
+      "display_name": "NGC 7418 parallel",
+      "host": "NGC 7418",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 344.241351255904,
+      "dec": -37.10123497222222,
+      "ra_sex": "22:56:57.924",
+      "dec_sex": "-37:06:04.45",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits A5.",
+      "visits": [
+        "A5"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ngc7457",
+      "display_name": "NGC 7457",
+      "host": "NGC 7457",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 345.2497,
+      "dec": 30.1449,
+      "ra_sex": "23:00:59.928",
+      "dec_sex": "+30:08:41.64",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits A7.",
+      "visits": [
+        "A7"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc7513",
+      "display_name": "NGC 7513",
+      "host": "NGC 7513",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 348.30819999999994,
+      "dec": -28.3575,
+      "ra_sex": "23:13:13.968",
+      "dec_sex": "-28:21:27.00",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits A8.",
+      "visits": [
+        "A8"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc7513par",
+      "display_name": "NGC 7513 parallel",
+      "host": "NGC 7513",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 348.39061842300197,
+      "dec": -28.428634972222223,
+      "ra_sex": "23:13:33.748",
+      "dec_sex": "-28:25:43.09",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits A8.",
+      "visits": [
+        "A8"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ngc7741",
+      "display_name": "NGC 7741",
+      "host": "NGC 7741",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 355.97669999999994,
+      "dec": 26.0756,
+      "ra_sex": "23:43:54.408",
+      "dec_sex": "+26:04:32.16",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits A9.",
+      "visits": [
+        "A9"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ngc7814",
+      "display_name": "NGC 7814",
+      "host": "NGC 7814",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 0.7988666666666667,
+      "dec": 16.167194444444444,
+      "ra_sex": "00:03:11.728",
+      "dec_sex": "+16:10:01.90",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 01.",
+      "visits": [
+        "01"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "pgc009559",
+      "display_name": "PGC 9559",
+      "host": "PGC 9559",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 37.6693,
+      "dec": -3.8089999999999997,
+      "ra_sex": "02:30:40.632",
+      "dec_sex": "-03:48:32.40",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 08.",
+      "visits": [
+        "08"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "pgc009559par",
+      "display_name": "PGC 9559 parallel",
+      "host": "PGC 9559",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 37.74198887195165,
+      "dec": -3.880134972222222,
+      "ra_sex": "02:30:58.077",
+      "dec_sex": "-03:52:48.49",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits 08.",
+      "visits": [
+        "08"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "pgc013821",
+      "display_name": "PGC 13821",
+      "host": "PGC 13821",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 56.6589,
+      "dec": -16.5503,
+      "ra_sex": "03:46:38.136",
+      "dec_sex": "-16:33:01.08",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 19.",
+      "visits": [
+        "19"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "pgc013821par",
+      "display_name": "PGC 13821 parallel",
+      "host": "PGC 13821",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 56.73456302244406,
+      "dec": -16.62143497222222,
+      "ra_sex": "03:46:56.295",
+      "dec_sex": "-16:37:17.17",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits 19.",
+      "visits": [
+        "19"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "pgc047885",
+      "display_name": "PGC 47885",
+      "host": "PGC 47885",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 203.7838,
+      "dec": -30.1174,
+      "ra_sex": "13:35:08.112",
+      "dec_sex": "-30:07:02.64",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 77.",
+      "visits": [
+        "77"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "pgc058549",
+      "display_name": "PGC 58549",
+      "host": "PGC 58549",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 248.82989999999995,
+      "dec": -58.2188,
+      "ra_sex": "16:35:19.176",
+      "dec_sex": "-58:13:07.68",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 90.",
+      "visits": [
+        "90"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "pgc058549par",
+      "display_name": "PGC 58549 parallel",
+      "host": "PGC 58549",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 248.96760929716194,
+      "dec": -58.28993497222223,
+      "ra_sex": "16:35:52.226",
+      "dec_sex": "-58:17:23.77",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits 90.",
+      "visits": [
+        "90"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "pgc058798",
+      "display_name": "PGC 58798",
+      "host": "PGC 58798",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 250.5127,
+      "dec": -5.0324,
+      "ra_sex": "16:42:03.048",
+      "dec_sex": "-05:01:56.64",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 91.",
+      "visits": [
+        "91"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "pgc058798par",
+      "display_name": "PGC 58798 parallel",
+      "host": "PGC 58798",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 250.58550896566814,
+      "dec": -5.1035349722222225,
+      "ra_sex": "16:42:20.522",
+      "dec_sex": "-05:06:12.73",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits 91.",
+      "visits": [
+        "91"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "pgc069332",
+      "display_name": "PGC 69332",
+      "host": "PGC 69332",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 339.3073,
+      "dec": 38.6468,
+      "ra_sex": "22:37:13.752",
+      "dec_sex": "+38:38:48.48",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits A2.",
+      "visits": [
+        "A2"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "pgc069332par",
+      "display_name": "PGC 69332 parallel",
+      "host": "PGC 69332",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 339.40016468566847,
+      "dec": 38.575665027777774,
+      "ra_sex": "22:37:36.040",
+      "dec_sex": "+38:34:32.39",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits A2.",
+      "visits": [
+        "A2"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "pgc069395",
+      "display_name": "PGC 69395",
+      "host": "PGC 69395",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 339.6624,
+      "dec": 39.7646,
+      "ra_sex": "22:38:38.976",
+      "dec_sex": "+39:45:52.56",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits A3.",
+      "visits": [
+        "A3"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "pgc069395par",
+      "display_name": "PGC 69395 parallel",
+      "host": "PGC 69395",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 339.7567544940759,
+      "dec": 39.693465027777776,
+      "ra_sex": "22:39:01.621",
+      "dec_sex": "+39:41:36.47",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits A3.",
+      "visits": [
+        "A3"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "pgc1475910",
+      "display_name": "PGC 1475910",
+      "host": "PGC 1475910",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 84.6583,
+      "dec": 15.1248,
+      "ra_sex": "05:38:37.992",
+      "dec_sex": "+15:07:29.28",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits B1.",
+      "visits": [
+        "B1"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ugc02826",
+      "display_name": "UGC 2826",
+      "host": "UGC 2826",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 55.9398,
+      "dec": 68.3013,
+      "ra_sex": "03:43:45.552",
+      "dec_sex": "+68:18:04.68",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 18.",
+      "visits": [
+        "18"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ugc02826par",
+      "display_name": "UGC 2826 parallel",
+      "host": "UGC 2826",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 56.13596788959238,
+      "dec": 68.23016502777777,
+      "ra_sex": "03:44:32.632",
+      "dec_sex": "+68:13:48.59",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits 18.",
+      "visits": [
+        "18"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ugc02912",
+      "display_name": "UGC 2912",
+      "host": "UGC 2912",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 59.888999999999996,
+      "dec": 42.6166,
+      "ra_sex": "03:59:33.360",
+      "dec_sex": "+42:36:59.76",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 20.",
+      "visits": [
+        "20"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ugc02912par",
+      "display_name": "UGC 2912 parallel",
+      "host": "UGC 2912",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 59.98755715731362,
+      "dec": 42.54546502777777,
+      "ra_sex": "03:59:57.014",
+      "dec_sex": "+42:32:43.67",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits 20.",
+      "visits": [
+        "20"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ugc02977",
+      "display_name": "UGC 2977",
+      "host": "UGC 2977",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 63.03760000000001,
+      "dec": 27.930200000000003,
+      "ra_sex": "04:12:09.024",
+      "dec_sex": "+27:55:48.72",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 22.",
+      "visits": [
+        "22"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ugc02977par",
+      "display_name": "UGC 2977 parallel",
+      "host": "UGC 2977",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 63.11969027368599,
+      "dec": 27.85906502777778,
+      "ra_sex": "04:12:28.726",
+      "dec_sex": "+27:51:32.63",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits 22.",
+      "visits": [
+        "22"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ugc10310",
+      "display_name": "UGC 10310",
+      "host": "UGC 10310",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 244.0759,
+      "dec": 47.0457,
+      "ra_sex": "16:16:18.216",
+      "dec_sex": "+47:02:44.52",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits C1.",
+      "visits": [
+        "C1"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ugc10310par",
+      "display_name": "UGC 10310 parallel",
+      "host": "UGC 10310",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 244.18233781895094,
+      "dec": 46.97456502777777,
+      "ra_sex": "16:16:43.761",
+      "dec_sex": "+46:58:28.43",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits C1.",
+      "visits": [
+        "C1"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ugc11466",
+      "display_name": "UGC 11466",
+      "host": "UGC 11466",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 295.7448,
+      "dec": 45.2981,
+      "ra_sex": "19:42:58.752",
+      "dec_sex": "+45:17:53.16",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 96.",
+      "visits": [
+        "96"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ugc11466par",
+      "display_name": "UGC 11466 parallel",
+      "host": "UGC 11466",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 295.84790836140525,
+      "dec": 45.22696502777777,
+      "ra_sex": "19:43:23.498",
+      "dec_sex": "+45:13:37.07",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits 96.",
+      "visits": [
+        "96"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 0.0
+    },
+    {
+      "name": "ugc11861",
+      "display_name": "UGC 11861",
+      "host": "UGC 11861",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 329.1006,
+      "dec": 73.2609,
+      "ra_sex": "21:56:24.144",
+      "dec_sex": "+73:15:39.24",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits 98.",
+      "visits": [
+        "98"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ugc11920",
+      "display_name": "UGC 11920",
+      "host": "UGC 11920",
+      "sn_type": "",
+      "field_role": "prime",
+      "ra": 332.1141,
+      "dec": 48.440799999999996,
+      "ra_sex": "22:08:27.384",
+      "dec_sex": "+48:26:26.88",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "WFC3 prime field. APT visits A0.",
+      "visits": [
+        "A0"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338"
+    },
+    {
+      "name": "ugc11920par",
+      "display_name": "UGC 11920 parallel",
+      "host": "UGC 11920",
+      "sn_type": "",
+      "field_role": "parallel",
+      "ra": 332.0168077898862,
+      "dec": 48.36234786520461,
+      "ra_sex": "22:08:04.034",
+      "dec_sex": "+48:21:44.45",
+      "radius_arcmin": 5.0,
+      "instruments": [
+        "ACS",
+        "WFC3",
+        "WFPC2"
+      ],
+      "telescope": "hst",
+      "notes": "ACS parallel field. APT visits A0.",
+      "visits": [
+        "A0"
+      ],
+      "ready": true,
+      "observed": false,
+      "filters": [],
+      "program_id": "18338",
+      "orient": 85.0
+    }
+  ]
+}

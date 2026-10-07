@@ -17,9 +17,9 @@ from .config import (
     status_path,
     target_config,
 )
-from .host_distance import format_distance, lookup_host_distance
+from .host_distance import format_distance, lookup_host_distance, warm_host_distances
 from .photometry import build_filter_plan, row_ab_mags
-from .sky import pix_to_world, read_image_header, reference_heading
+from .sky import format_obs_datetime, pix_to_world, read_image_header, reference_heading
 from .st123api import display_filter, filter_names, instrument_name
 
 _SCIENCE_SKIP = ('_pam.fits', '_c1m.fits')
@@ -337,7 +337,10 @@ def _fits_metadata(path: Path, download_root: Path) -> dict[str, Any]:
     if tel_hdr:
         meta['telescope'] = str(tel_hdr)
     meta['exptime'] = _header_value(header, 'EXPTIME', 'TEXPTIME')
-    meta['date_obs'] = _header_value(header, 'DATE-OBS', 'DATE_OBS')
+    meta['date_obs'] = format_obs_datetime(
+        _header_value(header, 'DATE-OBS', 'DATE_OBS'),
+        _header_value(header, 'TIME-OBS', 'TIME_OBS'),
+    )
     meta['ra'] = _header_value(header, 'RA_TARG', 'CRVAL1')
     meta['dec'] = _header_value(header, 'DEC_TARG', 'CRVAL2')
     meta['targname'] = _header_value(header, 'TARGNAME', 'TARG_ID')
@@ -512,6 +515,37 @@ def _mosaic_stage_label(stage: str, tag: str) -> str:
     return stage
 
 
+def _obs_date_label(date_obs: str | None) -> str:
+    text = str(date_obs or '').strip()
+    return text.split('T', 1)[0] if text else ''
+
+
+def _mosaic_labels(inst: str | None, filt: str | None, date_obs: str | None, filename: str, *, dolphot: bool) -> tuple[str, str]:
+    base = ' '.join(part for part in (inst, filt) if part) or filename
+    day = _obs_date_label(date_obs)
+    label = f'{base} · {day}' if day else base
+    option = f'{label} (DOLPHOT reference)' if dolphot else label
+    return label, option
+
+
+def _disambiguate_mosaic_labels(found: list[dict[str, Any]]) -> None:
+    from collections import Counter
+
+    counts = Counter(item['option_label'] for item in found)
+    for item in found:
+        if counts[item['option_label']] <= 1:
+            continue
+        stamp = str(item.get('date_obs') or '')
+        if 'T' not in stamp:
+            continue
+        # Same-day repeats keep the full timestamp.
+        base = ' '.join(part for part in (item.get('instrument'), item.get('filter')) if part) or item['filename']
+        item['label'] = f'{base} · {stamp}'
+        item['option_label'] = (
+            f'{item["label"]} (DOLPHOT reference)' if item.get('is_dolphot_reference') else item['label']
+        )
+
+
 def _mosaic_id(stage: str, instrument: str, filt: str, tag: str) -> str:
     parts = [stage or 'image', instrument or 'unk', filt or 'unk']
     if tag:
@@ -566,8 +600,8 @@ def discover_mosaic_images(base_dir: Path) -> list[dict[str, Any]]:
             is_dolphot = bool(
                 stamp_resolved is not None and resolved == stamp_resolved
             ) or bool(stamp_name and path.name == stamp_name)
-            label = ' '.join(part for part in (inst, filt) if part) or path.name
-            option = f'{label} (DOLPHOT reference)' if is_dolphot else label
+            date_obs = header.get('date_obs')
+            label, option = _mosaic_labels(inst, filt, date_obs, path.name, dolphot=is_dolphot)
             found.append(
                 {
                     'id': image_id,
@@ -575,6 +609,7 @@ def discover_mosaic_images(base_dir: Path) -> list[dict[str, Any]]:
                     'filename': path.name,
                     'instrument': inst,
                     'filter': filt,
+                    'date_obs': date_obs,
                     'stage': stage,
                     'stage_label': _mosaic_stage_label(stage, tag),
                     'label': label,
@@ -593,11 +628,13 @@ def discover_mosaic_images(base_dir: Path) -> list[dict[str, Any]]:
             stage_rank,
             str(item.get('instrument') or ''),
             str(item.get('filter') or ''),
+            str(item.get('date_obs') or ''),
             str(item.get('stage_label') or ''),
             item['filename'],
         )
 
     found.sort(key=_sort_key)
+    _disambiguate_mosaic_labels(found)
     chosen = next((item for item in found if item['is_dolphot_reference']), None)
     if chosen is None:
         mosaics = [item for item in found if item['stage'] == 'mosaic']
@@ -914,20 +951,53 @@ def dispatch_availability(target=None, jobs=None, max_jobs=None) -> dict[str, An
     }
 
 
-def list_campaign_targets() -> list[dict[str, Any]]:
+def list_campaign_targets(program: str | None = None, *, refresh_distances: bool = False) -> list[dict[str, Any]]:
     live = {job['name']: job for job in running_jobs()}
+    targets = list(campaign_targets(program))
+    host_sky: dict[str, dict[str, Any]] = {}
+    for target in targets:
+        key = ''.join(ch for ch in str(target.host or '').upper() if ch.isalnum())
+        if not key:
+            continue
+        role = getattr(target, 'field_role', 'prime') or 'prime'
+        current = host_sky.get(key)
+        if current is None or role != 'parallel':
+            host_sky[key] = {
+                'host': target.host,
+                'ra': target.ra,
+                'dec': target.dec,
+                'base_dir': target.base_dir,
+            }
+    host_distance: dict[str, Any] = {}
+    for key, sky in host_sky.items():
+        host_distance[key] = lookup_host_distance(
+            host=sky['host'],
+            ra=sky['ra'],
+            dec=sky['dec'],
+            base_dir=sky['base_dir'],
+            remote=False,
+        )
+    if refresh_distances:
+        missing = [
+            {
+                'host': sky['host'],
+                'ra': sky['ra'],
+                'dec': sky['dec'],
+                'base_dir': sky['base_dir'],
+            }
+            for key, sky in host_sky.items()
+            if host_distance.get(key) is None or host_distance[key].get('catalog') != 'NED'
+        ]
+        if missing:
+            warm_host_distances(missing)
     rows = []
-    for target in campaign_targets():
+    for target in targets:
         root = target.base_dir
         stages = infer_stages(root)
         remaining = remaining_stages(stages)
         n_done = sum(1 for row in stages if row['state'] == 'completed')
-        distance = lookup_host_distance(
-            host=target.host,
-            ra=target.ra,
-            dec=target.dec,
-            base_dir=root,
-        )
+        host_key = ''.join(ch for ch in str(target.host or '').upper() if ch.isalnum())
+        distance = host_distance.get(host_key)
         job = live.get(target.name)
         if job:
             status = 'running'
@@ -942,7 +1012,9 @@ def list_campaign_targets() -> list[dict[str, Any]]:
             {
                 'name': target.name,
                 'display_name': target.display_name,
+                'program_id': target.program_id,
                 'host': target.host,
+                'field_role': getattr(target, 'field_role', 'prime') or 'prime',
                 'ra': target.ra,
                 'dec': target.dec,
                 'ra_sex': target.ra_sex,
@@ -986,7 +1058,9 @@ def build_campaign_status(base_dir: Path | None = None, target=None) -> dict[str
         'target': {
             'name': target.name,
             'display_name': target.display_name,
+            'program_id': target.program_id,
             'host': target.host,
+            'field_role': getattr(target, 'field_role', 'prime') or 'prime',
             'ra': target.ra,
             'dec': target.dec,
             'ra_sex': target.ra_sex,

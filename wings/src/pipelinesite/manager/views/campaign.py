@@ -10,6 +10,7 @@ from django.views.decorators.http import require_GET, require_POST
 from pathlib import Path
 
 from manager.st123.config import find_target, target_config
+from manager.st123.programs import find_program
 from manager.st123.gaia import format_wcs_quality, load_gaia_overlay
 from manager.st123.hdf5_export import ensure_catalog_hdf5
 from manager.st123.inventory import (
@@ -52,30 +53,7 @@ def _attach_wcs_quality(status, spec):
 
 
 def campaign_home(request):
-    query = (request.GET.get('q') or '').strip()
-    targets = list_campaign_targets()
-    if query:
-        needle = query.lower()
-        compact = needle.replace(' ', '')
-        targets = [
-            row
-            for row in targets
-            if needle in ' '.join(
-                str(row.get(key) or '') for key in ('name', 'display_name', 'host')
-            ).lower()
-            or compact in (row.get('name') or '').lower().replace(' ', '')
-        ]
-        if len(targets) == 1:
-            return redirect('manager:target_detail', name=targets[0]['name'])
-    return render(
-        request,
-        'campaign/home.html',
-        {
-            'targets': targets,
-            'search_query': query,
-            'dispatch': dispatch_availability(),
-        },
-    )
+    return redirect('program_campaign', program_id='18338')
 
 
 def target_search(request):
@@ -86,7 +64,14 @@ def target_search(request):
 def target_detail(request, name):
     spec = _spec_or_404(name)
     status = _attach_wcs_quality(_status(spec), spec)
-    return render(request, 'campaign/target.html', {'campaign': status})
+    return render(
+        request,
+        'campaign/target.html',
+        {
+            'campaign': status,
+            'program': find_program(spec.program_id),
+        },
+    )
 
 
 @require_GET
@@ -115,7 +100,11 @@ def campaign_dispatch(request, name=None):
         return render(
             request,
             'campaign/target.html',
-            {'campaign': _attach_wcs_quality(_status(spec), spec), 'dispatch_error': str(exc)},
+            {
+                'campaign': _attach_wcs_quality(_status(spec), spec),
+                'program': find_program(spec.program_id),
+                'dispatch_error': str(exc),
+            },
             status=409,
         )
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':

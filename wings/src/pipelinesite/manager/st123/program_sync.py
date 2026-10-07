@@ -11,7 +11,7 @@ from typing import Any, Iterable
 from urllib.error import URLError
 from urllib.request import Request, urlopen
 
-from .config import TargetSpec, campaign_registry_path, data_root, program_id
+from .config import TargetSpec, campaign_registry_path, program_data_root, program_id
 from .sky import format_dec, format_ra
 
 VISIT_STATUS_URL = 'https://www.stsci.edu/hst-program-info/visits/?program={program}'
@@ -32,6 +32,22 @@ _INST_MAP = (
     ('ACS', 'ACS'),
 )
 _USER_AGENT = 'NGP-pipelinesite/1.0 (+https://github.com/)'
+UV_PREIMAGE_FILTERS = (
+    'F336W',
+    'F330W',
+    'F300X',
+    'F275W',
+    'F225W',
+    'F218W',
+    'F255W',
+    'F170W',
+    'F160BW',
+    'F150LP',
+    'F165LP',
+    'F140LP',
+    'F25QTZ',
+    'F343N',
+)
 
 
 def name_key(value: str | None) -> str:
@@ -48,6 +64,25 @@ def pretty_target_name(raw: str) -> str:
     text = re.sub(r'\s+', ' ', text).strip()
     text = re.sub(r'([A-Za-z]+)0*([0-9]+)', r'\1 \2', text)
     return text or str(raw or '').strip()
+
+
+def lookup_host_name(raw: str | None) -> str:
+    """Galaxy name used for coordinate lookup (strip visit suffixes like -1)."""
+    text = pretty_target_name(raw or '')
+    return re.sub(r'-\d+$', '', text).strip()
+
+
+def resolve_sky_name(name: str | None) -> tuple[float, float] | None:
+    host = lookup_host_name(name)
+    if not host:
+        return None
+    try:
+        from astropy.coordinates import SkyCoord
+
+        sky = SkyCoord.from_name(host)
+        return float(sky.ra.degree), float(sky.dec.degree)
+    except Exception:
+        return None
 
 
 def parse_instruments(raw: str | Iterable[str] | None) -> tuple[str, ...]:
@@ -237,11 +272,17 @@ def build_registry_record(
     *,
     root: Path,
     previous: dict[str, Any] | None = None,
+    include_planned: bool = False,
+    resolve_sky=None,
 ) -> dict[str, Any]:
     sky = _mean_sky(mast_hits)
     instruments = list(target.get('instruments') or [])
     for row in mast_hits:
         for inst in row.get('instruments') or ():
+            if inst not in instruments:
+                instruments.append(inst)
+    if include_planned:
+        for inst in ('ACS', 'WFC3', 'WFPC2'):
             if inst not in instruments:
                 instruments.append(inst)
     if not instruments:
@@ -258,13 +299,24 @@ def build_registry_record(
             for inst in previous['instruments']:
                 if inst not in instruments:
                     instruments.append(inst)
+    if sky is None and include_planned:
+        resolver = resolve_sky or resolve_sky_name
+        try:
+            sky = resolver(target.get('host') or target.get('display_name'))
+        except Exception:
+            sky = None
     ra, dec = sky if sky is not None else (None, None)
+    if include_planned and ra is not None and dec is not None:
+        ready = True
+    host = lookup_host_name(target.get('host') or target.get('display_name')) or target.get('host')
+    field_role = str(target.get('field_role') or (previous or {}).get('field_role') or 'prime')
     base = previous.get('base_dir') if previous else None
     record = {
         'name': target['name'],
         'display_name': target['display_name'],
-        'host': target['host'],
+        'host': host,
         'sn_type': '',
+        'field_role': field_role,
         'ra': ra,
         'dec': dec,
         'ra_sex': format_ra(ra) if ra is not None else '',
@@ -279,21 +331,24 @@ def build_registry_record(
         'observed': bool(target.get('observed')),
         'mast_products': len(mast_hits),
         'ready': ready,
+        'filters': list((previous or {}).get('filters') or (UV_PREIMAGE_FILTERS if include_planned else ())),
     }
     return record
 
 
-def spec_from_record(row: dict[str, Any]) -> TargetSpec | None:
+def spec_from_record(row: dict[str, Any], program_id: str | None = None) -> TargetSpec | None:
     try:
         ra = float(row['ra'])
         dec = float(row['dec'])
     except (KeyError, TypeError, ValueError):
         return None
     instruments = tuple(row.get('instruments') or ('ACS', 'WFC3', 'WFPC2'))
+    pid = str(program_id or row.get('program_id') or '18338')
+    slug = str(row['name'])
     return TargetSpec(
-        name=str(row['name']),
-        display_name=str(row.get('display_name') or row['name']),
-        host=str(row.get('host') or row.get('display_name') or row['name']),
+        name=slug,
+        display_name=str(row.get('display_name') or slug),
+        host=str(row.get('host') or row.get('display_name') or slug),
         sn_type=str(row.get('sn_type') or ''),
         ra=ra,
         dec=dec,
@@ -302,8 +357,11 @@ def spec_from_record(row: dict[str, Any]) -> TargetSpec | None:
         radius_arcmin=float(row.get('radius_arcmin') or 5.0),
         instruments=instruments,
         telescope=str(row.get('telescope') or 'hst'),
-        base_dir=Path(row.get('base_dir') or (data_root() / row['name'])),
+        base_dir=program_data_root(pid) / slug,
         notes=str(row.get('notes') or ''),
+        program_id=pid,
+        filters=tuple(row.get('filters') or ()),
+        field_role=str(row.get('field_role') or 'prime'),
     )
 
 
@@ -330,13 +388,76 @@ def write_registry(payload: dict[str, Any], path: Path | None = None) -> Path:
     return registry
 
 
-def load_registry_specs(path: Path | None = None) -> list[TargetSpec]:
+def add_manual_target(
+    *,
+    program_id: str,
+    name: str,
+    display_name: str = '',
+    host: str = '',
+    ra: float,
+    dec: float,
+    field_role: str = 'prime',
+    radius_arcmin: float = 5.0,
+    notes: str = '',
+) -> dict[str, Any]:
+    """Append a ready target to a program registry so it appears on the campaign page."""
+    from .apt import output_slug
+    from .config import find_target, packaged_catalog_path
+    from .programs import find_program
+
+    prog = find_program(program_id)
+    if prog is None:
+        raise ValueError(f'Unknown program {program_id}')
+    role = 'parallel' if str(field_role).lower() == 'parallel' else 'prime'
+    slug = output_slug(name, parallel=role == 'parallel')
+    if not slug:
+        raise ValueError('Target name is required')
+    if find_target(slug) is not None:
+        raise ValueError(f'Target {slug} already exists')
+    dest = campaign_registry_path(prog.program_id)
+    if dest.is_file():
+        payload = load_registry(dest)
+    else:
+        packaged = packaged_catalog_path(prog.program_id)
+        payload = load_registry(packaged) if packaged.is_file() else {'program_id': prog.program_id, 'targets': []}
+    pretty = pretty_target_name(display_name or name)
+    host_name = lookup_host_name(host or display_name or name) or pretty
+    record = {
+        'name': slug,
+        'display_name': pretty if role == 'prime' else f'{pretty} parallel',
+        'host': host_name,
+        'sn_type': '',
+        'field_role': role,
+        'ra': float(ra),
+        'dec': float(dec),
+        'ra_sex': format_ra(float(ra)),
+        'dec_sex': format_dec(float(dec)),
+        'radius_arcmin': float(radius_arcmin or 5.0),
+        'instruments': ['ACS', 'WFC3', 'WFPC2'],
+        'telescope': 'hst',
+        'notes': notes or 'Added from the site admin console.',
+        'visits': [],
+        'ready': True,
+        'observed': False,
+        'filters': list(UV_PREIMAGE_FILTERS) if prog.program_id == '18440' else [],
+        'program_id': prog.program_id,
+        'source': 'manual',
+    }
+    payload['program_id'] = prog.program_id
+    payload.setdefault('targets', [])
+    payload['targets'].append(record)
+    write_registry(payload, dest)
+    return record
+
+
+def load_registry_specs(path: Path | None = None, program_id: str | None = None) -> list[TargetSpec]:
     data = load_registry(path)
+    pid = program_id or data.get('program_id')
     specs: list[TargetSpec] = []
     for row in data.get('targets') or []:
         if not row.get('ready'):
             continue
-        spec = spec_from_record(row)
+        spec = spec_from_record(row, program_id=pid)
         if spec is not None:
             specs.append(spec)
     return specs
@@ -351,15 +472,21 @@ def sync_program_targets(
     mast_rows: list[dict[str, Any]] | None = None,
     dry_run: bool = False,
     create_dirs: bool = True,
+    include_planned: bool | None = None,
+    resolve_sky=None,
 ) -> dict[str, Any]:
+    from .programs import find_program
+
     pid = str(program or program_id())
-    dest = Path(registry_path) if registry_path is not None else campaign_registry_path()
-    hst_root = Path(root) if root is not None else data_root()
+    dest = Path(registry_path) if registry_path is not None else campaign_registry_path(pid)
+    hst_root = Path(root) if root is not None else program_data_root(pid)
     html = visit_html if visit_html is not None else fetch_visit_html(pid)
     visits = parse_visit_table(html)
     grouped = group_visits(visits)
     mast = mast_rows if mast_rows is not None else query_mast_observations(pid)
     previous = {row.get('name'): row for row in load_registry(dest).get('targets') or []}
+    spec = find_program(pid)
+    planned = bool(spec.include_planned) if include_planned is None and spec else bool(include_planned)
     records = []
     added = []
     for slug, target in sorted(grouped.items()):
@@ -369,6 +496,8 @@ def sync_program_targets(
             hits,
             root=hst_root,
             previous=previous.get(slug),
+            include_planned=planned,
+            resolve_sky=resolve_sky,
         )
         was_ready = bool((previous.get(slug) or {}).get('ready'))
         if record['ready'] and not was_ready:

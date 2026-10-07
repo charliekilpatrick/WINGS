@@ -608,6 +608,77 @@
     loadView(selectedImageId);
   }
 
+  function cellSortValue(cell, type) {
+    var text = (cell && cell.textContent ? cell.textContent : '').replace(/\s+/g, ' ').trim();
+    if (!text || text === '—') {
+      return null;
+    }
+    if (type === 'number') {
+      var number = parseFloat(text.replace(/,/g, ''));
+      return isNaN(number) ? null : number;
+    }
+    return text.toLowerCase();
+  }
+
+  function setupSortableTables(scope) {
+    (scope.querySelectorAll('[data-sortable]') || []).forEach(function (table) {
+      var headers = table.querySelectorAll('thead th[data-sort]');
+      headers.forEach(function (header, index) {
+        header.setAttribute('role', 'button');
+        header.tabIndex = 0;
+        header.addEventListener('click', function () {
+          sortTable(table, headers, index);
+        });
+        header.addEventListener('keydown', function (event) {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            sortTable(table, headers, index);
+          }
+        });
+      });
+    });
+  }
+
+  function sortTable(table, headers, index) {
+    var body = table.tBodies[0];
+    if (!body) {
+      return;
+    }
+    var header = headers[index];
+    var type = header.getAttribute('data-sort') || 'text';
+    var next = header.getAttribute('aria-sort') === 'ascending' ? 'descending' : 'ascending';
+    headers.forEach(function (node) {
+      node.removeAttribute('aria-sort');
+    });
+    header.setAttribute('aria-sort', next);
+    var rows = Array.prototype.slice.call(body.rows).filter(function (row) {
+      return row.cells.length > 1;
+    });
+    rows.sort(function (left, right) {
+      var a = cellSortValue(left.cells[index], type);
+      var b = cellSortValue(right.cells[index], type);
+      if (a === null && b === null) {
+        return 0;
+      }
+      if (a === null) {
+        return 1;
+      }
+      if (b === null) {
+        return -1;
+      }
+      if (a < b) {
+        return next === 'ascending' ? -1 : 1;
+      }
+      if (a > b) {
+        return next === 'ascending' ? 1 : -1;
+      }
+      return 0;
+    });
+    rows.forEach(function (row) {
+      body.appendChild(row);
+    });
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
     var root = document.querySelector('[data-campaign-root]');
     if (!root) {
@@ -616,5 +687,6 @@
     pollStatus(root.dataset.statusUrl);
     setupDispatch(root.querySelector('[data-dispatch-form]'));
     setupViewer(root.querySelector('[data-viewer]'), root);
+    setupSortableTables(root);
   });
 })();

@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import math
+import re
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
@@ -11,6 +13,37 @@ def _header_get(header, *keys):
         if key in header and header[key] not in (None, '', 'N/A'):
             return header[key]
     return None
+
+
+def format_obs_datetime(date_obs: Any, time_obs: Any = None) -> str | None:
+    """Format FITS DATE-OBS / TIME-OBS as ``YYYY-MM-DDTHH:MM:SS``."""
+    date = str(date_obs or '').strip()
+    time = str(time_obs or '').strip()
+    if not date or date.upper() in {'N/A', 'NONE', 'UNKNOWN'}:
+        return None
+    if time.upper() in {'N/A', 'NONE', 'UNKNOWN'}:
+        time = ''
+    raw = date.replace(' ', 'T')
+    if 'T' not in raw and time:
+        raw = f'{date}T{time}'
+    raw = raw.replace('Z', '')
+    if '.' in raw:
+        raw = raw.split('.', 1)[0]
+    for fmt in (
+        '%Y-%m-%dT%H:%M:%S',
+        '%Y-%m-%dT%H:%M',
+        '%Y-%m-%d',
+        '%Y/%m/%dT%H:%M:%S',
+        '%Y/%m/%d',
+    ):
+        try:
+            parsed = datetime.strptime(raw, fmt)
+        except ValueError:
+            continue
+        if 'T' in raw or time:
+            return parsed.strftime('%Y-%m-%dT%H:%M:%S')
+        return parsed.strftime('%Y-%m-%d')
+    return raw or None
 
 
 def _cd_matrix(header) -> list[list[float]] | None:
@@ -139,6 +172,40 @@ def format_sky(ra: float | None, dec: float | None) -> str | None:
     return f'{format_ra(ra)} {format_dec(dec)}'
 
 
+_EQ_VALUE = re.compile(
+    r'(?P<rah>\d+)\s+(?P<ram>\d+)\s+(?P<ras>[\d.]+)\s+'
+    r'(?P<dsign>[+-])\s*(?P<ded>\d+)\s+(?P<dem>\d+)\s+(?P<des>[\d.]+)'
+)
+
+
+def parse_sky_pair(ra_text: str | None, dec_text: str | None) -> tuple[float, float] | None:
+    """Parse decimal degrees or sexagesimal RA/Dec into ICRS degrees."""
+    ra_raw = str(ra_text or '').strip()
+    dec_raw = str(dec_text or '').strip()
+    if not ra_raw or not dec_raw:
+        return None
+    try:
+        return float(ra_raw), float(dec_raw)
+    except ValueError:
+        pass
+    match = _EQ_VALUE.search(f'{ra_raw} {dec_raw}'.replace(':', ' '))
+    if not match:
+        return None
+    ra = (
+        float(match.group('rah'))
+        + float(match.group('ram')) / 60.0
+        + float(match.group('ras')) / 3600.0
+    ) * 15.0
+    dec = (
+        float(match.group('ded'))
+        + float(match.group('dem')) / 60.0
+        + float(match.group('des')) / 3600.0
+    )
+    if match.group('dsign') == '-':
+        dec = -dec
+    return ra, dec
+
+
 def ab_zeropoint(photflam: float | None, photplam: float | None) -> float | None:
     if not photflam or not photplam or photflam <= 0 or photplam <= 0:
         return None
@@ -178,6 +245,7 @@ def read_image_header(path: Path) -> dict[str, Any]:
                 data = None
                 inst = detector = None
                 date_obs = None
+                time_obs = None
                 exptime = None
                 for hdu in hdul:
                     cards = getattr(hdu, 'header', None)
@@ -191,6 +259,8 @@ def read_image_header(path: Path) -> dict[str, Any]:
                         detector = cards['DETECTOR']
                     if date_obs is None:
                         date_obs = _header_get(cards, 'DATE-OBS', 'DATE_OBS')
+                    if time_obs is None:
+                        time_obs = _header_get(cards, 'TIME-OBS', 'TIME_OBS')
                     if exptime is None:
                         exptime = _header_get(cards, 'TEXPTIME', 'EXPTIME')
                     if meta['photflam'] is None and 'PHOTFLAM' in cards:
@@ -212,7 +282,7 @@ def read_image_header(path: Path) -> dict[str, Any]:
 
     meta['instrument'] = None if inst is None else str(inst).strip()
     meta['detector'] = None if detector is None else str(detector).strip()
-    meta['date_obs'] = None if date_obs is None else str(date_obs)
+    meta['date_obs'] = format_obs_datetime(date_obs, time_obs)
     try:
         meta['exptime'] = None if exptime is None else float(exptime)
     except (TypeError, ValueError):

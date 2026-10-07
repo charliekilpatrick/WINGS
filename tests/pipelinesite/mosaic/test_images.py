@@ -24,7 +24,9 @@ class MosaicImageTests(SimpleTestCase):
         selected = next(row for row in mosaics if row['selected'])
         self.assertEqual(selected['instrument'], 'ACS')
         self.assertEqual(selected['filter'], 'F814W')
-        self.assertEqual(selected['option_label'], 'ACS F814W (DOLPHOT reference)')
+        self.assertTrue(selected['option_label'].startswith('ACS F814W'))
+        self.assertIn('DOLPHOT reference', selected['option_label'])
+        self.assertIn(' · ', selected['option_label'])
         switched = resolve_display_image(root, 'mosaic-acs-f606w')
         self.assertIsNotNone(switched)
         self.assertIn('f606w', switched.name.lower())
@@ -36,6 +38,14 @@ class MosaicImageTests(SimpleTestCase):
         self.assertIn(('WFC3', 'F625W'), filters)
         self.assertIn(('WFC3', 'F336W'), filters)
         self.assertIn(('WFPC2', 'F814W'), filters)
+        self.assertTrue(all(' · ' in row['option_label'] for row in mosaics))
+
+    def test_ic1954_dropdown_includes_observation_date(self):
+        root = Path('/data/ckilpatrick/HST/ic1954')
+        mosaics = discover_mosaic_images(root)
+        labels = [row['option_label'] for row in mosaics]
+        self.assertTrue(any('WFC3 F275W · 2020-02-14' in label for label in labels))
+        self.assertTrue(any('WFC3 F336W · 2020-02-14' in label for label in labels))
 
 
 class DisplayImageTests(SimpleTestCase):

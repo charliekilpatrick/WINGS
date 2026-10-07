@@ -40,6 +40,16 @@ body.campaign-page {
   margin-bottom: 0.85rem;
 }
 
+.crumb {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin: 0 0 0.65rem;
+}
+
+.crumb a {
+  color: var(--accent);
+}
+
 .meta-list {
   margin: 0;
   padding: 0;
@@ -151,6 +161,25 @@ body.campaign-page {
   white-space: nowrap;
   color: var(--muted);
   font-weight: 600;
+}
+
+.campaign-table[data-sortable] th[data-sort] {
+  cursor: pointer;
+  user-select: none;
+}
+
+.campaign-table[data-sortable] th[data-sort]:hover {
+  color: var(--ink);
+}
+
+.campaign-table[data-sortable] th[aria-sort="ascending"]::after,
+.campaign-table[data-sortable] th[aria-sort="descending"]::after {
+  content: " ▲";
+  font-size: 0.75em;
+}
+
+.campaign-table[data-sortable] th[aria-sort="descending"]::after {
+  content: " ▼";
 }
 
 .dispatch-row {
@@ -337,11 +366,67 @@ body.campaign-page {
   margin-bottom: 1rem;
 }
 
+.login-wrap {
+  max-width: 28rem;
+}
+
+.login-wrap label,
+.admin-grid label {
+  display: block;
+  margin: 0 0 0.75rem;
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.login-wrap .form-control,
+.admin-grid .form-control {
+  display: block;
+  width: 100%;
+  margin-top: 0.3rem;
+}
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+  margin: 1.25rem 0 2rem;
+}
+
+.admin-grid h2,
+.campaign-wrap > h2 {
+  font-size: 1.15rem;
+  margin: 1.5rem 0 0.75rem;
+}
+
+.check-row {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.inline-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  align-items: center;
+  margin: 0;
+}
+
+.nav-account {
+  margin-left: 0.75rem;
+}
+
+.nav-account .navbar-text {
+  color: #d7e4f2;
+  padding-right: 0.5rem;
+}
+
 @media (max-width: 900px) {
   .campaign-hero,
   .viewer-shell,
   .stat-row,
-  .stage-rail {
+  .stage-rail,
+  .admin-grid {
     grid-template-columns: 1fr;
   }
 }

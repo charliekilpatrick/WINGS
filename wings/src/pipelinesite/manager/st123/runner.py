@@ -54,7 +54,7 @@ def _stage_argv(stage_key: str, target) -> list[str]:
     base = str(target.base_dir)
     cores = str(ncores())
     if stage_key == 'download':
-        return [
+        argv = [
             binary,
             '--telescope', target.telescope,
             '--ra', str(target.ra),
@@ -64,6 +64,9 @@ def _stage_argv(stage_key: str, target) -> list[str]:
             '--instruments', *list(target.instruments),
             '-v',
         ]
+        if getattr(target, 'filters', ()):
+            argv.extend(['--filters', ','.join(target.filters)])
+        return argv
     if stage_key == 'align':
         return [
             binary, '--base-dir', base,

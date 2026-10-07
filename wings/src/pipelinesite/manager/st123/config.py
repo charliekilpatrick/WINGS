@@ -32,6 +32,9 @@ class TargetSpec:
     telescope: str
     base_dir: Path
     notes: str
+    program_id: str = '18338'
+    filters: tuple[str, ...] = ()
+    field_role: str = 'prime'
 
 
 STAGES: tuple[StageSpec, ...] = (
@@ -133,7 +136,23 @@ NGC784_TARGET = TargetSpec(
     notes='',
 )
 
-_FIXED_TARGETS = (NGC1494_TARGET, NGC784_TARGET,)
+NGC4157_TARGET = TargetSpec(
+    name='ngc4157',
+    display_name='NGC 4157',
+    host='NGC 4157',
+    sn_type='',
+    ra=182.7681875,
+    dec=50.48468056,
+    ra_sex='12:11:04.365',
+    dec_sex='+50:29:04.85',
+    radius_arcmin=5.0,
+    instruments=('ACS',),
+    telescope='hst',
+    base_dir=Path('/data/ckilpatrick/HST/ngc4157'),
+    notes='Candidate. Archival ACS/WFC F555W+F814W from GO 17070 (SN 2003J).',
+)
+
+_FIXED_TARGETS = (NGC1494_TARGET, NGC784_TARGET, NGC4157_TARGET,)
 
 DEFAULT_QUALITY_CUTS = {
     'types': (1,),
@@ -157,32 +176,91 @@ def _norm_label(value: str | None) -> str:
     return ''.join(ch for ch in str(value or '').lower() if ch.isalnum())
 
 
-def campaign_targets() -> list[TargetSpec]:
-    """Targets shown on the campaign table."""
-    rows = [target_config()]
-    seen = {_norm_label(rows[0].name)}
-    for spec in _FIXED_TARGETS:
-        key = _norm_label(spec.name)
-        if key not in seen:
-            rows.append(spec)
-            seen.add(key)
+def campaign_targets(program: str | None = None) -> list[TargetSpec]:
+    """Targets shown on a campaign table, optionally limited to one program."""
     from .program_sync import load_registry_specs
+    from .programs import find_program, list_program_specs
 
-    for spec in load_registry_specs():
+    wanted = find_program(program) if program else None
+    programs = (wanted,) if wanted is not None else list_program_specs()
+    rows: list[TargetSpec] = []
+    seen: set[str] = set()
+
+    def _add(spec: TargetSpec) -> None:
         key = _norm_label(spec.name)
-        if key not in seen:
-            rows.append(spec)
-            seen.add(key)
+        if key in seen:
+            return
+        rows.append(spec)
+        seen.add(key)
+
+    for prog in programs:
+        if prog is None:
+            continue
+        if prog.include_example:
+            example = target_config()
+            if _norm_label(example.program_id) == _norm_label(prog.program_id):
+                _add(example)
+        if prog.include_fixed:
+            for spec in _FIXED_TARGETS:
+                if _norm_label(spec.program_id) == _norm_label(prog.program_id):
+                    _add(spec)
+        override = _registry_override()
+        if (
+            override is not None
+            and override.is_file()
+            and _norm_label(prog.program_id) == _norm_label(program_id())
+        ):
+            for spec in load_registry_specs(override, program_id=prog.program_id):
+                _add(spec)
+            continue
+        packaged = packaged_catalog_path(prog.program_id)
+        if packaged.is_file():
+            for spec in load_registry_specs(packaged, program_id=prog.program_id):
+                _add(spec)
+        registry = campaign_registry_path(prog.program_id)
+        if registry.is_file() and (not packaged.is_file() or registry.resolve() != packaged.resolve()):
+            from .program_sync import load_registry, spec_from_record
+
+            for row in load_registry(registry).get('targets') or []:
+                if row.get('source') != 'manual' or not row.get('ready'):
+                    continue
+                spec = spec_from_record(row, program_id=prog.program_id)
+                if spec is None:
+                    continue
+                key = _norm_label(spec.name)
+                rows[:] = [item for item in rows if _norm_label(item.name) != key]
+                seen.discard(key)
+                _add(spec)
     return rows
+
+
+def _registry_override() -> Path | None:
+    settings = _django_settings()
+    if settings is None:
+        return None
+    configured = getattr(settings, 'ST123_CAMPAIGN_REGISTRY', None)
+    if configured:
+        return Path(configured)
+    return None
 
 
 def find_target(name: str) -> TargetSpec | None:
     want = _norm_label(name)
     if not want:
         return None
-    for spec in campaign_targets():
+    specs = campaign_targets()
+    for spec in specs:
+        if _norm_label(spec.name) == want:
+            return spec
+    example = target_config()
+    if want in {
+        _norm_label(example.name),
+        _norm_label(example.display_name),
+        _norm_label(example.host),
+    }:
+        return example
+    for spec in specs:
         if want in {
-            _norm_label(spec.name),
             _norm_label(spec.display_name),
             _norm_label(spec.host),
         }:
@@ -209,6 +287,8 @@ def target_config() -> TargetSpec:
         telescope=getattr(settings, 'ST123_TELESCOPE', EXAMPLE_TARGET.telescope),
         base_dir=Path(base),
         notes=getattr(settings, 'ST123_TARGET_NOTES', EXAMPLE_TARGET.notes),
+        program_id='18338',
+        field_role='prime',
     )
 
 
@@ -313,9 +393,41 @@ def data_root() -> Path:
     return Path(getattr(settings, 'ST123_DATA_ROOT', default) or default)
 
 
-def campaign_registry_path() -> Path:
+def output_root() -> Path:
     settings = _django_settings()
-    default = data_root() / '.pipelinesite' / 'campaign_targets.json'
+    default = Path('/data/ckilpatrick')
     if settings is None:
         return default
-    return Path(getattr(settings, 'ST123_CAMPAIGN_REGISTRY', default) or default)
+    return Path(getattr(settings, 'ST123_OUTPUT_ROOT', default) or default)
+
+
+def program_data_root(program: str | None = None) -> Path:
+    from .programs import find_program
+
+    prog = find_program(program or program_id())
+    slug = prog.output_name if prog else f'go{program or program_id()}'
+    return output_root() / slug
+
+
+def packaged_catalog_path(program: str | None = None) -> Path:
+    from .apt import packaged_catalog_path as _packaged
+    from .programs import find_program
+
+    prog = find_program(program or program_id())
+    pid = prog.program_id if prog else str(program or program_id())
+    return _packaged(pid)
+
+
+def campaign_registry_path(program: str | None = None) -> Path:
+    from .programs import find_program
+
+    prog = find_program(program or program_id())
+    filename = prog.registry_filename if prog and prog.registry_filename else 'campaign_targets.json'
+    default = program_data_root(prog.program_id if prog else program) / '.pipelinesite' / filename
+    settings = _django_settings()
+    if settings is None:
+        return default
+    configured = getattr(settings, 'ST123_CAMPAIGN_REGISTRY', None)
+    if configured and (prog is None or prog.program_id == program_id()):
+        return Path(configured)
+    return default
