@@ -3,6 +3,10 @@ from unittest.mock import patch
 from django.contrib.auth import get_user_model
 from django.test import SimpleTestCase, TestCase, override_settings
 
+from pathlib import Path
+import tempfile
+from unittest.mock import MagicMock
+
 from manager.st123.config import EXAMPLE_TARGET, NGC1494_TARGET
 from manager.st123.inventory import dispatch_availability
 
@@ -83,3 +87,66 @@ class DispatchViewTests(TestCase):
         self.assertFalse(resp.json()['ok'])
         self.assertIn('already running', resp.json()['error'])
         spawn.assert_called_once()
+
+    @patch('manager.views.campaign.spawn_job')
+    @patch('manager.views.campaign._status')
+    def test_new_data_reruns_full_pipeline_including_download(self, status, spawn):
+        status.return_value = {
+            'stages': [{'key': 'download'}, {'key': 'align'}, {'key': 'mosaic'}],
+            'remaining': [],
+            'new_data': True,
+            'dispatch': {'allowed': True, 'message': 'ok'},
+        }
+        spawn.return_value = {'state': 'running'}
+        resp = self.client.post(
+            '/manager/targets/ngc0157/dispatch',
+            {'target': 'ngc0157'},
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+        )
+        self.assertEqual(resp.status_code, 200)
+        spawn.assert_called_once()
+        self.assertEqual(spawn.call_args[0][0], ['download', 'align', 'mosaic'])
+
+
+class EmptyMastRunnerTests(SimpleTestCase):
+    @patch('manager.st123.jobs.create_run_jobs', return_value=[])
+    @patch('manager.st123.runner.subprocess.run')
+    def test_empty_mast_download_completes_as_zero_of_zero(self, run, _jobs):
+        import json
+
+        from manager.st123.config import TargetSpec
+        from manager.st123.runner import run_stages
+
+        with tempfile.TemporaryDirectory() as tmp:
+            spec = TargetSpec(
+                name='empty',
+                display_name='Empty',
+                host='',
+                sn_type='',
+                ra=1.0,
+                dec=1.0,
+                ra_sex='',
+                dec_sex='',
+                radius_arcmin=5.0,
+                instruments=('ACS',),
+                telescope='hst',
+                base_dir=Path(tmp),
+                notes='',
+                program_id='18338',
+            )
+
+            def _fake_run(*_args, **_kwargs):
+                logs = spec.base_dir / 'logs'
+                logs.mkdir(exist_ok=True)
+                (logs / 'download_test.log').write_text(
+                    'Found 0 HST imaging observation(s)\n'
+                )
+                return MagicMock(returncode=1)
+
+            run.side_effect = _fake_run
+            run_stages(['download', 'align'], target=spec)
+            status = json.loads((spec.base_dir / '.pipelinesite' / 'status.json').read_text())
+            self.assertEqual(status['state'], 'completed')
+            self.assertIn('0/0', status['message'])
+            self.assertEqual(status['stages']['download']['state'], 'completed')
+            self.assertEqual(status['stages']['align']['state'], 'skipped')

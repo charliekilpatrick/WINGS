@@ -33,6 +33,12 @@
     {% endif %}
   </p>
   {% endif %}
+  {% if n_new_data %}
+  <p class="mast-flag">
+    New MAST data are available for {{ n_new_data }} target{{ n_new_data|pluralize }}.
+    Open a flagged target and run the pipeline to download and process them.
+  </p>
+  {% endif %}
 
   {% if search_query and not targets %}
   <p>No targets match “{{ search_query }}”.</p>

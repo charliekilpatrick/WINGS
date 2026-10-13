@@ -121,6 +121,22 @@ body.campaign-page {
 .state-running { color: var(--run); }
 .state-error, .state-stale { color: var(--err); }
 .state-pending { color: var(--wait); }
+.state-new { color: #8a3d12; }
+
+.mast-flag {
+  background: #fff6e8;
+  border: 1px solid #e4c38a;
+  color: #8a3d12;
+  padding: 0.7rem 0.9rem;
+  margin: 0 0 1rem;
+}
+
+.mast-flag.compact {
+  display: inline-block;
+  margin: 0.35rem 0 0;
+  padding: 0.15rem 0.45rem;
+  font-size: 0.78rem;
+}
 
 .stat-row {
   display: grid;

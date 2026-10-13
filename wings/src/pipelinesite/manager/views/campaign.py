@@ -88,7 +88,7 @@ def campaign_dispatch(request, name=None):
     raw = request.POST.get('stages', '').strip()
     if raw:
         stages = [part.strip() for part in raw.split(',') if part.strip()]
-    elif rerun_all:
+    elif rerun_all or status.get('new_data'):
         stages = [row['key'] for row in status['stages']]
     else:
         stages = status['remaining'] or [row['key'] for row in status['stages']]

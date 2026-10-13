@@ -356,6 +356,10 @@ def status_path(base_dir: Path | None = None) -> Path:
     return status_dir(base_dir) / 'status.json'
 
 
+def mast_updates_path(program: str | None = None) -> Path:
+    return program_data_root(program) / '.pipelinesite' / 'mast_updates.json'
+
+
 def _preview_stem(image_id: str | None = None) -> str:
     if not image_id:
         return 'reference_preview'

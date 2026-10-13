@@ -35,13 +35,16 @@
     </div>
     <div class="card">
       <h2>Dispatch</h2>
+      {% if campaign.new_data %}
+      <p class="mast-flag">New MAST data are available ({{ campaign.n_new_obs }} observation{{ campaign.n_new_obs|pluralize }}). Re-running the pipeline starts with a MAST download.</p>
+      {% endif %}
       <p class="campaign-sub" data-dispatch-message>{% if dispatch_error %}{{ dispatch_error }}{% else %}{{ campaign.dispatch.message }}{% endif %}</p>
       <form method="post" action="{% url 'manager:target_dispatch' campaign.target.name %}" data-dispatch-form data-ajax="1" data-dispatch-allowed="{% if campaign.dispatch.allowed %}1{% else %}0{% endif %}">
         {% csrf_token %}
         <input type="hidden" name="target" value="{{ campaign.target.name }}">
         <div class="dispatch-row">
           <button type="submit" class="btn btn-accent"{% if not campaign.dispatch.allowed %} disabled{% endif %}>
-            {% if campaign.remaining %}Run remaining stages{% else %}Re-run full pipeline{% endif %}
+            {% if campaign.new_data %}Process new data{% elif campaign.remaining %}Run remaining stages{% else %}Re-run full pipeline{% endif %}
           </button>
           <label>
             <input type="checkbox" name="rerun_all" value="1"{% if not campaign.dispatch.allowed %} disabled{% endif %}>

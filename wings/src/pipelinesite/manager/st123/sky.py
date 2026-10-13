@@ -15,6 +15,15 @@ def _header_get(header, *keys):
     return None
 
 
+def separation_arcmin(ra1: float, dec1: float, ra2: float, dec2: float) -> float:
+    """Great-circle distance in arcminutes between two ICRS positions."""
+    r1, d1, r2, d2 = (math.radians(float(v)) for v in (ra1, dec1, ra2, dec2))
+    hav = math.sin((d2 - d1) / 2.0) ** 2 + math.cos(d1) * math.cos(d2) * math.sin(
+        (r2 - r1) / 2.0
+    ) ** 2
+    return math.degrees(2.0 * math.asin(min(1.0, math.sqrt(hav)))) * 60.0
+
+
 def format_obs_datetime(date_obs: Any, time_obs: Any = None) -> str | None:
     """Format FITS DATE-OBS / TIME-OBS as ``YYYY-MM-DDTHH:MM:SS``."""
     date = str(date_obs or '').strip()

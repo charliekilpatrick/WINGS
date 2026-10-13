@@ -106,6 +106,53 @@ def _science_fits(download_root: Path) -> list[Path]:
     return out
 
 
+_ANSI = re.compile(r'\x1b\[[0-9;]*m')
+
+
+def mast_imaging_found_count(base_dir: Path) -> int | None:
+    """Return the MAST cone-search hit count from the latest download log."""
+    logs = _latest_logs(Path(base_dir) / 'logs', ('download',))
+    if not logs:
+        return None
+    try:
+        text = _ANSI.sub('', logs[-1].read_text(errors='replace'))
+    except OSError:
+        return None
+    match = re.search(r'Found (\d+) HST imaging', text)
+    return int(match.group(1)) if match else None
+
+
+def is_empty_mast_download(base_dir: Path) -> bool:
+    """True when MAST was queried and returned no imaging (0/0, not a timeout)."""
+    if _science_fits(Path(base_dir) / 'download'):
+        return False
+    return mast_imaging_found_count(base_dir) == 0
+
+
+def revert_status_for_new_data(base_dir: Path) -> None:
+    """Put an empty-field target back to pending when MAST later has data."""
+    stored = read_status_file(base_dir)
+    if stored.get('state') == 'running' and pid_is_running(stored.get('pid')):
+        return
+    stages = dict(stored.get('stages') or {})
+    for spec in STAGES:
+        record = dict(stages.get(spec.key) or {})
+        if spec.key == 'download' or record.get('state') == 'skipped' or record.get('empty_mast'):
+            record['state'] = 'pending'
+        stages[spec.key] = record
+    stored.update(
+        {
+            'state': 'idle',
+            'message': 'New MAST data are available',
+            'ended_at': None,
+            'stages': stages,
+        }
+    )
+    from .runner import write_status
+
+    write_status(Path(base_dir), stored)
+
+
 def _latest_logs(log_dir: Path, prefixes: Iterable[str]) -> list[Path]:
     if not log_dir.is_dir():
         return []
@@ -841,11 +888,16 @@ def infer_stages(base_dir: Path, stored: dict[str, Any] | None = None) -> list[d
     stored_stages = stored.get('stages') or {}
     running = stored.get('state') == 'running' and pid_is_running(stored.get('pid'))
     _ensure_missing_stage_logs(base_dir)
+    empty_mast = is_empty_mast_download(base_dir)
     rows = []
     for spec in STAGES:
         record = stored_stages.get(spec.key) or {}
         artifact_done = _artifact_complete(base_dir, spec.key)
         state = record.get('state')
+        if empty_mast and spec.key == 'download' and state == 'error':
+            state = 'completed'
+        elif empty_mast and spec.key != 'download' and state in {None, 'error', 'pending'}:
+            state = 'skipped'
         if running and state == 'running':
             pass
         elif state in {'completed', 'error', 'skipped'}:
@@ -885,7 +937,11 @@ def infer_stages(base_dir: Path, stored: dict[str, Any] | None = None) -> list[d
 
 
 def remaining_stages(stage_rows: list[dict[str, Any]]) -> list[str]:
-    return [row['key'] for row in stage_rows if row['state'] not in {'completed', 'running'}]
+    return [
+        row['key']
+        for row in stage_rows
+        if row['state'] not in {'completed', 'running', 'skipped'}
+    ]
 
 
 def running_jobs() -> list[dict[str, Any]]:
@@ -952,8 +1008,11 @@ def dispatch_availability(target=None, jobs=None, max_jobs=None) -> dict[str, An
 
 
 def list_campaign_targets(program: str | None = None, *, refresh_distances: bool = False) -> list[dict[str, Any]]:
+    from .mast_updates import updates_by_target
+
     live = {job['name']: job for job in running_jobs()}
     targets = list(campaign_targets(program))
+    mast_flags = updates_by_target(program)
     host_sky: dict[str, dict[str, Any]] = {}
     for target in targets:
         key = ''.join(ch for ch in str(target.host or '').upper() if ch.isalnum())
@@ -995,15 +1054,22 @@ def list_campaign_targets(program: str | None = None, *, refresh_distances: bool
         root = target.base_dir
         stages = infer_stages(root)
         remaining = remaining_stages(stages)
-        n_done = sum(1 for row in stages if row['state'] == 'completed')
+        n_done = sum(1 for row in stages if row['state'] in {'completed', 'skipped'})
+        n_images = len(_science_fits(root / 'download'))
         host_key = ''.join(ch for ch in str(target.host or '').upper() if ch.isalnum())
         distance = host_distance.get(host_key)
         job = live.get(target.name)
+        flag = mast_flags.get(target.name) or {}
+        new_data = bool(flag.get('new_available'))
+        n_new_obs = int(flag.get('n_pending') or 0)
         if job:
             status = 'running'
             job_state = 'running'
+        elif new_data:
+            status = 'new data available'
+            job_state = 'new'
         elif not remaining:
-            status = 'complete'
+            status = 'no data yet' if n_images == 0 else 'complete'
             job_state = 'completed'
         else:
             status = f'{remaining[0]} pending'
@@ -1020,12 +1086,14 @@ def list_campaign_targets(program: str | None = None, *, refresh_distances: bool
                 'ra_sex': target.ra_sex,
                 'dec_sex': target.dec_sex,
                 'distance_display': format_distance(distance),
-                'n_images': len(_science_fits(root / 'download')),
+                'n_images': n_images,
                 'n_done': n_done,
                 'n_stages': len(stages),
                 'remaining': remaining,
                 'status': status,
                 'job_state': job_state,
+                'new_data': new_data,
+                'n_new_obs': n_new_obs,
                 'has_catalog': bool(discover_phot_files(root)),
                 'has_reference': bool(resolve_display_image(root)),
             }
@@ -1054,6 +1122,9 @@ def build_campaign_status(base_dir: Path | None = None, target=None) -> dict[str
         dec=target.dec,
         base_dir=root,
     )
+    from .mast_updates import updates_by_target
+
+    flag = updates_by_target(target.program_id).get(target.name) or {}
     return {
         'target': {
             'name': target.name,
@@ -1086,6 +1157,8 @@ def build_campaign_status(base_dir: Path | None = None, target=None) -> dict[str
         },
         'stages': stages,
         'remaining': remaining_stages(stages),
+        'new_data': bool(flag.get('new_available')),
+        'n_new_obs': int(flag.get('n_pending') or 0),
         'images': images,
         'n_images': len(images),
         'catalogs': catalogs,

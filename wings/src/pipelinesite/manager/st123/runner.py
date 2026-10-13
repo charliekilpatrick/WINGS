@@ -28,6 +28,7 @@ from .config import (
 from .inventory import (
     build_campaign_status,
     dispatch_availability,
+    is_empty_mast_download,
     pid_is_running,
     read_status_file,
 )
@@ -211,10 +212,25 @@ def run_stages(stage_keys: Iterable[str], target=None) -> None:
     write_status(target.base_dir, payload)
 
     env = _env()
+    skip_rest = False
+    empty_mast = False
     try:
         for key in keys:
             spec = STAGE_BY_KEY[key]
             job = job_by_stage.get(key)
+            if skip_rest:
+                payload['stages'][key] = {
+                    'state': 'skipped',
+                    'started_at': None,
+                    'ended_at': None,
+                    'seconds': None,
+                    'returncode': None,
+                    'command': None,
+                }
+                write_status(target.base_dir, payload)
+                if job is not None:
+                    mark_job(job, JobStates.COMPLETED.value[0], end=True)
+                continue
             if job is not None:
                 mark_job(job, JobStates.INITIALIZED.value[0], start=True)
             started = _now_iso()
@@ -239,6 +255,10 @@ def run_stages(stage_keys: Iterable[str], target=None) -> None:
             seconds = time.perf_counter() - t0
             ended = _now_iso()
             ok = result.returncode == 0
+            if key == 'download' and is_empty_mast_download(target.base_dir):
+                ok = True
+                skip_rest = True
+                empty_mast = True
             payload['stages'][key] = {
                 'state': 'completed' if ok else 'error',
                 'started_at': started,
@@ -246,6 +266,7 @@ def run_stages(stage_keys: Iterable[str], target=None) -> None:
                 'seconds': seconds,
                 'returncode': result.returncode,
                 'command': argv,
+                'empty_mast': empty_mast if key == 'download' else False,
             }
             write_status(target.base_dir, payload)
             if job is not None:
@@ -258,7 +279,11 @@ def run_stages(stage_keys: Iterable[str], target=None) -> None:
                 raise RuntimeError(f'{spec.label} failed with exit {result.returncode}')
         payload['state'] = 'completed'
         payload['ended_at'] = _now_iso()
-        payload['message'] = 'All requested stages finished'
+        payload['message'] = (
+            'No HST images in MAST yet (0/0)'
+            if empty_mast
+            else 'All requested stages finished'
+        )
         write_status(target.base_dir, payload)
     except Exception as exc:
         payload['state'] = 'error'

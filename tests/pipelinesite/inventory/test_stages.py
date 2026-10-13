@@ -26,6 +26,28 @@ class StageInferenceTests(SimpleTestCase):
             self.assertEqual(by_key['combine_catalogs']['state'], 'pending')
             self.assertIn('combine_catalogs', remaining_stages(rows))
 
+    def test_empty_mast_download_is_success_not_failure(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            logs = root / 'logs'
+            logs.mkdir()
+            (logs / 'download_20261009.log').write_text(
+                'Found 0 HST imaging observation(s)\n'
+                'No matching products for: HST (empty search or all downloads failed)\n'
+            )
+            stored = {
+                'state': 'error',
+                'message': 'Download failed with exit 1',
+                'stages': {
+                    'download': {'state': 'error', 'returncode': 1},
+                },
+            }
+            rows = infer_stages(root, stored)
+            by_key = {row['key']: row for row in rows}
+            self.assertEqual(by_key['download']['state'], 'completed')
+            self.assertEqual(by_key['align']['state'], 'skipped')
+            self.assertEqual(remaining_stages(rows), [])
+
 
 class DolphotRuntimeTests(SimpleTestCase):
     def test_elapsed_from_dolphot_err(self):

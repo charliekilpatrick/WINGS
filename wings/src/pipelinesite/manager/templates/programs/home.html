@@ -72,7 +72,12 @@
             {% if row.institution %}<div class="campaign-sub" style="margin:0">{{ row.institution }}</div>{% endif %}
           </td>
           <td>{{ row.status|default:"—" }}</td>
-          <td>{{ row.n_targets }}{% if row.n_complete %} <span class="campaign-sub">({{ row.n_complete }} complete)</span>{% endif %}</td>
+          <td>
+            {{ row.n_targets }}{% if row.n_complete %} <span class="campaign-sub">({{ row.n_complete }} complete)</span>{% endif %}
+            {% if row.n_new_data %}
+            <div class="mast-flag compact">{{ row.n_new_data }} with new MAST data</div>
+            {% endif %}
+          </td>
           <td>{{ row.n_images }}</td>
         </tr>
         {% empty %}

@@ -38,6 +38,7 @@ def program_summaries() -> list[dict]:
                 'n_targets': len(targets),
                 'n_images': sum(int(row.get('n_images') or 0) for row in targets),
                 'n_complete': sum(1 for row in targets if row.get('job_state') == 'completed'),
+                'n_new_data': sum(1 for row in targets if row.get('new_data')),
             }
         )
     return rows
@@ -87,5 +88,6 @@ def program_campaign(request, program_id):
             'targets': targets,
             'search_query': query,
             'dispatch': dispatch_availability(),
+            'n_new_data': sum(1 for row in targets if row.get('new_data')),
         },
     )
