@@ -19,13 +19,16 @@ class MosaicImageTests(SimpleTestCase):
         self.assertIn(('ACS', 'F814W', 'mosaic'), keys)
         self.assertIn(('WFPC2', 'F606W', 'mosaic'), keys)
         self.assertIn(('WFPC2', 'F814W', 'mosaic'), keys)
-        self.assertEqual(len(mosaics), 4)
-        self.assertTrue(all(row['stage'] == 'mosaic' for row in mosaics))
+        # ACS stamps are half the L3 footprint, so true full-field aligns stay.
+        self.assertIn(('ACS', 'F606W', 'align'), keys)
+        self.assertIn(('ACS', 'F814W', 'align'), keys)
+        self.assertNotIn(('WFPC2', 'F606W', 'align'), keys)
+        self.assertNotIn(('WFPC2', 'F814W', 'align'), keys)
+        self.assertEqual(len(mosaics), 6)
         selected = next(row for row in mosaics if row['selected'])
         self.assertEqual(selected['instrument'], 'ACS')
         self.assertEqual(selected['filter'], 'F814W')
         self.assertTrue(selected['option_label'].startswith('ACS F814W'))
-        self.assertIn('DOLPHOT reference', selected['option_label'])
         self.assertIn(' · ', selected['option_label'])
         switched = resolve_display_image(root, 'mosaic-acs-f606w')
         self.assertIsNotNone(switched)
@@ -38,6 +41,9 @@ class MosaicImageTests(SimpleTestCase):
         self.assertIn(('WFC3', 'F625W'), filters)
         self.assertIn(('WFC3', 'F336W'), filters)
         self.assertIn(('WFPC2', 'F814W'), filters)
+        # Same-visit align coadds are dropped when they match the mosaic area.
+        self.assertTrue(all(row['stage'] == 'mosaic' for row in mosaics))
+        self.assertEqual(len(mosaics), 5)
         self.assertTrue(all(' · ' in row['option_label'] for row in mosaics))
 
     def test_ic1954_dropdown_includes_observation_date(self):
@@ -46,6 +52,30 @@ class MosaicImageTests(SimpleTestCase):
         labels = [row['option_label'] for row in mosaics]
         self.assertTrue(any('WFC3 F275W · 2020-02-14' in label for label in labels))
         self.assertTrue(any('WFC3 F336W · 2020-02-14' in label for label in labels))
+        self.assertEqual(len(mosaics), 2)
+        self.assertTrue(all(row['stage'] == 'mosaic' for row in mosaics))
+
+    def test_ngc0247_one_coadd_per_visit(self):
+        root = Path('/data/ckilpatrick/go18440/ngc0247')
+        mosaics = discover_mosaic_images(root)
+        labels = [row['option_label'] for row in mosaics]
+        self.assertEqual(len(mosaics), 2)
+        self.assertEqual(len([label for label in labels if 'F336W' in label]), 1)
+        self.assertEqual(len([label for label in labels if 'F165LP' in label]), 1)
+        self.assertFalse(any('(full field)' in label for label in labels))
+        wfc3 = next(row for row in mosaics if row['filter'] == 'F336W')
+        acs = next(row for row in mosaics if row['filter'] == 'F165LP')
+        self.assertEqual(wfc3['stage'], 'mosaic')
+        self.assertEqual(acs['stage'], 'mosaic')
+        # Primary DOLPHOT catalog is the non-empty WFC3 box.
+        self.assertTrue(wfc3['is_dolphot_reference'])
+        self.assertFalse(acs['is_dolphot_reference'])
+        self.assertIn('DOLPHOT reference', wfc3['option_label'])
+        self.assertNotIn('DOLPHOT reference', acs['option_label'])
+        stamp = discover_reference_image(root)
+        self.assertIsNotNone(stamp)
+        self.assertIn('wfc3', stamp.name.lower())
+        self.assertIn('f336w', stamp.name.lower())
 
 
 class DisplayImageTests(SimpleTestCase):

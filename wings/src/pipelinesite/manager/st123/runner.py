@@ -44,9 +44,38 @@ def _now_iso() -> str:
 def write_status(base_dir: Path, payload: dict) -> None:
     path = status_path(base_dir)
     path.parent.mkdir(parents=True, exist_ok=True)
+    if payload.get('state') != 'running' and 'n_images' not in payload:
+        from .inventory import count_science_fits
+
+        payload['n_images'] = count_science_fits(Path(base_dir) / 'download')
     tmp = path.with_suffix('.json.tmp')
     tmp.write_text(json.dumps(payload, indent=2))
     tmp.replace(path)
+    from .campaign_index import upsert_target_status
+    from .inventory import clear_campaign_list_cache, clear_target_page_caches
+
+    clear_campaign_list_cache()
+    clear_target_page_caches(Path(base_dir))
+    upsert_target_status(Path(base_dir), payload)
+    state = str(payload.get('state') or '')
+    if state in {'completed', 'error', 'skipped'}:
+        _schedule_artifact_rebuild(Path(base_dir))
+
+
+def _schedule_artifact_rebuild(base_dir: Path) -> None:
+    import threading
+
+    root = Path(base_dir)
+
+    def _run() -> None:
+        try:
+            from .inventory import rebuild_page_artifacts
+
+            rebuild_page_artifacts(root, include_preview=True)
+        except Exception:
+            return
+
+    threading.Thread(target=_run, name='artifact-rebuild', daemon=True).start()
 
 
 def _stage_argv(stage_key: str, target) -> list[str]:
@@ -136,6 +165,9 @@ def spawn_job(stage_keys: Sequence[str], target=None) -> dict:
     if unknown:
         raise RuntimeError(f'Unknown stages: {", ".join(unknown)}')
 
+    from .inventory import clear_campaign_list_cache
+
+    clear_campaign_list_cache()
     with _dispatch_lock():
         gate = dispatch_availability(target)
         if not gate['allowed']:

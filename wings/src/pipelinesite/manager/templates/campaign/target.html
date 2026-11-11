@@ -7,7 +7,9 @@
 {% endblock %}
 
 {% block body %}
-<div class="campaign-wrap" data-campaign-root data-status-url="{% url 'manager:target_status' campaign.target.name %}">
+<div class="campaign-wrap" data-campaign-root
+     data-status-url="{% url 'manager:target_status' campaign.target.name %}"
+     data-inventory-url="{% url 'manager:target_inventory' campaign.target.name %}">
   {% csrf_token %}
   <div class="campaign-hero">
     <div>
@@ -37,6 +39,8 @@
       <h2>Dispatch</h2>
       {% if campaign.new_data %}
       <p class="mast-flag">New MAST data are available ({{ campaign.n_new_obs }} observation{{ campaign.n_new_obs|pluralize }}). Re-running the pipeline starts with a MAST download.</p>
+      {% elif campaign.status_tag == 'empty_mast' %}
+      <p class="mast-empty">No MAST science products for this field (0 images). Stages are complete; this is an empty field, not a pipeline failure.</p>
       {% endif %}
       <p class="campaign-sub" data-dispatch-message>{% if dispatch_error %}{{ dispatch_error }}{% else %}{{ campaign.dispatch.message }}{% endif %}</p>
       <form method="post" action="{% url 'manager:target_dispatch' campaign.target.name %}" data-dispatch-form data-ajax="1" data-dispatch-allowed="{% if campaign.dispatch.allowed %}1{% else %}0{% endif %}">
@@ -96,8 +100,8 @@
     </div>
   </div>
 
-  <div class="card" style="margin-bottom:1.25rem;">
-    <h2>Images ({{ campaign.n_images }})</h2>
+  <div class="card" style="margin-bottom:1.25rem;" data-images-card>
+    <h2>Images (<span data-image-count>{{ campaign.n_images }}</span>)</h2>
     <div class="table-wrap">
       <table class="table campaign-table" data-sortable>
         <thead>
@@ -114,7 +118,7 @@
             <th data-sort="text">ObsID</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody data-images-body>
           {% for image in campaign.images %}
           <tr>
             <td>{{ image.filename }}</td>
@@ -129,15 +133,17 @@
             <td>{{ image.obsid }}</td>
           </tr>
           {% empty %}
-          <tr><td colspan="10">No downloaded science images yet.</td></tr>
+          <tr data-images-placeholder><td colspan="10">{% if campaign.n_images %}Loading image metadata…{% else %}No downloaded science images yet.{% endif %}</td></tr>
           {% endfor %}
         </tbody>
       </table>
     </div>
   </div>
 
-  <div class="card" style="margin-bottom:1.25rem;">
+  <div class="card" style="margin-bottom:1.25rem;" data-catalogs-card
+       data-hdf5-template="{% url 'manager:catalog_hdf5' campaign.target.name '__STEM__' %}">
     <h2>Catalogs</h2>
+    <div data-catalogs-body>
     {% if campaign.catalogs %}
       {% for cat in campaign.catalogs %}
       <p>
@@ -151,9 +157,12 @@
         SNR ≥ {{ cat.cuts.snr_min }}{% endif %}.
       </p>
       {% endfor %}
+    {% elif campaign.has_catalog %}
+      <p data-catalogs-placeholder>Loading catalog summary…</p>
     {% else %}
-      <p>No DOLPHOT catalog yet.</p>
+      <p data-catalogs-placeholder>No DOLPHOT catalog yet.</p>
     {% endif %}
+    </div>
   </div>
 
   <div class="card">
@@ -161,8 +170,7 @@
     {% if campaign.wcs_quality %}
     <p data-gaia-count>{{ campaign.wcs_quality }}</p>
     {% endif %}
-    {% if campaign.mosaics %}
-    <label class="viewer-ref-pick">
+    <label class="viewer-ref-pick"{% if not campaign.mosaics %} hidden{% endif %} data-mosaic-picker>
       Mosaic
       <select data-reference-select>
         {% for image in campaign.mosaics %}
@@ -170,7 +178,6 @@
         {% endfor %}
       </select>
     </label>
-    {% endif %}
     {% if campaign.reference.path %}
     <p>
       <a class="btn btn-sm btn-outline-secondary" data-reference-fits href="{% url 'manager:reference_fits' campaign.target.name %}{% if campaign.reference.id %}?image={{ campaign.reference.id }}{% endif %}">Download mosaic</a>

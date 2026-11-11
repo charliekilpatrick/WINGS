@@ -263,12 +263,28 @@
       if (!image.width) {
         return;
       }
-      var box = canvas.getBoundingClientRect();
-      canvas.width = box.width;
-      canvas.height = Math.max(520, box.height);
+      var frame = canvas.parentElement || canvas;
+      var box = frame.getBoundingClientRect();
+      var width = Math.max(1, Math.floor(box.width || canvas.clientWidth || 640));
+      var height = Math.max(520, Math.floor(box.height || 520));
+      canvas.width = width;
+      canvas.height = height;
+      // Keep CSS size equal to the drawing buffer so mouse coords match pixels.
+      canvas.style.width = width + 'px';
+      canvas.style.height = height + 'px';
       scale = Math.min(canvas.width / image.width, canvas.height / image.height);
       tx = (canvas.width - image.width * scale) / 2;
       ty = (canvas.height - image.height * scale) / 2;
+    }
+
+    function pointerPos(event) {
+      var rect = canvas.getBoundingClientRect();
+      var sx = canvas.width / Math.max(rect.width, 1e-6);
+      var sy = canvas.height / Math.max(rect.height, 1e-6);
+      return {
+        x: (event.clientX - rect.left) * sx,
+        y: (event.clientY - rect.top) * sy
+      };
     }
 
     function visibleSources() {
@@ -321,10 +337,13 @@
       }
       visibleSources().forEach(function (src) {
         var p = sourceToCanvas(src);
+        if (p.x < -20 || p.y < -20 || p.x > canvas.width + 20 || p.y > canvas.height + 20) {
+          return;
+        }
         ctx.beginPath();
-        ctx.arc(p.x, p.y, src.passed ? 2.4 : 1.6, 0, Math.PI * 2);
-        ctx.strokeStyle = src.passed ? 'rgba(120, 200, 255, 0.9)' : 'rgba(255, 180, 80, 0.45)';
-        ctx.lineWidth = 1;
+        ctx.arc(p.x, p.y, src.passed ? 3.2 : 2.2, 0, Math.PI * 2);
+        ctx.strokeStyle = src.passed ? 'rgba(30, 120, 220, 0.95)' : 'rgba(210, 120, 20, 0.55)';
+        ctx.lineWidth = 1.25;
         ctx.stroke();
       });
       if (showGaia) {
@@ -443,19 +462,19 @@
 
     canvas.addEventListener('wheel', function (event) {
       event.preventDefault();
-      var rect = canvas.getBoundingClientRect();
-      var mx = event.clientX - rect.left;
-      var my = event.clientY - rect.top;
+      var pos = pointerPos(event);
       var factor = event.deltaY < 0 ? 1.12 : 0.89;
       var next = Math.min(18, Math.max(0.2, scale * factor));
-      tx = mx - (mx - tx) * (next / scale);
-      ty = my - (my - ty) * (next / scale);
+      // Keep the sky point under the cursor fixed while zooming.
+      tx = pos.x - (pos.x - tx) * (next / scale);
+      ty = pos.y - (pos.y - ty) * (next / scale);
       scale = next;
       draw();
     }, { passive: false });
 
     canvas.addEventListener('mousedown', function (event) {
-      drag = { x: event.clientX, y: event.clientY, tx: tx, ty: ty };
+      var pos = pointerPos(event);
+      drag = { x: pos.x, y: pos.y, tx: tx, ty: ty };
       dragged = false;
       root.classList.add('is-dragging');
     });
@@ -465,19 +484,18 @@
     });
     window.addEventListener('mousemove', function (event) {
       var rect = canvas.getBoundingClientRect();
-      var mx = event.clientX - rect.left;
-      var my = event.clientY - rect.top;
+      var pos = pointerPos(event);
       if (drag) {
-        tx = drag.tx + (event.clientX - drag.x);
-        ty = drag.ty + (event.clientY - drag.y);
-        if (Math.abs(event.clientX - drag.x) > 3 || Math.abs(event.clientY - drag.y) > 3) {
+        tx = drag.tx + (pos.x - drag.x);
+        ty = drag.ty + (pos.y - drag.y);
+        if (Math.abs(pos.x - drag.x) > 3 || Math.abs(pos.y - drag.y) > 3) {
           dragged = true;
         }
         draw();
       }
       if (event.clientX >= rect.left && event.clientX <= rect.right &&
           event.clientY >= rect.top && event.clientY <= rect.bottom) {
-        updateHud(mx, my);
+        updateHud(pos.x, pos.y);
       }
     });
     canvas.addEventListener('mouseleave', function () {
@@ -490,8 +508,8 @@
       if (dragged) {
         return;
       }
-      var rect = canvas.getBoundingClientRect();
-      var hit = nearest(event.clientX - rect.left, event.clientY - rect.top);
+      var pos = pointerPos(event);
+      var hit = nearest(pos.x, pos.y);
       selected = hit ? hit.item : null;
       selectedKind = hit ? hit.kind : null;
       showSelected();
@@ -679,6 +697,113 @@
     });
   }
 
+  function fmtNum(value, digits) {
+    if (value == null || value === '' || !isFinite(Number(value))) {
+      return '—';
+    }
+    return Number(value).toFixed(digits);
+  }
+
+  function renderImages(root, images, nImages) {
+    var body = root.querySelector('[data-images-body]');
+    var count = root.querySelector('[data-image-count]');
+    if (count && nImages != null) {
+      count.textContent = nImages;
+    }
+    if (!body) {
+      return;
+    }
+    if (!images || !images.length) {
+      body.innerHTML = '<tr data-images-placeholder><td colspan="10">' +
+        (nImages ? 'Loading image metadata…' : 'No downloaded science images yet.') +
+        '</td></tr>';
+      return;
+    }
+    body.innerHTML = images.map(function (image) {
+      return '<tr>' +
+        '<td>' + esc(image.filename) + '</td>' +
+        '<td>' + esc(image.telescope) + '</td>' +
+        '<td>' + esc(image.instrument) + '</td>' +
+        '<td>' + esc(image.filter) + '</td>' +
+        '<td>' + (image.exptime != null && isFinite(Number(image.exptime)) ? Number(image.exptime).toFixed(1) : '—') + '</td>' +
+        '<td>' + esc(image.date_obs || '—') + '</td>' +
+        '<td>' + fmtNum(image.ra, 5) + '</td>' +
+        '<td>' + fmtNum(image.dec, 5) + '</td>' +
+        '<td>' + esc(image.size_display || '—') + '</td>' +
+        '<td>' + esc(image.obsid || '') + '</td>' +
+        '</tr>';
+    }).join('');
+  }
+
+  function renderCatalogs(root, catalogs) {
+    var card = root.querySelector('[data-catalogs-card]');
+    var body = root.querySelector('[data-catalogs-body]');
+    if (!body) {
+      return;
+    }
+    if (!catalogs || !catalogs.length) {
+      return;
+    }
+    var template = card ? card.getAttribute('data-hdf5-template') : '';
+    body.innerHTML = catalogs.map(function (cat) {
+      var href = template ? template.replace('__STEM__', encodeURIComponent(cat.stem || '')) : '#';
+      var cuts = cat.cuts || {};
+      var extra = cuts.snr_min != null ? ', SNR ≥ ' + esc(cuts.snr_min) : '';
+      return '<p><code>' + esc(cat.name) + '</code> ' +
+        '<a class="btn btn-sm btn-outline-secondary" href="' + esc(href) + '">Download HDF5</a> ' +
+        '<strong>' + esc(cat.n_before) + '</strong> sources before cuts, ' +
+        '<strong>' + esc(cat.n_after) + '</strong> after type ∈ ' +
+        esc((cuts.types || []).join(', ')) +
+        ', |sharp| ≤ ' + esc(cuts.sharp_max) +
+        ', crowd ≤ ' + esc(cuts.crowd_max) + extra + '.</p>';
+    }).join('');
+  }
+
+  function renderMosaics(root, mosaics, selectedId) {
+    var picker = root.querySelector('[data-mosaic-picker]');
+    var select = root.querySelector('[data-reference-select]');
+    if (!select || !mosaics || !mosaics.length) {
+      return;
+    }
+    var current = selectedId || select.value;
+    select.innerHTML = mosaics.map(function (image) {
+      var selected = image.id === current || image.selected ? ' selected' : '';
+      return '<option value="' + esc(image.id) + '"' + selected + '>' +
+        esc(image.option_label || image.label || image.filename) + '</option>';
+    }).join('');
+    if (picker) {
+      picker.hidden = false;
+    }
+  }
+
+  function loadInventory(root) {
+    var url = root.dataset.inventoryUrl;
+    if (!url) {
+      return;
+    }
+    fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+      .then(function (resp) { return resp.json(); })
+      .then(function (data) {
+        renderImages(root, data.images || [], data.n_images);
+        renderCatalogs(root, data.catalogs || []);
+        renderMosaics(root, data.mosaics || [], (data.reference || {}).id);
+        var heading = root.querySelector('[data-reference-heading]');
+        if (heading && data.reference && data.reference.heading) {
+          heading.textContent = data.reference.heading;
+        }
+        var viewer = root.querySelector('[data-viewer]');
+        if (viewer && data.reference && data.reference.id && !viewer.dataset.imageId) {
+          viewer.dataset.imageId = data.reference.id;
+        }
+      })
+      .catch(function () {
+        var body = root.querySelector('[data-images-body]');
+        if (body && body.querySelector('[data-images-placeholder]')) {
+          body.innerHTML = '<tr><td colspan="10">Could not load image metadata.</td></tr>';
+        }
+      });
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
     var root = document.querySelector('[data-campaign-root]');
     if (!root) {
@@ -688,5 +813,6 @@
     setupDispatch(root.querySelector('[data-dispatch-form]'));
     setupViewer(root.querySelector('[data-viewer]'), root);
     setupSortableTables(root);
+    loadInventory(root);
   });
 })();

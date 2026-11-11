@@ -5,11 +5,15 @@ from pathlib import Path
 from django.test import SimpleTestCase
 
 from manager.st123.inventory import (
+    build_campaign_status,
+    count_science_fits,
+    has_science_fits,
     infer_stages,
     remaining_stages,
     _dolphot_run_timing,
     _format_image_size,
     _format_timestamp,
+    _science_fits,
 )
 
 
@@ -64,6 +68,85 @@ class DolphotRuntimeTests(SimpleTestCase):
             by_key = {row['key']: row for row in rows}
             self.assertEqual(by_key['run_dolphot']['state'], 'completed')
             self.assertEqual(by_key['run_dolphot']['duration'], '11m 33s')
+
+
+class ScienceFitsWalkTests(SimpleTestCase):
+    def test_counts_calibrated_products_and_skips_dq(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp) / 'download' / 'HST' / 'WFC3' / 'F814W' / '1'
+            root.mkdir(parents=True)
+            (root / 'frame_flc.fits').write_bytes(b'sci')
+            (root / 'frame_c1m.fits').write_bytes(b'dq')
+            (root / 'frame_pam.fits').write_bytes(b'pam')
+            (root / 'notes.txt').write_text('nope')
+            self.assertTrue(has_science_fits(Path(tmp) / 'download'))
+            self.assertEqual(count_science_fits(Path(tmp) / 'download'), 1)
+            self.assertEqual([p.name for p in _science_fits(Path(tmp) / 'download')], ['frame_flc.fits'])
+
+    def test_quick_infer_matches_empty_mast_remap(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            logs = root / 'logs'
+            logs.mkdir()
+            (logs / 'download_20261009.log').write_text(
+                'Found 0 HST imaging observation(s)\n'
+            )
+            stored = {'stages': {'download': {'state': 'error', 'returncode': 1}}}
+            rows = infer_stages(root, stored, detailed=False)
+            by_key = {row['key']: row for row in rows}
+            self.assertEqual(by_key['download']['state'], 'completed')
+            self.assertEqual(by_key['align']['state'], 'skipped')
+
+    def test_list_infer_trusts_stored_completed_without_disk_walk(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            stored = {
+                'state': 'idle',
+                'n_images': 12,
+                'stages': {
+                    'download': {'state': 'completed'},
+                    'align': {'state': 'completed'},
+                    'mosaic': {'state': 'completed'},
+                    'prepare_dolphot': {'state': 'completed'},
+                    'run_dolphot': {'state': 'completed'},
+                    'combine_catalogs': {'state': 'completed'},
+                },
+            }
+            rows = infer_stages(
+                root,
+                stored,
+                detailed=False,
+                facts={'has_science': True, 'has_phot': True, 'has_mosaic': True},
+            )
+            self.assertTrue(all(row['state'] == 'completed' for row in rows))
+            self.assertEqual(remaining_stages(rows), [])
+            self.assertTrue(all(row['duration'] is None for row in rows))
+
+    def test_infer_uses_stored_timings_without_logs(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            stored = {
+                'state': 'idle',
+                'n_images': 46,
+                'stages': {
+                    'download': {
+                        'state': 'completed',
+                        'started_at': '2026-10-11T20:51:04',
+                        'ended_at': '2026-10-11T21:02:06',
+                        'seconds': 662,
+                    },
+                    'align': {'state': 'completed', 'seconds': 10},
+                    'mosaic': {'state': 'completed', 'seconds': 10},
+                    'prepare_dolphot': {'state': 'completed', 'seconds': 10},
+                    'run_dolphot': {'state': 'completed', 'seconds': 10},
+                    'combine_catalogs': {'state': 'completed', 'seconds': 10},
+                },
+            }
+            rows = infer_stages(root, stored, detailed=False)
+            download = {row['key']: row for row in rows}['download']
+            self.assertEqual(download['started_at'], '2026-10-11T20:51:04')
+            self.assertEqual(download['ended_at'], '2026-10-11T21:02:06')
+            self.assertEqual(download['duration'], '11m 02s')
 
 
 class TimestampFormatTests(SimpleTestCase):

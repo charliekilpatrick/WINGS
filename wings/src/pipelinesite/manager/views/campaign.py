@@ -15,21 +15,27 @@ from manager.st123.gaia import format_wcs_quality, load_gaia_overlay
 from manager.st123.hdf5_export import ensure_catalog_hdf5
 from manager.st123.inventory import (
     build_campaign_status,
+    build_page_inventory,
     catalog_sources,
     discover_phot_files,
+    discover_phot_for_display,
+    discover_reference_for_phot,
     discover_reference_image,
     dispatch_availability,
     list_campaign_targets,
+    load_sources_overlay,
     resolve_display_image,
+    save_sources_overlay,
+    warm_page_inventory,
 )
 from manager.st123.sky import read_image_header
 from manager.st123.preview import build_preview
 from manager.st123.runner import spawn_job
 
 
-def _status(target=None):
+def _status(target=None, *, heavy=False):
     spec = target or target_config()
-    return build_campaign_status(spec.base_dir, target=spec)
+    return build_campaign_status(spec.base_dir, target=spec, heavy=heavy)
 
 
 def _spec_or_404(name):
@@ -63,7 +69,9 @@ def target_search(request):
 
 def target_detail(request, name):
     spec = _spec_or_404(name)
-    status = _attach_wcs_quality(_status(spec), spec)
+    status = _status(spec, heavy=False)
+    if not status.get('inventory_ready'):
+        warm_page_inventory(spec.base_dir)
     return render(
         request,
         'campaign/target.html',
@@ -77,7 +85,13 @@ def target_detail(request, name):
 @require_GET
 def campaign_status(request, name=None):
     spec = _spec_or_404(name or request.GET.get('target'))
-    return JsonResponse(_status(spec))
+    return JsonResponse(_status(spec, heavy=False))
+
+
+@require_GET
+def target_inventory(request, name):
+    spec = _spec_or_404(name)
+    return JsonResponse(build_page_inventory(spec.base_dir))
 
 
 @require_POST
@@ -129,12 +143,40 @@ def reference_preview(request, name=None):
 @require_GET
 def reference_sources(request, name=None):
     spec = _spec_or_404(name)
-    meta = build_preview(spec.base_dir, image_id=_image_id(request))
+    image_id = _image_id(request)
+    meta = build_preview(spec.base_dir, image_id=image_id)
     if meta is None:
         raise Http404('Catalog overlay is not available yet')
-    phot_files = discover_phot_files(spec.base_dir)
-    stamp = discover_reference_image(spec.base_dir)
+    display_path = Path(str(meta.get('source') or '')) if meta.get('source') else None
+    if display_path is None or not display_path.is_file():
+        display_path = resolve_display_image(spec.base_dir, image_id)
+    # Pair each catalog with its own img0 stamp — never mix boxes.
+    phot = discover_phot_for_display(
+        spec.base_dir, image_id=image_id, display_path=display_path
+    )
+    stamp = (
+        discover_reference_for_phot(phot, spec.base_dir)
+        if phot is not None
+        else discover_reference_image(spec.base_dir)
+    )
+    cache_stamp = {
+        'image_id': image_id or '',
+        'source': meta.get('source'),
+        'source_mtime': meta.get('source_mtime'),
+        'preview_version': meta.get('preview_version'),
+        'phot': str(phot) if phot else '',
+        'phot_mtime': phot.stat().st_mtime if phot is not None else 0.0,
+        'stamp': str(stamp) if stamp else '',
+        'stamp_mtime': stamp.stat().st_mtime if stamp is not None else 0.0,
+        'pairing': 'phot-stamp-v1',
+    }
+    cached = load_sources_overlay(spec.base_dir, image_id, cache_stamp)
+    if cached is not None:
+        return JsonResponse(cached)
+    # DOLPHOT x,y live on the stamp; convert to sky with the stamp WCS, then
+    # the browser reprojects onto whatever mosaic is displayed via meta.wcs.
     stamp_header = read_image_header(stamp) if stamp else {}
+    display_header = read_image_header(display_path) if display_path else {}
     header = {
         'path': str(stamp) if stamp else meta.get('source'),
         'instrument': stamp_header.get('instrument') or meta.get('instrument'),
@@ -145,25 +187,28 @@ def reference_sources(request, name=None):
         'wcs': stamp_header.get('wcs'),
     }
     sources = []
-    if phot_files:
+    if phot is not None:
         sources = catalog_sources(
-            phot_files[0],
+            phot,
             reference=stamp,
             wcs=stamp_header.get('wcs'),
             header=header,
             base_dir=spec.base_dir,
         )
-    gaia = load_gaia_overlay(spec.base_dir, meta.get('wcs'))
-    return JsonResponse(
-        {
-            'reference': meta,
-            'sources': sources,
-            'n_sources': len(sources),
-            'n_passed': sum(1 for src in sources if src['passed']),
-            'gaia': gaia,
-            'wcs_quality': format_wcs_quality(gaia),
-        }
+    gaia = load_gaia_overlay(
+        spec.base_dir,
+        meta.get('wcs') or display_header.get('wcs') or stamp_header.get('wcs'),
     )
+    payload = {
+        'reference': meta,
+        'sources': sources,
+        'n_sources': len(sources),
+        'n_passed': sum(1 for src in sources if src['passed']),
+        'gaia': gaia,
+        'wcs_quality': format_wcs_quality(gaia),
+    }
+    save_sources_overlay(spec.base_dir, image_id, cache_stamp, payload)
+    return JsonResponse(payload)
 
 
 @require_GET
@@ -181,7 +226,7 @@ def catalog_hdf5(request, name, stem):
     phot = next((path for path in discover_phot_files(spec.base_dir) if path.stem == stem), None)
     if phot is None:
         raise Http404('Catalog is not available yet')
-    stamp = discover_reference_image(spec.base_dir)
+    stamp = discover_reference_for_phot(phot, spec.base_dir) or discover_reference_image(spec.base_dir)
     stamp_header = read_image_header(stamp) if stamp else {}
     header = {
         'path': str(stamp) if stamp else None,

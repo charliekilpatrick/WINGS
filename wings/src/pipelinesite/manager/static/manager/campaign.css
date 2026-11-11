@@ -117,11 +117,35 @@ body.campaign-page {
   margin-top: 0.4rem;
 }
 
-.state-completed { color: var(--ok); }
+.state-completed, .state-complete { color: var(--ok); }
 .state-running { color: var(--run); }
 .state-error, .state-stale { color: var(--err); }
 .state-pending { color: var(--wait); }
-.state-new { color: #8a3d12; }
+.state-new, .state-new_data { color: #8a3d12; }
+.state-empty_mast { color: #5a6470; }
+
+.campaign-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem 1.25rem;
+  align-items: end;
+  margin: 0.85rem 0 1rem;
+}
+.campaign-filters label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.85rem;
+  color: var(--muted, #5a6470);
+}
+.campaign-filters select {
+  min-width: 11rem;
+  padding: 0.3rem 0.45rem;
+}
+.filter-clear {
+  font-size: 0.9rem;
+  align-self: center;
+}
 
 .mast-flag {
   background: #fff6e8;
@@ -132,6 +156,21 @@ body.campaign-page {
 }
 
 .mast-flag.compact {
+  display: inline-block;
+  margin: 0.35rem 0 0;
+  padding: 0.15rem 0.45rem;
+  font-size: 0.78rem;
+}
+
+.mast-empty {
+  background: #f3f5f7;
+  border: 1px solid #c9d0d8;
+  color: #3d4650;
+  padding: 0.7rem 0.9rem;
+  margin: 0 0 1rem;
+}
+
+.mast-empty.compact {
   display: inline-block;
   margin: 0.35rem 0 0;
   padding: 0.15rem 0.45rem;
@@ -254,8 +293,12 @@ body.campaign-page {
 
 .viewer-frame canvas {
   display: block;
+  /* Width/height are also set in JS to match the drawing buffer so
+     pointer events stay aligned with the rendered mosaic. */
   width: 100%;
-  height: 100%;
+  height: auto;
+  max-width: 100%;
+  vertical-align: top;
 }
 
 .viewer-hud {

@@ -8,7 +8,7 @@ from typing import Any
 
 from .config import preview_meta_path, preview_path, status_dir
 from .inventory import discover_phot_files, resolve_display_image
-from .sky import read_image_header, reference_heading
+from .sky import apply_north_up_east_left, read_image_header, reference_heading
 
 
 def _asinh_stretch(data):
@@ -40,22 +40,31 @@ def build_preview(
     max_dim: int = 1400,
     force: bool = False,
 ) -> dict[str, Any] | None:
-    reference = resolve_display_image(base_dir, image_id)
-    if reference is None:
-        return None
     cache_id = image_id or 'default'
     out = preview_path(base_dir, cache_id)
     meta_file = preview_meta_path(base_dir, cache_id)
-    preview_version = 6
+    # v8: North-up / East-left oriented previews.
+    preview_version = 8
+    reference = resolve_display_image(base_dir, image_id)
+    if reference is None:
+        return None
     if out.is_file() and out.stat().st_size > 0 and meta_file.is_file() and not force:
         try:
             meta = json.loads(meta_file.read_text())
         except (OSError, json.JSONDecodeError):
             meta = {}
+        try:
+            source_ok = (
+                meta.get('source') == str(reference)
+                and meta.get('source_mtime') == reference.stat().st_mtime
+            )
+        except OSError:
+            source_ok = False
         if (
-            meta.get('source') == str(reference)
-            and meta.get('source_mtime') == reference.stat().st_mtime
+            source_ok
             and meta.get('preview_version') == preview_version
+            and (meta.get('wcs') or {}).get('orientation') == 'north_up_east_left'
+            and (image_id is None or meta.get('image_id') in {None, image_id})
         ):
             return meta
 
@@ -74,12 +83,17 @@ def build_preview(
         return None
     if data.ndim > 2:
         data = data[0]
-    ny, nx = data.shape[-2:]
+
+    header = read_image_header(reference)
+    wcs = dict(header.get('wcs') or {}) if header.get('wcs') else None
+    stretched = _asinh_stretch(data)
+    # Normalize every mosaic to the same sky orientation before display.
+    oriented, wcs = apply_north_up_east_left(stretched, wcs)
+    ny, nx = int(oriented.shape[0]), int(oriented.shape[1])
     scale = min(1.0, float(max_dim) / float(max(nx, ny)))
     out_w = max(1, int(round(nx * scale)))
     out_h = max(1, int(round(ny * scale)))
-    stretched = _asinh_stretch(data)
-    image = Image.fromarray(stretched, mode='L')
+    image = Image.fromarray(np.asarray(oriented), mode='L')
     if (out_w, out_h) != (nx, ny):
         image = image.resize((out_w, out_h), getattr(Image, 'BILINEAR', 2))
     # FITS origin is lower-left; flip so the PNG matches sky-up overlay math.
@@ -89,8 +103,6 @@ def build_preview(
     image.save(tmp, format='PNG')
     tmp.replace(out)
     phot = discover_phot_files(base_dir)
-    header = read_image_header(reference)
-    wcs = header.get('wcs') or {}
     if wcs:
         wcs = dict(wcs)
         wcs['nx'] = int(nx)

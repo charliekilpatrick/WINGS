@@ -1,10 +1,13 @@
 from __future__ import annotations
 
+from collections import Counter
+
 from django.http import Http404
 from django.shortcuts import redirect, render
 
 from manager.st123.inventory import dispatch_availability, list_campaign_targets
 from manager.st123.programs import find_program, list_program_specs
+from manager.st123.status_tags import TAG_LABELS
 
 
 def _filter_targets(targets, query: str):
@@ -14,10 +17,20 @@ def _filter_targets(targets, query: str):
         row
         for row in targets
         if needle in ' '.join(
-            str(row.get(key) or '') for key in ('name', 'display_name', 'host', 'field_role')
+            str(row.get(key) or '')
+            for key in ('name', 'display_name', 'host', 'field_role', 'status', 'sn_type')
         ).lower()
         or compact in (row.get('name') or '').lower().replace(' ', '')
     ]
+
+
+def _apply_list_filters(targets, *, tag: str = '', role: str = ''):
+    rows = list(targets)
+    if tag:
+        rows = [row for row in rows if (row.get('status_tag') or '') == tag]
+    if role in {'prime', 'parallel'}:
+        rows = [row for row in rows if (row.get('field_role') or 'prime') == role]
+    return rows
 
 
 def program_summaries() -> list[dict]:
@@ -37,7 +50,12 @@ def program_summaries() -> list[dict]:
                 'url': spec.url,
                 'n_targets': len(targets),
                 'n_images': sum(int(row.get('n_images') or 0) for row in targets),
-                'n_complete': sum(1 for row in targets if row.get('job_state') == 'completed'),
+                'n_complete': sum(
+                    1 for row in targets if row.get('status_tag') == 'complete'
+                ),
+                'n_empty_mast': sum(
+                    1 for row in targets if row.get('status_tag') == 'empty_mast'
+                ),
                 'n_new_data': sum(1 for row in targets if row.get('new_data')),
             }
         )
@@ -75,11 +93,20 @@ def program_campaign(request, program_id):
     if spec is None:
         raise Http404(f'Unknown program {program_id}')
     query = (request.GET.get('q') or '').strip()
-    targets = list_campaign_targets(spec.program_id, refresh_distances=True)
+    tag = (request.GET.get('tag') or '').strip().lower()
+    role = (request.GET.get('role') or '').strip().lower()
+    all_targets = list_campaign_targets(spec.program_id, refresh_distances=True)
+    tag_counts = Counter(row.get('status_tag') or 'pending' for row in all_targets)
+    tag_options = [
+        {'key': key, 'label': label, 'count': tag_counts.get(key, 0)}
+        for key, label in TAG_LABELS.items()
+    ]
+    targets = all_targets
     if query:
         targets = _filter_targets(targets, query)
-        if len(targets) == 1:
+        if len(targets) == 1 and not tag and not role:
             return redirect('manager:target_detail', name=targets[0]['name'])
+    targets = _apply_list_filters(targets, tag=tag, role=role)
     return render(
         request,
         'campaign/home.html',
@@ -87,7 +114,11 @@ def program_campaign(request, program_id):
             'program': spec,
             'targets': targets,
             'search_query': query,
+            'filter_tag': tag,
+            'filter_role': role,
+            'tag_options': tag_options,
             'dispatch': dispatch_availability(),
-            'n_new_data': sum(1 for row in targets if row.get('new_data')),
+            'n_new_data': sum(1 for row in all_targets if row.get('new_data')),
+            'n_empty_mast': tag_counts.get('empty_mast', 0),
         },
     )

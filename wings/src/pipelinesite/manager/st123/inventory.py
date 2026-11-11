@@ -5,6 +5,8 @@ from __future__ import annotations
 import json
 import os
 import re
+import threading
+import time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Iterable
@@ -14,13 +16,14 @@ from .config import (
     campaign_targets,
     max_concurrent_jobs,
     quality_cuts,
+    status_dir,
     status_path,
     target_config,
 )
 from .host_distance import format_distance, lookup_host_distance, warm_host_distances
 from .photometry import build_filter_plan, row_ab_mags
 from .sky import format_obs_datetime, pix_to_world, read_image_header, reference_heading
-from .st123api import display_filter, filter_names, instrument_name
+from .st123api import display_filter, instrument_name
 
 _SCIENCE_SKIP = ('_pam.fits', '_c1m.fits')
 _SCIENCE_SUFFIXES = ('_flc.fits', '_flt.fits', '_c0m.fits', '_cal.fits', '_i2d.fits')
@@ -34,6 +37,12 @@ _LOG_NAME = re.compile(
 )
 _LOG_TS = re.compile(r'(\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}:\d{2})')
 _ELAPSED_SEC = re.compile(r'ELAPSED_SEC\s*=\s*([0-9.]+)', re.IGNORECASE)
+_LIST_TTL_SEC = 20.0
+_LIST_LOCK = threading.Lock()
+_LIST_CACHE: dict[Any, tuple[float, list[dict[str, Any]]]] = {}
+_FITS_META_CACHE: dict[tuple[str, float], dict[str, Any]] = {}
+_CATALOG_SUMMARY_CACHE: dict[tuple[str, float], dict[str, Any]] = {}
+_FITS_META_CACHE_MAX = 4000
 
 
 def _utc_from_mtime(path: Path) -> datetime:
@@ -51,6 +60,27 @@ def _duration_seconds(start: datetime | None, end: datetime | None) -> float | N
     if start is None or end is None:
         return None
     return max(0.0, (end - start).total_seconds())
+
+
+def _parse_stored_time(value: Any) -> datetime | None:
+    if value is None or value == '':
+        return None
+    if isinstance(value, datetime):
+        parsed = value
+    else:
+        text = str(value).strip().replace('Z', '')
+        parsed = None
+        for fmt in ('%Y-%m-%dT%H:%M:%S', '%Y-%m-%d %H:%M:%S', '%Y-%m-%dT%H:%M'):
+            try:
+                parsed = datetime.strptime(text[:19], fmt)
+                break
+            except ValueError:
+                continue
+        if parsed is None:
+            return None
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=timezone.utc)
+    return parsed
 
 
 def _format_timestamp(value: datetime | None) -> str | None:
@@ -74,6 +104,22 @@ def _format_duration(seconds: float | None) -> str | None:
     return f'{secs}s'
 
 
+def _persist_n_images(base_dir: Path, stored: dict[str, Any], n_images: int) -> None:
+    """Remember the science-image count so later list loads skip the download walk."""
+    if not stored or stored.get('state') == 'running' or stored.get('n_images') == n_images:
+        return
+    path = status_path(base_dir)
+    if not path.is_file():
+        return
+    stored['n_images'] = n_images
+    try:
+        tmp = path.with_suffix('.json.tmp')
+        tmp.write_text(json.dumps(stored, indent=2))
+        tmp.replace(path)
+    except OSError:
+        pass
+
+
 def read_status_file(base_dir: Path) -> dict[str, Any]:
     path = status_path(base_dir)
     if not path.is_file():
@@ -94,16 +140,76 @@ def pid_is_running(pid: int | None) -> bool:
     return True
 
 
-def _science_fits(download_root: Path) -> list[Path]:
+def _is_science_fits_name(name: str) -> bool:
+    lower = name.lower()
+    if any(lower.endswith(skip) for skip in _SCIENCE_SKIP):
+        return False
+    return any(lower.endswith(suffix) for suffix in _SCIENCE_SUFFIXES)
+
+
+def iter_science_fits(download_root: Path):
+    """Yield calibrated science FITS under *download_root* without sorting."""
     if not download_root.is_dir():
-        return []
-    out: list[Path] = []
-    for path in sorted(download_root.rglob('*.fits')):
-        name = path.name.lower()
-        if any(name.endswith(skip) for skip in _SCIENCE_SKIP):
+        return
+    for dirpath, _dirnames, filenames in os.walk(download_root, followlinks=False):
+        for name in filenames:
+            if _is_science_fits_name(name):
+                yield Path(dirpath, name)
+
+
+def has_science_fits(download_root: Path) -> bool:
+    return next(iter_science_fits(download_root), None) is not None
+
+
+def count_science_fits(download_root: Path) -> int:
+    return sum(1 for _ in iter_science_fits(download_root))
+
+
+def _science_fits(download_root: Path) -> list[Path]:
+    return sorted(iter_science_fits(download_root))
+
+
+def _has_named_fits(root: Path, pattern: str) -> bool:
+    if not root.is_dir():
+        return False
+    return next(root.rglob(pattern), None) is not None
+
+
+def has_phot_files(base_dir: Path) -> bool:
+    for root in (Path(base_dir) / 'dolphot', Path(base_dir) / 'reduction'):
+        if not root.is_dir():
             continue
-        out.append(path)
-    return out
+        for phot in root.rglob('*.phot'):
+            name = phot.name
+            if name.endswith('.phot.info') or name.endswith('.phot.ap'):
+                continue
+            try:
+                if phot.is_file() and phot.stat().st_size > 0:
+                    return True
+            except OSError:
+                continue
+    return False
+
+
+def has_mosaic_coadd(base_dir: Path) -> bool:
+    root = Path(base_dir) / 'reduction' / 'reference'
+    if not root.is_dir():
+        return False
+    for path in root.rglob('coadd_*.fits'):
+        if _is_science_coadd(path):
+            return True
+    return False
+
+
+def clear_campaign_list_cache() -> None:
+    with _LIST_LOCK:
+        _LIST_CACHE.clear()
+    try:
+        from .mast_updates import clear_updates_cache
+
+        clear_updates_cache()
+    except Exception:
+        pass
 
 
 _ANSI = re.compile(r'\x1b\[[0-9;]*m')
@@ -124,7 +230,7 @@ def mast_imaging_found_count(base_dir: Path) -> int | None:
 
 def is_empty_mast_download(base_dir: Path) -> bool:
     """True when MAST was queried and returned no imaging (0/0, not a timeout)."""
-    if _science_fits(Path(base_dir) / 'download'):
+    if has_science_fits(Path(base_dir) / 'download'):
         return False
     return mast_imaging_found_count(base_dir) == 0
 
@@ -261,11 +367,13 @@ def _ensure_missing_stage_logs(base_dir: Path) -> None:
     )
 
 
-def _log_times(path: Path) -> tuple[datetime | None, datetime | None]:
+def _log_times(path: Path, *, detailed: bool = True) -> tuple[datetime | None, datetime | None]:
     start = None
     match = _LOG_NAME.match(path.name)
     if match:
         start = _parse_log_stamp(match.group('stamp'))
+    if not detailed:
+        return start, _utc_from_mtime(path)
     try:
         text = path.read_text(errors='replace')
     except OSError:
@@ -286,23 +394,36 @@ def _log_times(path: Path) -> tuple[datetime | None, datetime | None]:
 
 
 def _science_chip_shapes(hdul) -> list[tuple[int, int]]:
+    """Chip sizes from NAXIS cards only — never load pixel arrays."""
     shapes: list[tuple[int, int]] = []
     for hdu in hdul:
+        cards = getattr(hdu, 'header', None)
+        if cards is None:
+            continue
         name = str(getattr(hdu, 'name', '') or '').upper()
-        if name and not name.startswith('SCI'):
+        if name and not name.startswith('SCI') and name not in {'', 'PRIMARY'}:
             continue
-        data = getattr(hdu, 'data', None)
-        if data is None:
+        try:
+            naxis = int(cards.get('NAXIS') or 0)
+        except (TypeError, ValueError):
             continue
-        ndim = getattr(data, 'ndim', 0)
-        if ndim == 3:
-            for plane in data:
-                if getattr(plane, 'ndim', 0) >= 2:
-                    shapes.append((int(plane.shape[-2]), int(plane.shape[-1])))
+        if naxis < 2:
             continue
-        if ndim >= 2:
-            if name.startswith('SCI') or (name in {'', 'PRIMARY'} and not shapes):
-                shapes.append((int(data.shape[-2]), int(data.shape[-1])))
+        try:
+            nx = int(cards['NAXIS1'])
+            ny = int(cards['NAXIS2'])
+        except (KeyError, TypeError, ValueError):
+            continue
+        n_plane = 1
+        if naxis >= 3:
+            try:
+                n_plane = max(1, int(cards.get('NAXIS3') or 1))
+            except (TypeError, ValueError):
+                n_plane = 1
+        if name.startswith('SCI'):
+            shapes.append((ny, nx))
+        elif name in {'', 'PRIMARY'} and not shapes:
+            shapes.extend([(ny, nx)] * n_plane)
     return shapes
 
 
@@ -325,6 +446,22 @@ def _header_value(header, *keys):
 
 
 def _fits_metadata(path: Path, download_root: Path) -> dict[str, Any]:
+    try:
+        mtime = path.stat().st_mtime
+    except OSError:
+        mtime = 0.0
+    cache_key = (str(path), mtime)
+    cached = _FITS_META_CACHE.get(cache_key)
+    if cached is not None:
+        return dict(cached)
+    meta = _fits_metadata_uncached(path, download_root)
+    if len(_FITS_META_CACHE) >= _FITS_META_CACHE_MAX:
+        _FITS_META_CACHE.clear()
+    _FITS_META_CACHE[cache_key] = meta
+    return dict(meta)
+
+
+def _fits_metadata_uncached(path: Path, download_root: Path) -> dict[str, Any]:
     try:
         rel = path.relative_to(download_root)
     except ValueError:
@@ -367,11 +504,12 @@ def _fits_metadata(path: Path, download_root: Path) -> dict[str, Any]:
         return meta
 
     try:
-        with fits.open(path, memmap=True) as hdul:
+        with fits.open(path, memmap=True, lazy_load_hdus=True) as hdul:
             header = hdul[0].header
             for hdu in hdul:
-                if hdu.header.get('INSTRUME') or hdu.header.get('EXPTIME') or hdu.header.get('FILTER'):
-                    header = hdu.header
+                cards = hdu.header
+                if cards.get('INSTRUME') or cards.get('EXPTIME') or cards.get('FILTER'):
+                    header = cards
                     break
             shapes = _science_chip_shapes(hdul)
     except Exception:
@@ -410,14 +548,13 @@ def _fits_metadata(path: Path, download_root: Path) -> dict[str, Any]:
 
 def list_images(base_dir: Path) -> list[dict[str, Any]]:
     download_root = base_dir / 'download'
-    paths = _science_fits(download_root)
-    filters = filter_names(paths)
     rows = []
-    for path in paths:
+    for path in _science_fits(download_root):
         meta = _fits_metadata(path, download_root)
-        filt = display_filter(filters.get(str(path)))
-        if filt:
-            meta['filter'] = filt
+        if not meta.get('filter'):
+            meta['filter'] = display_filter(_filter_from_name(path.name))
+        else:
+            meta['filter'] = display_filter(meta.get('filter')) or meta.get('filter')
         rows.append(meta)
     return rows
 
@@ -453,25 +590,129 @@ def discover_hdf5_files(base_dir: Path) -> list[Path]:
     return found
 
 
-def discover_reference_image(base_dir: Path) -> Path | None:
+def _img0_file_from_param(param: Path) -> str | None:
+    for line in param.read_text(errors='replace').splitlines():
+        if line.strip().startswith('img0_file'):
+            ref = line.split('=', 1)[-1].strip()
+            return ref or None
+    return None
+
+
+def _resolve_img0_candidates(base_dir: Path, param: Path, ref: str) -> list[Path]:
+    names = [ref]
+    if not ref.lower().endswith('.fits'):
+        names.append(f'{ref}.fits')
+    candidates: list[Path] = []
+    for name in names:
+        candidates.extend(
+            (
+                param.parent / name,
+                param.parent / Path(name).name,
+                Path(base_dir) / 'reduction' / 'reference' / Path(name).name,
+            )
+        )
+    ref_root = Path(base_dir) / 'reduction' / 'reference'
+    if ref_root.is_dir():
+        stem = Path(ref).name
+        if stem.lower().endswith('.fits'):
+            stem = stem[:-5]
+        candidates.extend(ref_root.rglob(f'{stem}.fits'))
+    return candidates
+
+
+def discover_dolphot_reference_paths(base_dir: Path) -> list[Path]:
+    """Every DOLPHOT ``img0_file`` coadd on disk (one entry per photometry box)."""
+    found: list[Path] = []
+    seen: set[Path] = set()
     for param in discover_param_files(base_dir):
-        ref = None
-        for line in param.read_text(errors='replace').splitlines():
-            if line.strip().startswith('img0_file'):
-                ref = line.split('=', 1)[-1].strip()
-                break
+        ref = _img0_file_from_param(param)
         if not ref:
             continue
-        for candidate in (
-            param.parent / f'{ref}.fits',
-            param.parent / ref,
-            base_dir / 'reduction' / 'reference' / f'{ref}.fits',
-        ):
-            if candidate.is_file():
-                return candidate
-        matches = list((base_dir / 'reduction' / 'reference').rglob(f'{ref}.fits')) if (base_dir / 'reduction' / 'reference').is_dir() else []
-        if matches:
-            return matches[0]
+        for candidate in _resolve_img0_candidates(base_dir, param, ref):
+            if not candidate.is_file():
+                continue
+            try:
+                resolved = candidate.resolve()
+            except OSError:
+                resolved = candidate
+            if resolved in seen:
+                continue
+            seen.add(resolved)
+            found.append(candidate)
+            break
+    return found
+
+
+def discover_reference_for_phot(phot: Path, base_dir: Path | None = None) -> Path | None:
+    """Return the ``img0_file`` stamp for this ``.phot`` run (same DOLPHOT box)."""
+    phot = Path(phot)
+    param = phot.parent / 'dolphot.param'
+    if not param.is_file():
+        return None
+    ref = _img0_file_from_param(param)
+    if not ref:
+        return None
+    root = Path(base_dir) if base_dir is not None else phot.parent.parent.parent
+    for candidate in _resolve_img0_candidates(root, param, ref):
+        if candidate.is_file():
+            return candidate
+    return None
+
+
+def discover_phot_for_display(
+    base_dir: Path,
+    *,
+    image_id: str | None = None,
+    display_path: Path | None = None,
+) -> Path | None:
+    """Pick the non-empty ``.phot`` whose stamp best matches the displayed mosaic."""
+    phot_files = discover_phot_files(base_dir)
+    if not phot_files:
+        return None
+    if len(phot_files) == 1:
+        return phot_files[0]
+
+    want_name = Path(display_path).name.lower() if display_path is not None else ''
+    want_filt = _filter_from_name(want_name) if want_name else None
+    want_inst = _instrument_from_name(want_name) if want_name else None
+    if image_id and (want_filt is None or want_inst is None):
+        mosaics = discover_mosaic_images(base_dir)
+        selected = next((row for row in mosaics if row.get('id') == image_id), None)
+        if selected is not None:
+            want_filt = want_filt or selected.get('filter')
+            want_inst = want_inst or selected.get('instrument')
+            want_name = want_name or Path(str(selected.get('path') or '')).name.lower()
+
+    scored: list[tuple[int, Path]] = []
+    for phot in phot_files:
+        stamp = discover_reference_for_phot(phot, base_dir)
+        if stamp is None:
+            scored.append((0, phot))
+            continue
+        name = stamp.name.lower()
+        score = 0
+        if want_name and Path(name).name == Path(want_name).name:
+            score += 100
+        stamp_filt = _filter_from_name(name)
+        stamp_inst = _instrument_from_name(name)
+        if want_filt and stamp_filt == want_filt:
+            score += 10
+        if want_inst and stamp_inst == want_inst:
+            score += 5
+        scored.append((score, phot))
+    scored.sort(key=lambda item: (-item[0], str(item[1])))
+    return scored[0][1]
+
+
+def discover_reference_image(base_dir: Path) -> Path | None:
+    # Prefer the stamp that owns the first non-empty catalog (viewer overlay).
+    for phot in discover_phot_files(base_dir):
+        stamp = discover_reference_for_phot(phot, base_dir)
+        if stamp is not None:
+            return stamp
+    refs = discover_dolphot_reference_paths(base_dir)
+    if refs:
+        return refs[0]
     refs = sorted((base_dir / 'reduction' / 'reference').rglob('coadd_*_drc.fits')) if (base_dir / 'reduction' / 'reference').is_dir() else []
     return refs[0] if refs else None
 
@@ -583,14 +824,21 @@ def _disambiguate_mosaic_labels(found: list[dict[str, Any]]) -> None:
         if counts[item['option_label']] <= 1:
             continue
         stamp = str(item.get('date_obs') or '')
-        if 'T' not in stamp:
-            continue
-        # Same-day repeats keep the full timestamp.
         base = ' '.join(part for part in (item.get('instrument'), item.get('filter')) if part) or item['filename']
-        item['label'] = f'{base} · {stamp}'
-        item['option_label'] = (
-            f'{item["label"]} (DOLPHOT reference)' if item.get('is_dolphot_reference') else item['label']
-        )
+        # Prefer the full timestamp when present; otherwise keep stage context.
+        if 'T' in stamp:
+            item['label'] = f'{base} · {stamp}'
+        else:
+            stage = str(item.get('stage_label') or '').strip()
+            day = _obs_date_label(stamp)
+            core = f'{base} · {day}' if day else base
+            item['label'] = f'{core} · {stage}' if stage else core
+        if item.get('is_dolphot_reference'):
+            item['option_label'] = f'{item["label"]} (DOLPHOT reference)'
+        elif item.get('is_full_field') and item.get('stage') == 'align':
+            item['option_label'] = f'{item["label"]} (full field)'
+        else:
+            item['option_label'] = item['label']
 
 
 def _mosaic_id(stage: str, instrument: str, filt: str, tag: str) -> str:
@@ -600,24 +848,111 @@ def _mosaic_id(stage: str, instrument: str, filt: str, tag: str) -> str:
     return '-'.join(re.sub(r'[^a-z0-9]+', '', part.lower()) or 'x' for part in parts)
 
 
+def _mosaic_visit_key(item: dict[str, Any]) -> tuple[str, str, str]:
+    return (
+        str(item.get('instrument') or '').upper(),
+        str(item.get('filter') or '').upper(),
+        _obs_date_label(item.get('date_obs')),
+    )
+
+
+def _align_rank(item: dict[str, Any]) -> tuple[int, int]:
+    """Prefer JHAT L3 over prelim, then larger area."""
+    label = str(item.get('stage_label') or '')
+    prefer = 2 if 'L3' in label or label.endswith('l3') else 1 if 'prelim' in label else 0
+    return (prefer, int(item.get('area') or 0))
+
+
+def _dedupe_mosaic_by_visit(found: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """One product per visit/filter unless align is a true larger full field.
+
+    Mosaic / DOLPHOT stamps are always kept. Align (prelim / L3) products for the
+    same instrument+filter+night are dropped when they are essentially the same
+    coadd (~same area); kept only when area is at least 2× the mosaic stamp.
+    """
+    from collections import defaultdict
+
+    mosaics = [item for item in found if item.get('stage') == 'mosaic']
+    aligns = [item for item in found if item.get('stage') == 'align']
+    other = [item for item in found if item.get('stage') not in {'mosaic', 'align'}]
+
+    by_visit: dict[tuple[str, str, str], list[dict[str, Any]]] = defaultdict(list)
+    for item in mosaics:
+        by_visit[_mosaic_visit_key(item)].append(item)
+
+    kept_align: list[dict[str, Any]] = []
+    align_groups: dict[tuple[str, str, str], list[dict[str, Any]]] = defaultdict(list)
+    for item in aligns:
+        align_groups[_mosaic_visit_key(item)].append(item)
+
+    for key, group in align_groups.items():
+        best = max(group, key=_align_rank)
+        peers = by_visit.get(key) or []
+        if not peers:
+            best['is_full_field'] = True
+            if not best.get('is_dolphot_reference'):
+                best['option_label'] = f'{best["label"]} (full field)'
+            kept_align.append(best)
+            continue
+        peer_area = max(int(item.get('area') or 0) for item in peers)
+        if peer_area > 0 and int(best.get('area') or 0) >= peer_area * 2:
+            best['is_full_field'] = True
+            if not best.get('is_dolphot_reference'):
+                best['option_label'] = f'{best["label"]} (full field)'
+            kept_align.append(best)
+
+    # Same-filter mosaic that covers ~the full align footprint is the full field.
+    for item in mosaics:
+        item['is_full_field'] = False
+    for key, peers in by_visit.items():
+        align_peer = next((row for row in kept_align if _mosaic_visit_key(row) == key), None)
+        if align_peer is not None:
+            continue
+        # No separate align product: the mosaic itself is what the viewer shows.
+        largest = max(peers, key=lambda row: int(row.get('area') or 0))
+        largest['is_full_field'] = True
+
+    return mosaics + kept_align + other
+
+
 def discover_mosaic_images(base_dir: Path) -> list[dict[str, Any]]:
-    """Science coadds from the mosaic step for the viewer dropdown."""
+    """Science coadds for the viewer dropdown (full-field + DOLPHOT boxes)."""
     root = Path(base_dir)
+    # Only the primary DOLPHOT detection image (first img0_file) gets the
+    # "(DOLPHOT reference)" label — other boxes may also have img0 files.
     stamp = discover_reference_image(root)
+    stamp_filt = None
+    stamp_inst = None
     stamp_name = stamp.name if stamp is not None else None
     try:
         stamp_resolved = stamp.resolve() if stamp is not None else None
     except OSError:
         stamp_resolved = None
+    if stamp is not None:
+        stamp_header = read_image_header(stamp)
+        stamp_filt = (
+            _filter_from_name(stamp.name)
+            or display_filter(stamp_header.get('filter'))
+        )
+        stamp_inst = (
+            _instrument_from_name(stamp.name)
+            or (str(stamp_header.get('instrument') or '').strip().upper() or None)
+        )
 
-    search_roots = (root / 'reduction' / 'reference',)
+    search_roots = (
+        root / 'reduction' / 'reference',
+        root / 'reduction' / 'reference_prelim',
+        root / 'reduction' / 'jhat_hst' / 'l3_ref',
+        root / 'reduction' / 'jhat' / 'l3_ref',
+    )
     found: list[dict[str, Any]] = []
     seen: set[Path] = set()
     used_ids: set[str] = set()
     for search in search_roots:
         if not search.is_dir():
             continue
-        for path in sorted(search.rglob('coadd_*.fits')):
+        paths = sorted(search.rglob('coadd_*.fits')) if search.name == 'reference' else sorted(search.glob('coadd_*.fits'))
+        for path in paths:
             if not _is_science_coadd(path):
                 continue
             try:
@@ -629,24 +964,25 @@ def discover_mosaic_images(base_dir: Path) -> list[dict[str, Any]]:
             seen.add(resolved)
             header = read_image_header(path)
             inst = (
-                display_filter(instrument_name(path))
+                _instrument_from_name(path.name)
                 or (str(header.get('instrument') or '').strip().upper() or None)
-                or _instrument_from_name(path.name)
+                or display_filter(instrument_name(path))
             )
             filt = (
-                display_filter(header.get('filter'))
-                or _filter_from_name(path.name)
+                _filter_from_name(path.name)
+                or display_filter(header.get('filter'))
             )
             stage, tag = _mosaic_stage(path)
-            if stage != 'mosaic':
+            if stage not in {'mosaic', 'align'}:
                 continue
+            area = int(header.get('nx') or 0) * int(header.get('ny') or 0)
             image_id = _mosaic_id(stage, inst or 'unk', filt or 'unk', tag)
             if image_id in used_ids:
                 image_id = _mosaic_id(stage, inst or 'unk', filt or 'unk', tag or path.stem)
             used_ids.add(image_id)
             is_dolphot = bool(
                 stamp_resolved is not None and resolved == stamp_resolved
-            ) or bool(stamp_name and path.name == stamp_name)
+            ) or bool(stamp_name and path.name == stamp_name and stage == 'mosaic')
             date_obs = header.get('date_obs')
             label, option = _mosaic_labels(inst, filt, date_obs, path.name, dolphot=is_dolphot)
             found.append(
@@ -662,17 +998,25 @@ def discover_mosaic_images(base_dir: Path) -> list[dict[str, Any]]:
                     'label': label,
                     'option_label': option,
                     'is_dolphot_reference': is_dolphot,
+                    # Refined after visit dedupe; align-only rows become full field there.
+                    'is_full_field': False,
                     'nx': header.get('nx'),
                     'ny': header.get('ny'),
+                    'area': area,
                     'heading': reference_heading(header),
                     'selected': False,
                 }
             )
 
+    found = _dedupe_mosaic_by_visit(found)
+
     def _sort_key(item: dict[str, Any]) -> tuple:
-        stage_rank = 0 if item['stage'] == 'mosaic' else 1
+        # Full-field first, then boxed mosaics; prefer dolphot filter.
+        full = 0 if item.get('is_full_field') else 1
+        same_filt = 0 if stamp_filt and item.get('filter') == stamp_filt else 1
         return (
-            stage_rank,
+            full,
+            same_filt,
             str(item.get('instrument') or ''),
             str(item.get('filter') or ''),
             str(item.get('date_obs') or ''),
@@ -682,14 +1026,36 @@ def discover_mosaic_images(base_dir: Path) -> list[dict[str, Any]]:
 
     found.sort(key=_sort_key)
     _disambiguate_mosaic_labels(found)
-    chosen = next((item for item in found if item['is_dolphot_reference']), None)
+
+    # Default: largest full-field mosaic matching the DOLPHOT instrument+filter
+    # (so overlays land on the same sky), else same filter, else the DOLPHOT
+    # stamp, else any full-field / first entry.
+    chosen = None
+    full = [item for item in found if item.get('is_full_field')]
+
+    def _best(rows: list[dict[str, Any]]) -> dict[str, Any] | None:
+        return max(rows, key=lambda item: int(item.get('area') or 0)) if rows else None
+
+    if stamp_inst and stamp_filt:
+        chosen = _best(
+            [
+                item
+                for item in full
+                if item.get('instrument') == stamp_inst and item.get('filter') == stamp_filt
+            ]
+        )
+    if chosen is None and stamp_filt:
+        chosen = _best([item for item in full if item.get('filter') == stamp_filt])
     if chosen is None:
-        mosaics = [item for item in found if item['stage'] == 'mosaic']
+        chosen = next((item for item in found if item['is_dolphot_reference']), None)
+    if chosen is None:
+        chosen = _best(full)
+    if chosen is None and found:
         for want in ('F814W', 'F625W', 'F606W'):
-            chosen = next((item for item in mosaics if item.get('filter') == want), None)
+            chosen = next((item for item in found if item.get('filter') == want), None)
             if chosen is not None:
                 break
-        chosen = chosen or (mosaics[0] if mosaics else (found[0] if found else None))
+        chosen = chosen or found[0]
     if chosen is not None:
         chosen['selected'] = True
     return found
@@ -730,6 +1096,14 @@ def _passes_cuts(parts: list[str], cuts: dict[str, Any]) -> bool:
 
 def summarize_catalog(phot: Path, cuts: dict[str, Any] | None = None) -> dict[str, Any]:
     cuts = cuts or quality_cuts()
+    try:
+        mtime = phot.stat().st_mtime
+    except OSError:
+        mtime = 0.0
+    cache_key = (str(phot), mtime, json.dumps(cuts, sort_keys=True, default=str))
+    cached = _CATALOG_SUMMARY_CACHE.get(cache_key)
+    if cached is not None:
+        return dict(cached)
     n_in = 0
     n_out = 0
     rejected = {'type': 0, 'sharp': 0, 'crowd': 0, 'snr': 0, 'short': 0}
@@ -761,7 +1135,7 @@ def summarize_catalog(phot: Path, cuts: dict[str, Any] | None = None) -> dict[st
                 rejected['snr'] += 1
                 continue
             n_out += 1
-    return {
+    summary = {
         'path': str(phot),
         'name': phot.name,
         'stem': phot.stem,
@@ -776,6 +1150,8 @@ def summarize_catalog(phot: Path, cuts: dict[str, Any] | None = None) -> dict[st
             'snr_min': cuts.get('snr_min'),
         },
     }
+    _CATALOG_SUMMARY_CACHE[cache_key] = summary
+    return dict(summary)
 
 
 def _mark_reference_mags(mags: list[dict[str, Any]], header: dict[str, Any] | None) -> list[dict[str, Any]]:
@@ -862,43 +1238,85 @@ def catalog_sources(
     return sources
 
 
-def _artifact_complete(base_dir: Path, stage_key: str) -> bool:
+def _artifact_complete(
+    base_dir: Path,
+    stage_key: str,
+    facts: dict[str, Any] | None = None,
+) -> bool:
+    facts = facts or {}
     if stage_key == 'download':
-        return bool(_science_fits(base_dir / 'download'))
+        if 'has_science' in facts:
+            return bool(facts['has_science'])
+        return has_science_fits(base_dir / 'download')
     if stage_key == 'align':
+        if 'has_jhat' in facts:
+            return bool(facts['has_jhat'])
         for rel in ('reduction/jhat', 'reduction/jhat_hst'):
-            root = base_dir / rel
-            if root.is_dir() and any(root.rglob('*_jhat.fits')):
+            if _has_named_fits(base_dir / rel, '*_jhat.fits'):
                 return True
         return False
     if stage_key == 'mosaic':
-        root = base_dir / 'reduction' / 'reference'
-        return root.is_dir() and any(root.rglob('coadd_*.fits'))
+        if 'has_mosaic' in facts:
+            return bool(facts['has_mosaic'])
+        return has_mosaic_coadd(base_dir)
     if stage_key == 'prepare_dolphot':
-        return bool(discover_param_files(base_dir))
+        if 'has_param' in facts:
+            return bool(facts['has_param'])
+        for root in (base_dir / 'dolphot', base_dir / 'reduction'):
+            if _has_named_fits(root, 'dolphot.param'):
+                return True
+        return False
     if stage_key == 'run_dolphot':
-        return bool(discover_phot_files(base_dir))
+        if 'has_phot' in facts:
+            return bool(facts['has_phot'])
+        return has_phot_files(base_dir)
     if stage_key == 'combine_catalogs':
-        return bool(discover_hdf5_files(base_dir))
+        if 'has_h5' in facts:
+            return bool(facts['has_h5'])
+        for root in (base_dir / 'dolphot', base_dir / 'reduction'):
+            if _has_named_fits(root, '*.h5'):
+                return True
+        return False
     return False
 
 
-def infer_stages(base_dir: Path, stored: dict[str, Any] | None = None) -> list[dict[str, Any]]:
+def infer_stages(
+    base_dir: Path,
+    stored: dict[str, Any] | None = None,
+    *,
+    detailed: bool = True,
+    facts: dict[str, Any] | None = None,
+) -> list[dict[str, Any]]:
     stored = stored or {}
     stored_stages = stored.get('stages') or {}
     running = stored.get('state') == 'running' and pid_is_running(stored.get('pid'))
-    _ensure_missing_stage_logs(base_dir)
-    empty_mast = is_empty_mast_download(base_dir)
+    if detailed:
+        _ensure_missing_stage_logs(base_dir)
+    download_state = (stored_stages.get('download') or {}).get('state')
+    stored_empty = any(
+        bool((stored_stages.get(spec.key) or {}).get('empty_mast')) for spec in STAGES
+    )
+    if facts and facts.get('has_science'):
+        empty_mast = False
+    elif not detailed and download_state in {'completed', 'skipped'} and not stored_empty:
+        empty_mast = False
+    elif not detailed and download_state not in {None, 'error'} and not stored_empty:
+        empty_mast = False
+    else:
+        empty_mast = is_empty_mast_download(base_dir)
     rows = []
     for spec in STAGES:
         record = stored_stages.get(spec.key) or {}
-        artifact_done = _artifact_complete(base_dir, spec.key)
         state = record.get('state')
+        trust_stored = (not detailed) and state in {'completed', 'error', 'skipped'}
+        artifact_done = False if trust_stored else _artifact_complete(base_dir, spec.key, facts)
         if empty_mast and spec.key == 'download' and state == 'error':
             state = 'completed'
         elif empty_mast and spec.key != 'download' and state in {None, 'error', 'pending'}:
             state = 'skipped'
         if running and state == 'running':
+            pass
+        elif trust_stored:
             pass
         elif state in {'completed', 'error', 'skipped'}:
             if artifact_done and state != 'error':
@@ -908,16 +1326,25 @@ def infer_stages(base_dir: Path, stored: dict[str, Any] | None = None) -> list[d
         else:
             state = 'pending'
 
-        logs = _latest_logs(base_dir / 'logs', spec.log_prefixes)
-        start = end = None
-        log_path = None
-        seconds = None
-        if logs:
-            log_path = logs[-1]
-            start, end = _log_times(log_path)
-            seconds = _parse_elapsed_seconds(log_path)
-            if seconds is None:
-                seconds = _duration_seconds(start, end)
+        start = _parse_stored_time(record.get('started_at'))
+        end = _parse_stored_time(record.get('ended_at'))
+        log_path = record.get('log')
+        seconds = record.get('seconds')
+        try:
+            seconds = None if seconds is None else float(seconds)
+        except (TypeError, ValueError):
+            seconds = None
+        if detailed and (start is None or seconds is None):
+            logs = _latest_logs(base_dir / 'logs', spec.log_prefixes)
+            if logs:
+                log_path = logs[-1]
+                log_start, log_end = _log_times(log_path, detailed=True)
+                start = start or log_start
+                end = end or log_end
+                if seconds is None:
+                    seconds = _parse_elapsed_seconds(log_path)
+        if seconds is None:
+            seconds = _duration_seconds(start, end)
 
         rows.append(
             {
@@ -1008,7 +1435,47 @@ def dispatch_availability(target=None, jobs=None, max_jobs=None) -> dict[str, An
 
 
 def list_campaign_targets(program: str | None = None, *, refresh_distances: bool = False) -> list[dict[str, Any]]:
-    from .mast_updates import updates_by_target
+    from .campaign_index import list_targets_from_db
+    from .mast_updates import _updates_cache_key, updates_by_target
+
+    cache_key = (str(program or ''), _updates_cache_key(program), 'orm')
+    now = time.monotonic()
+    with _LIST_LOCK:
+        hit = _LIST_CACHE.get(cache_key)
+        if hit and now - hit[0] < _LIST_TTL_SEC:
+            return [dict(row) for row in hit[1]]
+
+    orm_rows = list_targets_from_db(program)
+    if orm_rows is not None:
+        if refresh_distances:
+            from .config import find_target
+
+            warm = []
+            for row in orm_rows:
+                if row.get('distance_display'):
+                    continue
+                spec = find_target(row.get('name') or '')
+                if spec is None:
+                    continue
+                warm.append(
+                    {
+                        'host': spec.host,
+                        'ra': spec.ra,
+                        'dec': spec.dec,
+                        'base_dir': spec.base_dir,
+                    }
+                )
+            if warm:
+                warm_host_distances(warm)
+        with _LIST_LOCK:
+            _LIST_CACHE[cache_key] = (time.monotonic(), orm_rows)
+        return [dict(row) for row in orm_rows]
+
+    cache_key = (str(program or ''), _updates_cache_key(program), 'disk')
+    with _LIST_LOCK:
+        hit = _LIST_CACHE.get(cache_key)
+        if hit and now - hit[0] < _LIST_TTL_SEC:
+            return [dict(row) for row in hit[1]]
 
     live = {job['name']: job for job in running_jobs()}
     targets = list(campaign_targets(program))
@@ -1028,34 +1495,51 @@ def list_campaign_targets(program: str | None = None, *, refresh_distances: bool
                 'base_dir': target.base_dir,
             }
     host_distance: dict[str, Any] = {}
+    missing: list[dict[str, Any]] = []
     for key, sky in host_sky.items():
-        host_distance[key] = lookup_host_distance(
+        record = lookup_host_distance(
             host=sky['host'],
             ra=sky['ra'],
             dec=sky['dec'],
             base_dir=sky['base_dir'],
             remote=False,
         )
-    if refresh_distances:
-        missing = [
-            {
-                'host': sky['host'],
-                'ra': sky['ra'],
-                'dec': sky['dec'],
-                'base_dir': sky['base_dir'],
-            }
-            for key, sky in host_sky.items()
-            if host_distance.get(key) is None or host_distance[key].get('catalog') != 'NED'
-        ]
-        if missing:
-            warm_host_distances(missing)
+        host_distance[key] = record
+        if record is None or record.get('catalog') != 'NED':
+            missing.append(
+                {
+                    'host': sky['host'],
+                    'ra': sky['ra'],
+                    'dec': sky['dec'],
+                    'base_dir': sky['base_dir'],
+                }
+            )
+    if refresh_distances and missing:
+        warm_host_distances(missing)
     rows = []
     for target in targets:
         root = target.base_dir
-        stages = infer_stages(root)
+        stored = read_status_file(root)
+        stored_stages = stored.get('stages') or {}
+        stored_complete = all(
+            (stored_stages.get(spec.key) or {}).get('state') in {'completed', 'skipped', 'error'}
+            for spec in STAGES
+        )
+        if stored and 'n_images' in stored:
+            n_images = int(stored.get('n_images') or 0)
+        else:
+            n_images = count_science_fits(root / 'download')
+            _persist_n_images(root, stored, n_images)
+        facts = {'has_science': n_images > 0, 'n_images': n_images}
+        if stored_complete:
+            facts['has_phot'] = (stored_stages.get('run_dolphot') or {}).get('state') == 'completed'
+            facts['has_mosaic'] = (stored_stages.get('mosaic') or {}).get('state') == 'completed'
+        else:
+            facts['has_phot'] = has_phot_files(root)
+            facts['has_mosaic'] = has_mosaic_coadd(root)
+        stages = infer_stages(root, stored, detailed=False, facts=facts)
         remaining = remaining_stages(stages)
         n_done = sum(1 for row in stages if row['state'] in {'completed', 'skipped'})
-        n_images = len(_science_fits(root / 'download'))
         host_key = ''.join(ch for ch in str(target.host or '').upper() if ch.isalnum())
         distance = host_distance.get(host_key)
         job = live.get(target.name)
@@ -1063,17 +1547,25 @@ def list_campaign_targets(program: str | None = None, *, refresh_distances: bool
         new_data = bool(flag.get('new_available'))
         n_new_obs = int(flag.get('n_pending') or 0)
         if job:
-            status = 'running'
             job_state = 'running'
         elif new_data:
-            status = 'new data available'
             job_state = 'new'
         elif not remaining:
-            status = 'no data yet' if n_images == 0 else 'complete'
             job_state = 'completed'
         else:
-            status = f'{remaining[0]} pending'
             job_state = 'pending'
+        from .status_tags import derive_status_tag, status_label_for_row
+
+        status_tag = derive_status_tag(
+            job_state=job_state,
+            n_images=n_images,
+            new_data=new_data,
+            remaining=remaining,
+            stages=stages,
+        )
+        status = status_label_for_row(
+            status_tag, n_images=n_images, n_new_obs=n_new_obs, remaining=remaining
+        )
         rows.append(
             {
                 'name': target.name,
@@ -1081,6 +1573,7 @@ def list_campaign_targets(program: str | None = None, *, refresh_distances: bool
                 'program_id': target.program_id,
                 'host': target.host,
                 'field_role': getattr(target, 'field_role', 'prime') or 'prime',
+                'sn_type': getattr(target, 'sn_type', '') or '',
                 'ra': target.ra,
                 'dec': target.dec,
                 'ra_sex': target.ra_sex,
@@ -1091,28 +1584,195 @@ def list_campaign_targets(program: str | None = None, *, refresh_distances: bool
                 'n_stages': len(stages),
                 'remaining': remaining,
                 'status': status,
+                'status_tag': status_tag,
                 'job_state': job_state,
                 'new_data': new_data,
                 'n_new_obs': n_new_obs,
-                'has_catalog': bool(discover_phot_files(root)),
-                'has_reference': bool(resolve_display_image(root)),
+                'has_catalog': bool(facts.get('has_phot')),
+                'has_reference': bool(facts.get('has_mosaic')),
             }
         )
-    return rows
+    with _LIST_LOCK:
+        _LIST_CACHE[cache_key] = (time.monotonic(), rows)
+    return [dict(row) for row in rows]
 
 
-def build_campaign_status(base_dir: Path | None = None, target=None) -> dict[str, Any]:
-    target = target or target_config()
-    root = Path(base_dir) if base_dir is not None else target.base_dir
-    stored = read_status_file(root)
-    stages = infer_stages(root, stored)
+def page_inventory_path(base_dir: Path) -> Path:
+    return status_dir(base_dir) / 'page_inventory.json'
+
+
+def _page_inventory_stamp(base_dir: Path, stored: dict[str, Any] | None = None) -> dict[str, Any]:
+    stored = stored if stored is not None else read_status_file(base_dir)
+    return {
+        'ended_at': stored.get('ended_at'),
+        'state': stored.get('state'),
+        'n_images': stored.get('n_images'),
+        'status_mtime': _file_mtime(status_path(base_dir)),
+    }
+
+
+def _file_mtime(path: Path) -> float:
+    try:
+        return path.stat().st_mtime if path.is_file() else 0.0
+    except OSError:
+        return 0.0
+
+
+def load_page_inventory(base_dir: Path) -> dict[str, Any] | None:
+    path = page_inventory_path(base_dir)
+    if not path.is_file():
+        return None
+    try:
+        data = json.loads(path.read_text())
+    except (OSError, json.JSONDecodeError):
+        return None
+    if data.get('stamp') != _page_inventory_stamp(base_dir):
+        return None
+    return data
+
+
+def save_page_inventory(base_dir: Path, payload: dict[str, Any], stored: dict[str, Any] | None = None) -> None:
+    dest = page_inventory_path(base_dir)
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    body = dict(payload)
+    body['stamp'] = _page_inventory_stamp(base_dir, stored)
+    tmp = dest.with_suffix('.json.tmp')
+    tmp.write_text(json.dumps(body, default=str))
+    tmp.replace(dest)
+
+
+def clear_target_page_caches(base_dir: Path) -> None:
+    root = status_dir(base_dir)
+    if not root.is_dir():
+        return
+    for path in [page_inventory_path(base_dir), *root.glob('sources_*.json')]:
+        try:
+            path.unlink()
+        except OSError:
+            continue
+
+
+def build_page_inventory(base_dir: Path, stored: dict[str, Any] | None = None) -> dict[str, Any]:
+    root = Path(base_dir)
     images = list_images(root)
     phot_files = discover_phot_files(root)
     catalogs = [summarize_catalog(path) for path in phot_files]
     mosaics = discover_mosaic_images(root)
     selected = next((item for item in mosaics if item.get('selected')), None)
-    reference = Path(selected['path']) if selected else resolve_display_image(root)
+    reference = Path(selected['path']) if selected else (discover_display_image(root) or discover_reference_image(root))
     reference_header = read_image_header(reference) if reference else {}
+    payload = {
+        'images': images,
+        'n_images': len(images),
+        'catalogs': catalogs,
+        'mosaics': mosaics,
+        'has_catalog': bool(catalogs),
+        'reference_image': str(reference) if reference else None,
+        'reference': {
+            'id': None if selected is None else selected['id'],
+            'path': str(reference) if reference else None,
+            'instrument': reference_header.get('instrument'),
+            'detector': reference_header.get('detector'),
+            'filter': reference_header.get('filter'),
+            'date_obs': reference_header.get('date_obs'),
+            'heading': reference_heading(reference_header) if reference else 'Reference image',
+        },
+        'viewer_ready': bool(reference),
+    }
+    save_page_inventory(root, payload, stored)
+    try:
+        from .campaign_index import sync_science_products
+        from .config import find_target
+
+        spec = find_target(root.name)
+        if spec is not None:
+            sync_science_products(spec.name, payload)
+    except Exception:
+        pass
+    return payload
+
+
+def warm_page_inventory(base_dir: Path) -> None:
+    if load_page_inventory(base_dir) is not None:
+        return
+
+    def _run() -> None:
+        try:
+            build_page_inventory(base_dir)
+        except Exception:
+            return
+
+    threading.Thread(target=_run, name='page-inventory', daemon=True).start()
+
+
+def rebuild_page_artifacts(base_dir: Path, *, include_preview: bool = True) -> dict[str, Any]:
+    """Force-build page inventory (and optionally PNG preview) for a target."""
+    clear_target_page_caches(base_dir)
+    inventory = build_page_inventory(base_dir)
+    if include_preview:
+        try:
+            from .preview import build_preview
+
+            build_preview(base_dir, force=True)
+        except Exception:
+            pass
+    return inventory
+
+
+def sources_cache_path(base_dir: Path, image_id: str | None = None) -> Path:
+    safe = ''.join(ch if ch.isalnum() or ch in '._-' else '_' for ch in str(image_id or 'default'))
+    return status_dir(base_dir) / f'sources_{safe[:120]}.json'
+
+
+def load_sources_overlay(base_dir: Path, image_id: str | None, stamp: dict[str, Any]) -> dict[str, Any] | None:
+    path = sources_cache_path(base_dir, image_id)
+    if not path.is_file():
+        return None
+    try:
+        data = json.loads(path.read_text())
+    except (OSError, json.JSONDecodeError):
+        return None
+    if data.get('stamp') != stamp:
+        return None
+    return data.get('payload')
+
+
+def save_sources_overlay(
+    base_dir: Path,
+    image_id: str | None,
+    stamp: dict[str, Any],
+    payload: dict[str, Any],
+) -> None:
+    dest = sources_cache_path(base_dir, image_id)
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    tmp = dest.with_suffix('.json.tmp')
+    tmp.write_text(json.dumps({'stamp': stamp, 'payload': payload}, default=str))
+    tmp.replace(dest)
+
+
+def build_campaign_status(
+    base_dir: Path | None = None,
+    target=None,
+    *,
+    heavy: bool = True,
+) -> dict[str, Any]:
+    target = target or target_config()
+    root = Path(base_dir) if base_dir is not None else target.base_dir
+    stored = read_status_file(root)
+    stages = infer_stages(root, stored, detailed=False)
+    if heavy:
+        inventory = build_page_inventory(root, stored)
+    else:
+        inventory = load_page_inventory(root) or {}
+    images = inventory.get('images') or []
+    catalogs = inventory.get('catalogs') or []
+    mosaics = inventory.get('mosaics') or []
+    reference = inventory.get('reference') or {}
+    n_images = inventory.get('n_images')
+    if n_images is None:
+        n_images = stored.get('n_images')
+        if n_images is None:
+            n_images = len(images)
     job_state = stored.get('state') or 'idle'
     if job_state == 'running' and not pid_is_running(stored.get('pid')):
         job_state = stored.get('error') and 'error' or 'stale'
@@ -1121,10 +1781,26 @@ def build_campaign_status(base_dir: Path | None = None, target=None) -> dict[str
         ra=target.ra,
         dec=target.dec,
         base_dir=root,
+        remote=False,
     )
     from .mast_updates import updates_by_target
 
     flag = updates_by_target(target.program_id).get(target.name) or {}
+    mosaic_done = ((stored.get('stages') or {}).get('mosaic') or {}).get('state') == 'completed'
+    phot_done = ((stored.get('stages') or {}).get('run_dolphot') or {}).get('state') == 'completed'
+    viewer_ready = bool(inventory.get('viewer_ready') or reference.get('path') or mosaic_done)
+    remaining = remaining_stages(stages)
+    new_data = bool(flag.get('new_available'))
+    n_new_obs = int(flag.get('n_pending') or 0)
+    from .status_tags import derive_status_tag, status_label_for_row
+
+    status_tag = derive_status_tag(
+        job_state=job_state,
+        n_images=int(n_images or 0),
+        new_data=new_data,
+        remaining=remaining,
+        stages=stages,
+    )
     return {
         'target': {
             'name': target.name,
@@ -1156,23 +1832,32 @@ def build_campaign_status(base_dir: Path | None = None, target=None) -> dict[str
             'requested_stages': stored.get('requested_stages') or [],
         },
         'stages': stages,
-        'remaining': remaining_stages(stages),
-        'new_data': bool(flag.get('new_available')),
-        'n_new_obs': int(flag.get('n_pending') or 0),
+        'remaining': remaining,
+        'status_tag': status_tag,
+        'status': status_label_for_row(
+            status_tag,
+            n_images=int(n_images or 0),
+            n_new_obs=n_new_obs,
+            remaining=remaining,
+        ),
+        'new_data': new_data,
+        'n_new_obs': n_new_obs,
         'images': images,
-        'n_images': len(images),
+        'n_images': int(n_images or 0),
         'catalogs': catalogs,
-        'reference_image': str(reference) if reference else None,
+        'has_catalog': bool(catalogs or inventory.get('has_catalog') or phot_done),
+        'reference_image': inventory.get('reference_image') or reference.get('path'),
         'reference': {
-            'id': None if selected is None else selected['id'],
-            'path': str(reference) if reference else None,
-            'instrument': reference_header.get('instrument'),
-            'detector': reference_header.get('detector'),
-            'filter': reference_header.get('filter'),
-            'date_obs': reference_header.get('date_obs'),
-            'heading': reference_heading(reference_header) if reference else 'Reference image',
+            'id': reference.get('id'),
+            'path': reference.get('path'),
+            'instrument': reference.get('instrument'),
+            'detector': reference.get('detector'),
+            'filter': reference.get('filter'),
+            'date_obs': reference.get('date_obs'),
+            'heading': reference.get('heading') or 'Reference image',
         },
         'mosaics': mosaics,
-        'viewer_ready': bool(reference),
+        'viewer_ready': viewer_ready,
+        'inventory_ready': bool(inventory.get('images') or inventory.get('mosaics') or inventory.get('catalogs')),
         'dispatch': dispatch_availability(target),
     }

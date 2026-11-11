@@ -1,12 +1,11 @@
 #!/bin/bash
-# Start a local example of the pipelinesite frontend with SQLite sample data.
-# Bind on all interfaces so a laptop can reach the site via SSH tunnel
-# (recommended) or, on the campus network, http://burbidge.northwestern.edu:8000/.
+# Local development helper. Prefer scripts/serve_wings.sh (gunicorn) for the
+# public burbidge site; see deploy/SUDO_CUTOVER.md.
 set -euo pipefail
 cd "$(dirname "$0")"
 export PIPELINESITE_DEMO=1
 
-HOST="${PIPELINESITE_BIND:-0.0.0.0}"
+HOST="${PIPELINESITE_BIND:-127.0.0.1}"
 PORT="${PIPELINESITE_PORT:-8000}"
 
 PYTHON="${PYTHON:-python3.12}"
@@ -29,12 +28,8 @@ fi
 .venv/bin/python manage.py migrate
 .venv/bin/python manage.py setup_demo
 echo
-echo "On burbidge:     http://127.0.0.1:${PORT}/"
-echo "Campus / VPN:    http://burbidge.northwestern.edu:${PORT}/"
-echo "Target page:     http://burbidge.northwestern.edu:${PORT}/manager/targets/2026dix"
-echo
-echo "From a remote laptop (works off-campus), keep this SSH tunnel open:"
-echo "  ssh -N -L ${PORT}:127.0.0.1:${PORT} ckilpatrick@burbidge.northwestern.edu"
-echo "  then open http://127.0.0.1:${PORT}/"
+echo "Dev runserver on ${HOST}:${PORT}."
+echo "Public site should use: scripts/serve_wings.sh (gunicorn) + nginx."
+echo "SSH tunnel: ssh -N -L ${PORT}:127.0.0.1:${PORT} ckilpatrick@burbidge.northwestern.edu"
 echo
 exec .venv/bin/python manage.py runserver "${HOST}:${PORT}"

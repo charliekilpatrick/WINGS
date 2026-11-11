@@ -39,9 +39,43 @@
     Open a flagged target and run the pipeline to download and process them.
   </p>
   {% endif %}
+  {% if n_empty_mast %}
+  <p class="mast-empty">
+    {{ n_empty_mast }} target{{ n_empty_mast|pluralize }} finished with no MAST products (0/0).
+    These are empty fields, not pipeline failures.
+  </p>
+  {% endif %}
+
+  <form class="campaign-filters" method="get" action="">
+    {% if search_query %}<input type="hidden" name="q" value="{{ search_query }}">{% endif %}
+    <label>
+      Status
+      <select name="tag" onchange="this.form.submit()">
+        <option value="">All</option>
+        {% for opt in tag_options %}
+        <option value="{{ opt.key }}" {% if filter_tag == opt.key %}selected{% endif %}>
+          {{ opt.label }} ({{ opt.count }})
+        </option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>
+      Field
+      <select name="role" onchange="this.form.submit()">
+        <option value="">All</option>
+        <option value="prime" {% if filter_role == 'prime' %}selected{% endif %}>Prime</option>
+        <option value="parallel" {% if filter_role == 'parallel' %}selected{% endif %}>Parallel</option>
+      </select>
+    </label>
+    {% if filter_tag or filter_role or search_query %}
+    <a class="filter-clear" href="{% url 'program_campaign' program.program_id %}">Clear filters</a>
+    {% endif %}
+  </form>
 
   {% if search_query and not targets %}
   <p>No targets match “{{ search_query }}”.</p>
+  {% elif filter_tag or filter_role %}
+  <p class="campaign-sub">Showing {{ targets|length }} target{{ targets|length|pluralize }}.</p>
   {% endif %}
 
   <div class="table-wrap">
@@ -60,7 +94,7 @@
       </thead>
       <tbody>
         {% for row in targets %}
-        <tr>
+        <tr class="tag-{{ row.status_tag|default:'pending' }}">
           <td><a href="{% url 'manager:target_detail' row.name %}">{{ row.display_name }}</a></td>
           <td>{% if row.field_role == 'parallel' %}Parallel{% else %}Prime{% endif %}</td>
           <td>{{ row.host|default:"—" }}</td>
@@ -68,7 +102,7 @@
           <td>{{ row.ra_sex }} {{ row.dec_sex }}</td>
           <td>{{ row.n_images }}</td>
           <td>{{ row.n_done }} / {{ row.n_stages }}</td>
-          <td><span class="state state-{{ row.job_state|default:'pending' }}">{{ row.status }}</span></td>
+          <td><span class="state state-{{ row.status_tag|default:row.job_state|default:'pending' }}">{{ row.status }}</span></td>
         </tr>
         {% empty %}
         <tr><td colspan="8">No targets yet.</td></tr>

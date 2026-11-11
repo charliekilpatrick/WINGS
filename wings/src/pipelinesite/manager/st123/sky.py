@@ -221,8 +221,27 @@ def ab_zeropoint(photflam: float | None, photplam: float | None) -> float | None
     return -2.5 * math.log10(float(photflam)) - 5.0 * math.log10(float(photplam)) - 2.408
 
 
+_HEADER_CACHE: dict[tuple[str, float], dict[str, Any]] = {}
+_HEADER_CACHE_MAX = 256
+
+
 def read_image_header(path: Path) -> dict[str, Any]:
     """Read WCS and identifying cards from a FITS science image."""
+    try:
+        mtime = Path(path).stat().st_mtime
+    except OSError:
+        mtime = 0.0
+    cache_key = (str(path), mtime)
+    cached = _HEADER_CACHE.get(cache_key)
+    if cached is not None:
+        return dict(cached)
+
+    def _store(result: dict[str, Any]) -> dict[str, Any]:
+        if len(_HEADER_CACHE) >= _HEADER_CACHE_MAX:
+            _HEADER_CACHE.clear()
+        _HEADER_CACHE[cache_key] = result
+        return dict(result)
+
     meta: dict[str, Any] = {
         'path': str(path),
         'instrument': None,
@@ -236,14 +255,18 @@ def read_image_header(path: Path) -> dict[str, Any]:
         'ny': None,
         'wcs': None,
     }
-    from .st123api import display_filter, filter_name
-    meta['filter'] = display_filter(filter_name(path))
+    from .st123api import display_filter
+
+    name = Path(path).name
+    match = re.search(r'_(f\d{3,4}[a-z0-9]+)_', name, re.IGNORECASE)
+    if match:
+        meta['filter'] = display_filter(match.group(1))
     try:
         from astropy.io import fits
         from astropy.wcs import FITSFixedWarning
         import warnings
     except Exception:
-        return meta
+        return _store(meta)
 
     try:
         with warnings.catch_warnings():
@@ -251,7 +274,6 @@ def read_image_header(path: Path) -> dict[str, Any]:
             with fits.open(path, memmap=True) as hdul:
                 header = hdul[0].header
                 wcs_header = None
-                data = None
                 inst = detector = None
                 date_obs = None
                 time_obs = None
@@ -282,28 +304,26 @@ def read_image_header(path: Path) -> dict[str, Any]:
                             meta['photplam'] = float(cards['PHOTPLAM'])
                         except (TypeError, ValueError):
                             pass
-                    arr = getattr(hdu, 'data', None)
-                    if data is None and arr is not None and getattr(arr, 'ndim', 0) >= 2:
-                        data = arr
                 header = wcs_header or header
     except Exception:
-        return meta
+        return _store(meta)
 
     meta['instrument'] = None if inst is None else str(inst).strip()
     meta['detector'] = None if detector is None else str(detector).strip()
+    if not meta.get('filter'):
+        filt = _header_get(header, 'FILTER', 'FILTNAM1', 'FILTER1')
+        if filt:
+            meta['filter'] = display_filter(str(filt))
     meta['date_obs'] = format_obs_datetime(date_obs, time_obs)
     try:
         meta['exptime'] = None if exptime is None else float(exptime)
     except (TypeError, ValueError):
         meta['exptime'] = None
-    if data is not None:
-        meta['ny'], meta['nx'] = int(data.shape[-2]), int(data.shape[-1])
-    else:
-        try:
-            meta['nx'] = int(header['NAXIS1'])
-            meta['ny'] = int(header['NAXIS2'])
-        except (KeyError, TypeError, ValueError):
-            pass
+    try:
+        meta['nx'] = int(header['NAXIS1'])
+        meta['ny'] = int(header['NAXIS2'])
+    except (KeyError, TypeError, ValueError):
+        pass
 
     cd = _cd_matrix(header)
     try:
@@ -323,7 +343,7 @@ def read_image_header(path: Path) -> dict[str, Any]:
             'nx': meta['nx'],
             'ny': meta['ny'],
         }
-    return meta
+    return _store(meta)
 
 
 def reference_heading(meta: dict[str, Any] | None) -> str:
@@ -342,3 +362,99 @@ def reference_heading(meta: dict[str, Any] | None) -> str:
     if extra:
         parts.append(extra)
     return ' — '.join(parts)
+
+
+def _rotation_matrix_ccw(angle_deg: float):
+    import numpy as np
+
+    th = math.radians(float(angle_deg))
+    c, s = math.cos(th), math.sin(th)
+    return np.array([[c, -s], [s, c]], dtype=float)
+
+
+def north_up_east_left_params(cd: list[list[float]] | None) -> tuple[float, bool]:
+    """Return ``(ccw_deg, flip_x)`` to put North at +y and East at -x (East left)."""
+    import numpy as np
+
+    if not cd:
+        return 0.0, False
+    matrix = np.asarray(cd, dtype=float)
+    if matrix.shape != (2, 2):
+        return 0.0, False
+    try:
+        inv = np.linalg.inv(matrix)
+    except np.linalg.LinAlgError:
+        return 0.0, False
+    north = inv @ np.array([0.0, 1.0], dtype=float)
+    north_ang = math.degrees(math.atan2(float(north[1]), float(north[0])))
+    delta = 90.0 - north_ang
+    east = _rotation_matrix_ccw(delta) @ (inv @ np.array([1.0, 0.0], dtype=float))
+    return float(delta), bool(float(east[0]) > 0.0)
+
+
+def apply_north_up_east_left(
+    data,
+    wcs: dict[str, Any] | None,
+) -> tuple[Any, dict[str, Any] | None]:
+    """Rotate/flip a FITS-ordered image so North is up and East is left.
+
+    ``data`` is indexed ``[y, x]`` with ``y=0`` at the FITS bottom. The returned
+    WCS is updated for the same pixel convention so browser overlays stay aligned.
+    """
+    import numpy as np
+    from PIL import Image
+
+    if wcs is None or not wcs.get('cd') or not wcs.get('crpix'):
+        return data, wcs
+    arr = np.asarray(data)
+    if arr.ndim != 2:
+        return data, wcs
+    delta, flip_x = north_up_east_left_params(wcs.get('cd'))
+    do_rotate = abs(delta) > 0.05
+    if not do_rotate and not flip_x:
+        out = dict(wcs)
+        out['orientation'] = 'north_up_east_left'
+        return arr, out
+
+    old_ny, old_nx = int(arr.shape[0]), int(arr.shape[1])
+    # PIL y increases downward; flip into a y-up canvas, rotate in FITS CCW
+    # (negate angle for PIL), optional East-left mirror, then flip back.
+    img = Image.fromarray(arr)
+    img = img.transpose(getattr(Image, 'FLIP_TOP_BOTTOM', 1))
+    if do_rotate:
+        img = img.rotate(
+            -delta,
+            expand=True,
+            resample=getattr(Image, 'BILINEAR', 2),
+            fillcolor=0,
+        )
+    if flip_x:
+        img = img.transpose(getattr(Image, 'FLIP_LEFT_RIGHT', 0))
+    img = img.transpose(getattr(Image, 'FLIP_TOP_BOTTOM', 1))
+    out_arr = np.asarray(img)
+    new_ny, new_nx = int(out_arr.shape[0]), int(out_arr.shape[1])
+
+    cd = np.asarray(wcs['cd'], dtype=float)
+    crpix = np.asarray(wcs['crpix'], dtype=float)
+    old_center = np.array([(old_nx + 1.0) / 2.0, (old_ny + 1.0) / 2.0], dtype=float)
+    new_center = np.array([(new_nx + 1.0) / 2.0, (new_ny + 1.0) / 2.0], dtype=float)
+    # offset_new = M @ offset_old for the FITS (x-right, y-up) content transform.
+    M = _rotation_matrix_ccw(delta) if do_rotate else np.eye(2)
+    if flip_x:
+        M = np.array([[-1.0, 0.0], [0.0, 1.0]], dtype=float) @ M
+    # world = CD @ (p_old - crpix) and p_new - c_new = M @ (p_old - c_old)
+    # => CD_new = CD @ inv(M)
+    try:
+        cd_new = cd @ np.linalg.inv(M)
+    except np.linalg.LinAlgError:
+        return data, wcs
+    crpix_new = new_center + M @ (crpix - old_center)
+    out_wcs = dict(wcs)
+    out_wcs['cd'] = cd_new.tolist()
+    out_wcs['crpix'] = [float(crpix_new[0]), float(crpix_new[1])]
+    out_wcs['nx'] = new_nx
+    out_wcs['ny'] = new_ny
+    out_wcs['orientation'] = 'north_up_east_left'
+    out_wcs['rotation_deg'] = float(delta)
+    out_wcs['flip_x'] = bool(flip_x)
+    return out_arr, out_wcs

@@ -6,6 +6,7 @@ from .views.jobs import jobs
 from .views.job_single import job_single_view
 from .views.tasks import task_list, task_detail_view
 from .views.events import event_list, event_detail_view
+from .views.api import api_targets
 from .views.campaign import (
     campaign_dispatch,
     campaign_home,
@@ -15,6 +16,7 @@ from .views.campaign import (
     reference_preview,
     reference_sources,
     target_detail,
+    target_inventory,
     target_search,
 )
 
@@ -37,8 +39,10 @@ urlpatterns = [
 
     path('campaign', campaign_home, name='campaign_home'),
     path('search', target_search, name='target_search'),
+    path('api/targets/', api_targets, name='api_targets'),
     path('targets/<slug:name>', target_detail, name='target_detail'),
     path('targets/<slug:name>/status', campaign_status, name='target_status'),
+    path('targets/<slug:name>/inventory.json', target_inventory, name='target_inventory'),
     path('targets/<slug:name>/dispatch', campaign_dispatch, name='target_dispatch'),
     path('targets/<slug:name>/preview.png', reference_preview, name='target_preview'),
     path('targets/<slug:name>/sources.json', reference_sources, name='target_sources'),

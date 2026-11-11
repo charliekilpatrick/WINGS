@@ -1,0 +1,60 @@
+# Example HTTPS site for WINGS after certbot succeeds.
+# Prefer: sudo certbot --nginx -d burbidge.northwestern.edu ...
+# which edits sites-available/wings in place. This file is a reference if you
+# need to restore a working HTTPS block manually.
+#
+# Prerequisites (campus IT):
+#   - DNS A/AAAA for burbidge.northwestern.edu -> this host
+#   - inbound TCP 80 and 443 from the public internet (ACME + browsers)
+#
+# After HTTPS works, set PIPELINESITE_HTTPS=1 on the systemd unit (see
+# SUDO_CUTOVER.md / HANDOFF_REFACTOR.md).
+
+upstream wings_gunicorn {
+    server 127.0.0.1:8000 fail_timeout=0;
+}
+
+server {
+    listen 80;
+    listen [::]:80;
+    server_name burbidge.northwestern.edu;
+
+    location /.well-known/acme-challenge/ {
+        root /var/www/html;
+    }
+
+    location / {
+        return 301 https://$host$request_uri;
+    }
+}
+
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name burbidge.northwestern.edu;
+
+    # Paths written by certbot (adjust if certbot used different names):
+    ssl_certificate /etc/letsencrypt/live/burbidge.northwestern.edu/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/burbidge.northwestern.edu/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+    client_max_body_size 64m;
+
+    location /static/ {
+        alias /data/ckilpatrick/WINGS/wings/src/pipelinesite/root/;
+        expires 7d;
+        access_log off;
+    }
+
+    location / {
+        proxy_pass http://wings_gunicorn;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto https;
+        proxy_read_timeout 120s;
+        proxy_connect_timeout 10s;
+    }
+}

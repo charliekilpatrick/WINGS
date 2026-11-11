@@ -336,6 +336,17 @@ def build_registry_record(
     return record
 
 
+def _host_from_record(row: dict[str, Any], *, slug: str) -> str:
+    """Prefer an explicit galaxy host; never fall back to an SN designation."""
+    host = str(row.get('host') or '').strip()
+    if host:
+        return host
+    fallback = str(row.get('display_name') or slug).strip()
+    if re.match(r'^SN\b', fallback, re.IGNORECASE):
+        return ''
+    return fallback
+
+
 def spec_from_record(row: dict[str, Any], program_id: str | None = None) -> TargetSpec | None:
     try:
         ra = float(row['ra'])
@@ -348,7 +359,7 @@ def spec_from_record(row: dict[str, Any], program_id: str | None = None) -> Targ
     return TargetSpec(
         name=slug,
         display_name=str(row.get('display_name') or slug),
-        host=str(row.get('host') or row.get('display_name') or slug),
+        host=_host_from_record(row, slug=slug),
         sn_type=str(row.get('sn_type') or ''),
         ra=ra,
         dec=dec,

@@ -12,6 +12,9 @@ _EXEMPT_PREFIXES = (
     '/accounts/login/',
     '/accounts/logout/',
     '/admin/',
+    # Read-only campaign JSON for ops smoke checks / curl (no write surface).
+    '/api/targets/',
+    '/manager/api/targets/',
 )
 
 

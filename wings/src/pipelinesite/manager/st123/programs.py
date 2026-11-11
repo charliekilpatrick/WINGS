@@ -59,6 +59,22 @@ PROGRAMS: tuple[ProgramSpec, ...] = (
         registry_filename='campaign_targets.json',
         output_name='go18440',
     ),
+    ProgramSpec(
+        program_id='17070',
+        short_name='SNAP 17070',
+        title='Snapshot Observations of Type II Supernovae',
+        url=_stsci_url('17070'),
+        pi='Charles Kilpatrick',
+        institution='Northwestern University',
+        cycle='30',
+        orbits='92',
+        status='Completed',
+        include_example=False,
+        include_fixed=False,
+        include_planned=False,
+        registry_filename='campaign_targets.json',
+        output_name='go17070',
+    ),
 )
 
 

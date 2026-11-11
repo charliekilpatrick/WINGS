@@ -1,0 +1,21 @@
+[Unit]
+Description=WINGS pipelinesite (gunicorn demo)
+After=network.target
+
+[Service]
+Type=simple
+User=ckilpatrick
+Group=sn
+WorkingDirectory=/data/ckilpatrick/WINGS/wings/src/pipelinesite
+Environment=PIPELINESITE_DEMO=1
+Environment=PIPELINESITE_SERVE=1
+Environment=DJANGO_SETTINGS_MODULE=pipelinesite.settings_serve
+Environment=PIPELINESITE_GUNICORN_BIND=127.0.0.1
+Environment=PIPELINESITE_PORT=8000
+Environment=PIPELINESITE_GUNICORN_WORKERS=3
+ExecStart=/data/ckilpatrick/WINGS/wings/src/pipelinesite/scripts/serve_wings.sh
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

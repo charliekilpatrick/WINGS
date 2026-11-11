@@ -33,7 +33,7 @@
           <td><a href="{% url 'program_campaign' row.program_id %}">GO {{ row.program_id }}</a></td>
           <td>{% if row.field_role == 'parallel' %}Parallel{% else %}Prime{% endif %}</td>
           <td>{{ row.host|default:"—" }}</td>
-          <td><span class="state state-{{ row.job_state|default:'pending' }}">{{ row.status }}</span></td>
+          <td><span class="state state-{{ row.status_tag|default:row.job_state|default:'pending' }}">{{ row.status }}</span></td>
         </tr>
         {% endfor %}
       </tbody>
@@ -76,6 +76,9 @@
             {{ row.n_targets }}{% if row.n_complete %} <span class="campaign-sub">({{ row.n_complete }} complete)</span>{% endif %}
             {% if row.n_new_data %}
             <div class="mast-flag compact">{{ row.n_new_data }} with new MAST data</div>
+            {% endif %}
+            {% if row.n_empty_mast %}
+            <div class="mast-empty compact">{{ row.n_empty_mast }} empty MAST (0/0)</div>
             {% endif %}
           </td>
           <td>{{ row.n_images }}</td>

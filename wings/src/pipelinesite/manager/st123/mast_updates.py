@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import json
+import threading
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable
@@ -11,6 +13,15 @@ from .config import TargetSpec, campaign_targets, find_target, mast_updates_path
 from .program_sync import name_key, query_mast_observations
 from .programs import list_program_specs
 from .sky import separation_arcmin
+
+_UPDATES_TTL_SEC = 20.0
+_UPDATES_LOCK = threading.Lock()
+_UPDATES_CACHE: dict[str, tuple[float, dict[str, dict[str, Any]]]] = {}
+
+
+def clear_updates_cache() -> None:
+    with _UPDATES_LOCK:
+        _UPDATES_CACHE.clear()
 
 
 def _now_iso() -> str:
@@ -22,11 +33,13 @@ def _norm_id(value: Any) -> str:
 
 
 def local_image_tokens(base_dir: Path) -> set[str]:
+    from .inventory import iter_science_fits
+
     tokens: set[str] = set()
     root = Path(base_dir) / 'download'
     if not root.is_dir():
         return tokens
-    for path in root.rglob('*.fits'):
+    for path in iter_science_fits(root):
         tokens.add(_norm_id(path.name))
         tokens.add(_norm_id(path.stem.split('_')[0]))
         try:
@@ -119,7 +132,25 @@ def load_updates(program: str, *, refresh_local: bool = True) -> dict[str, Any]:
     return data
 
 
+def _updates_cache_key(program: str | None) -> tuple:
+    programs = [program] if program else [spec.program_id for spec in list_program_specs()]
+    stamps = []
+    for pid in programs:
+        path = mast_updates_path(str(pid))
+        try:
+            stamps.append((str(pid), path.stat().st_mtime if path.is_file() else 0.0))
+        except OSError:
+            stamps.append((str(pid), 0.0))
+    return (str(program or ''), tuple(stamps))
+
+
 def updates_by_target(program: str | None = None) -> dict[str, dict[str, Any]]:
+    cache_key = _updates_cache_key(program)
+    now = time.monotonic()
+    with _UPDATES_LOCK:
+        hit = _UPDATES_CACHE.get(cache_key)
+        if hit and now - hit[0] < _UPDATES_TTL_SEC:
+            return {name: dict(row) for name, row in hit[1].items()}
     programs = [program] if program else [spec.program_id for spec in list_program_specs()]
     out: dict[str, dict[str, Any]] = {}
     for pid in programs:
@@ -127,13 +158,20 @@ def updates_by_target(program: str | None = None) -> dict[str, dict[str, Any]]:
             name = row.get('name')
             if name:
                 out[str(name)] = row
-    return out
+    with _UPDATES_LOCK:
+        _UPDATES_CACHE[cache_key] = (time.monotonic(), out)
+    return {name: dict(row) for name, row in out.items()}
 
 
 def _refresh_local_pending(data: dict[str, Any]) -> None:
     for row in data.get('targets') or []:
-        spec = find_target(row.get('name') or '')
         pending = [obs for obs in row.get('pending_obs_ids') or [] if obs]
+        if not pending:
+            row['pending_obs_ids'] = []
+            row['n_pending'] = 0
+            row['new_available'] = False
+            continue
+        spec = find_target(row.get('name') or '')
         if spec is not None:
             tokens = local_image_tokens(spec.base_dir)
             pending = [obs for obs in pending if not obs_on_disk(obs, tokens)]
@@ -148,6 +186,7 @@ def write_updates(program: str, payload: dict[str, Any]) -> Path:
     tmp = dest.with_suffix('.json.tmp')
     tmp.write_text(json.dumps(payload, indent=2))
     tmp.replace(dest)
+    clear_updates_cache()
     return dest
 
 
@@ -207,6 +246,12 @@ def check_program_updates(
         for spec, row in zip(specs, rows):
             if row.get('new_available'):
                 revert_status_for_new_data(spec.base_dir)
+        try:
+            from .campaign_index import apply_mast_flags
+
+            apply_mast_flags(pid)
+        except Exception:
+            pass
     return payload
 
 

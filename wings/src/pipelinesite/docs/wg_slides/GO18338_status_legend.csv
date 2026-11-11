@@ -1,0 +1,6 @@
+Status,Meaning
+Not yet observed,Visit has not executed / no GO-18338 data in MAST yet
+Waiting on reduction,Data available; reduction not finished
+Reduction needs inspection,Pipeline products exist but need human QA
+Good data set,Accepted for science / HLSP path
+Needs reobservation,Failed QA or incomplete; consider reobserve request
