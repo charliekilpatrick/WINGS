@@ -251,10 +251,17 @@ def is_unusable_hst_download(base_dir: Path) -> bool:
     Typical case: all ``flc``/``flt`` have ``EXPFLAG=EXCESSIVE DOWNTIME`` (or
     similar), so download "succeeds" with files on disk but ``reduction/raw``
     is empty and align would find nothing to JHAT.
+
+    ``reduction/raw`` is created by link-raw even when zero frames are linked.
+    If that directory is missing, link-raw has not run yet -- download-only
+    trees must stay pending, not soft-skipped as unusable.
     """
     if is_empty_mast_download(base_dir):
         return False
     if not has_science_fits(Path(base_dir) / 'download'):
+        return False
+    raw = Path(base_dir) / 'reduction' / 'raw'
+    if not raw.is_dir():
         return False
     return count_raw_science_fits(base_dir) == 0
 

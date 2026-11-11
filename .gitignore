@@ -39,3 +39,12 @@ wings/src/pipelinesite/demo.sqlite3
 src/pipelinesite/.venv/
 src/pipelinesite/.venv312/
 src/pipelinesite/demo.sqlite3
+
+# Pipelinesite runtime / generated artifacts (keep on disk for the live site)
+wings/src/pipelinesite/logs/
+wings/src/pipelinesite/nohup.out
+wings/src/pipelinesite/.pipelinesite_dispatch.lock
+wings/src/pipelinesite/root/mosaic-previews/
+wings/src/pipelinesite/**/*.code-workspace
+*.code-workspace
+nohup.out

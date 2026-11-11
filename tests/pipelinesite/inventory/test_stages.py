@@ -30,6 +30,21 @@ class StageInferenceTests(SimpleTestCase):
             self.assertEqual(by_key['combine_catalogs']['state'], 'pending')
             self.assertIn('combine_catalogs', remaining_stages(rows))
 
+    def test_empty_raw_after_link_raw_soft_skips_later_stages(self):
+        """EXPFLAG-rejected downloads leave an empty reduction/raw directory."""
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            download = root / 'download' / 'HST' / 'ACS' / 'F814W' / '1'
+            download.mkdir(parents=True)
+            (download / 'bad_flc.fits').write_bytes(b'simple')
+            (root / 'reduction' / 'raw').mkdir(parents=True)
+            rows = infer_stages(root)
+            by_key = {row['key']: row for row in rows}
+            self.assertEqual(by_key['download']['state'], 'completed')
+            self.assertEqual(by_key['align']['state'], 'skipped')
+            self.assertEqual(by_key['combine_catalogs']['state'], 'skipped')
+            self.assertEqual(remaining_stages(rows), [])
+
     def test_empty_mast_download_is_success_not_failure(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
