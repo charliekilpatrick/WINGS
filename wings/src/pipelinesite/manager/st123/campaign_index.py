@@ -105,12 +105,16 @@ def upsert_target_from_spec(spec, *, mast_flags: dict[str, dict[str, Any]] | Non
         if state not in {'completed', 'running', 'skipped'}:
             remaining.append(stage.key)
 
+    unusable = any(bool((stored_stages.get(s.key) or {}).get('unusable')) for s in STAGES)
+    if not unusable:
+        unusable = inv.is_unusable_hst_download(spec.base_dir)
     job_state = _job_state_from_status(stored, new_data=new_data, n_images=n_images, remaining=remaining)
     status_tag = derive_status_tag(
         job_state=job_state,
         n_images=n_images,
         new_data=new_data,
         remaining=remaining,
+        unusable=unusable,
     )
     distance = lookup_host_distance(
         host=spec.host,
@@ -118,6 +122,7 @@ def upsert_target_from_spec(spec, *, mast_flags: dict[str, dict[str, Any]] | Non
         dec=spec.dec,
         base_dir=spec.base_dir,
         remote=False,
+        display_name=getattr(spec, 'display_name', None),
     )
     instruments = ','.join(spec.instruments) if getattr(spec, 'instruments', None) else ''
     target, _ = Target.objects.update_or_create(
@@ -205,11 +210,15 @@ def upsert_target_status(base_dir: Path, payload: dict[str, Any] | None = None) 
         )
         target.n_images = n_images
         target.job_state = job_state
+        unusable = any(bool((stored_stages.get(s.key) or {}).get('unusable')) for s in STAGES)
+        if not unusable:
+            unusable = inv.is_unusable_hst_download(base_dir)
         target.status_tag = derive_status_tag(
             job_state=job_state,
             n_images=n_images,
             new_data=flag_new,
             remaining=remaining,
+            unusable=unusable,
         )
         target.has_catalog = bool(
             (stored_stages.get('run_dolphot') or {}).get('state') == 'completed'

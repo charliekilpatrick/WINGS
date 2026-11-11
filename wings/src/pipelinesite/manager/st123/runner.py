@@ -29,6 +29,7 @@ from .inventory import (
     build_campaign_status,
     dispatch_availability,
     is_empty_mast_download,
+    is_unusable_hst_download,
     pid_is_running,
     read_status_file,
 )
@@ -287,10 +288,16 @@ def run_stages(stage_keys: Iterable[str], target=None) -> None:
             seconds = time.perf_counter() - t0
             ended = _now_iso()
             ok = result.returncode == 0
+            unusable = False
             if key == 'download' and is_empty_mast_download(target.base_dir):
                 ok = True
                 skip_rest = True
                 empty_mast = True
+            elif key == 'download' and is_unusable_hst_download(target.base_dir):
+                # Products landed but EXPFLAG rejected every frame at link-raw.
+                ok = True
+                skip_rest = True
+                unusable = True
             payload['stages'][key] = {
                 'state': 'completed' if ok else 'error',
                 'started_at': started,
@@ -299,6 +306,7 @@ def run_stages(stage_keys: Iterable[str], target=None) -> None:
                 'returncode': result.returncode,
                 'command': argv,
                 'empty_mast': empty_mast if key == 'download' else False,
+                'unusable': unusable if key == 'download' else False,
             }
             write_status(target.base_dir, payload)
             if job is not None:
@@ -309,13 +317,36 @@ def run_stages(stage_keys: Iterable[str], target=None) -> None:
                 )
             if not ok:
                 raise RuntimeError(f'{spec.label} failed with exit {result.returncode}')
+        def _stage_flag(key: str, flag: str) -> bool:
+            rec = (payload.get('stages') or {}).get(key) or {}
+            return bool(rec.get(flag)) if isinstance(rec, dict) else False
+
+        unusable_run = any(_stage_flag(spec.key, 'unusable') for spec in STAGES)
+        if empty_mast or unusable_run:
+            # Mark every post-download stage skipped even when the caller only
+            # requested download (otherwise remaining_stages stays non-empty and
+            # the site tags the target pending instead of empty_mast).
+            for spec in STAGES:
+                if spec.key == 'download':
+                    continue
+                payload['stages'][spec.key] = {
+                    'state': 'skipped',
+                    'started_at': None,
+                    'ended_at': None,
+                    'seconds': None,
+                    'returncode': None,
+                    'command': None,
+                    'empty_mast': bool(empty_mast),
+                    'unusable': bool(unusable_run),
+                }
         payload['state'] = 'completed'
         payload['ended_at'] = _now_iso()
-        payload['message'] = (
-            'No HST images in MAST yet (0/0)'
-            if empty_mast
-            else 'All requested stages finished'
-        )
+        if empty_mast:
+            payload['message'] = 'No HST images in MAST yet (0/0)'
+        elif unusable_run:
+            payload['message'] = 'No data (all frames rejected at link-raw / EXPFLAG)'
+        else:
+            payload['message'] = 'All requested stages finished'
         write_status(target.base_dir, payload)
     except Exception as exc:
         payload['state'] = 'error'

@@ -11,6 +11,7 @@ from xml.etree import ElementTree
 
 from .program_sync import lookup_host_name, pretty_target_name
 from .sky import format_dec, format_ra
+from .sn_host import is_galaxy_name, literature_host, pretty_galaxy_name
 
 APT_PUBLIC_URL = 'https://www.stsci.edu/hst/phase2-public/{program}.apt'
 _ARCHIVAL_INSTRUMENTS = ('ACS', 'WFC3', 'WFPC2')
@@ -185,9 +186,16 @@ def parse_apt_targets(path: Path | str, *, program_id: str) -> list[dict[str, An
     for name, target in sorted(fixed.items(), key=lambda item: item[0]):
         obs = observations.get(name) or {'has_prime': True, 'has_parallel': False, 'orient': 0.0}
         visits = visits_by_target.get(name) or []
-        host = lookup_host_name(name) or pretty_target_name(name)
         display = pretty_target_name(name)
         prime_ra, prime_dec = float(target['ra']), float(target['dec'])
+        host = lookup_host_name(name) or pretty_target_name(name)
+        # APT target names are often SN designations; prefer literature hosts and
+        # never keep an SN string as the galaxy host when a better name is known.
+        lit = literature_host(name) or literature_host(display)
+        if lit:
+            host = pretty_galaxy_name(lit['host'])
+        elif not is_galaxy_name(host):
+            host = ''
         rows.append(
             _record(
                 program_id=program_id,

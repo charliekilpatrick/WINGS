@@ -163,7 +163,10 @@ def build_filter_plan(
                 if field == 'Instrumental ABMAG magnitude':
                     phot.vega_idx = idx
                     phot.is_ab = True
-                elif field == 'Instrumental VEGAMAG magnitude' and phot.vega_idx is None:
+                elif field in {
+                    'Instrumental VEGAMAG magnitude',
+                    'Instrumental magnitude',
+                } and phot.vega_idx is None:
                     phot.vega_idx = idx
                 elif field == 'Magnitude uncertainty' and phot.magerr_idx is None:
                     phot.magerr_idx = idx
@@ -180,10 +183,22 @@ def build_filter_plan(
             if not instrument or not filt:
                 continue
             phot = _ensure_filter(plan, instrument, filt)
-            if field == 'Normalized count rate' and phot.vega_idx is None:
+            # Always collect rates for multi-chip/frame AB; a single per-chip
+            # "Instrumental magnitude" is a poor substitute for the stack.
+            if field == 'Normalized count rate':
                 phot.rate_idxs.append(idx)
-            elif field == 'Normalized count rate uncertainty' and phot.vega_idx is None:
+            elif field == 'Normalized count rate uncertainty':
                 phot.rateerr_idxs.append(idx)
+            elif field == 'Instrumental ABMAG magnitude':
+                phot.vega_idx = idx
+                phot.is_ab = True
+            elif field in {
+                'Instrumental VEGAMAG magnitude',
+                'Instrumental magnitude',
+            } and phot.vega_idx is None:
+                phot.vega_idx = idx
+            elif field == 'Magnitude uncertainty' and phot.magerr_idx is None:
+                phot.magerr_idx = idx
             if phot.zp_ab is None:
                 phot.zp_ab = ab_zeropoint(meta.get('photflam'), meta.get('photplam'))
             continue
@@ -192,6 +207,7 @@ def build_filter_plan(
         for prefix, attr, is_ab in (
             ('Instrumental ABMAG magnitude, ', 'vega_idx', True),
             ('Instrumental VEGAMAG magnitude, ', 'vega_idx', False),
+            ('Instrumental magnitude, ', 'vega_idx', False),
             ('Magnitude uncertainty, ', 'magerr_idx', False),
         ):
             if desc.startswith(prefix):
@@ -263,15 +279,57 @@ def three_sigma_limit(mag: float, magerr: float | None) -> float | None:
     return mag - 2.5 * math.log10(_DETECT_SNR / snr)
 
 
+def _mag_row(
+    *,
+    instrument: str,
+    filt: str,
+    mag: float,
+    magerr: float | None,
+    source: str | None,
+    mjd: float | None = None,
+    exposure: str | None = None,
+    n_epochs: int | None = None,
+) -> dict[str, Any]:
+    snr = flux_snr(magerr)
+    is_limit = snr is None or snr < _DETECT_SNR
+    limit = three_sigma_limit(float(mag), magerr) if is_limit else None
+    row: dict[str, Any] = {
+        'name': f'{instrument} {filt}'.strip(),
+        'instrument': instrument,
+        'filter': filt,
+        'mag': float(mag),
+        'magerr': None if magerr is None else float(magerr),
+        'snr': None if snr is None else float(snr),
+        'is_limit': bool(is_limit and limit is not None),
+        'limit_mag': None if limit is None else float(limit),
+        'system': 'AB',
+        'source': source,
+        'mjd': None if mjd is None else float(mjd),
+    }
+    if exposure is not None:
+        row['exposure'] = exposure
+    if n_epochs is not None:
+        row['n_epochs'] = int(n_epochs)
+    return row
+
+
 def row_ab_mags(parts: list[str], plan: list[FilterPhot]) -> list[dict[str, Any]]:
     out: list[dict[str, Any]] = []
     for phot in plan:
         mag = None
         magerr = None
         source = None
+        # Prefer stacked count rates when available (multi-chip DOLPHOT runs).
+        if phot.zp_ab is not None and phot.rate_idxs:
+            combined = _combine_rates(parts, phot)
+            if combined is not None:
+                rate, rate_err = combined
+                mag = phot.zp_ab - 2.5 * math.log10(rate)
+                magerr = (2.5 / math.log(10)) * (rate_err / rate)
+                source = 'count_rate'
         vega = _safe_float(parts, phot.vega_idx)
         verr = _safe_float(parts, phot.magerr_idx)
-        if vega is not None and abs(vega) < _SENTINEL_MAG:
+        if mag is None and vega is not None and abs(vega) < _SENTINEL_MAG:
             if phot.is_ab:
                 mag = vega
                 source = 'dolphot_ab'
@@ -282,30 +340,287 @@ def row_ab_mags(parts: list[str], plan: list[FilterPhot]) -> list[dict[str, Any]
                     source = 'vega_to_ab'
             if verr is not None and 0 <= verr < _SENTINEL_ERR:
                 magerr = verr
-        if mag is None and phot.vega_idx is None and phot.zp_ab is not None and phot.rate_idxs:
-            combined = _combine_rates(parts, phot)
-            if combined is not None:
-                rate, rate_err = combined
-                mag = phot.zp_ab - 2.5 * math.log10(rate)
-                magerr = (2.5 / math.log(10)) * (rate_err / rate)
-                source = 'count_rate'
+        elif mag is not None and magerr is None and verr is not None and 0 <= verr < _SENTINEL_ERR:
+            magerr = verr
         if mag is None or mag > 40:
             continue
-        snr = flux_snr(magerr)
-        is_limit = snr is None or snr < _DETECT_SNR
-        limit = three_sigma_limit(float(mag), magerr) if is_limit else None
         out.append(
-            {
-                'name': phot.name,
-                'instrument': phot.instrument,
-                'filter': phot.filt,
-                'mag': float(mag),
-                'magerr': None if magerr is None else float(magerr),
-                'snr': None if snr is None else float(snr),
-                'is_limit': bool(is_limit and limit is not None),
-                'limit_mag': None if limit is None else float(limit),
-                'system': 'AB',
-                'source': source,
-            }
+            _mag_row(
+                instrument=phot.instrument,
+                filt=phot.filt,
+                mag=float(mag),
+                magerr=None if magerr is None else float(magerr),
+                source=source,
+            )
         )
     return out
+
+
+@dataclass
+class EpochPhot:
+    exposure: str
+    instrument: str
+    filt: str
+    mjd: float | None = None
+    zp_ab: float | None = None
+    is_ab: bool = False
+    rate_idxs: list[int] = field(default_factory=list)
+    rateerr_idxs: list[int] = field(default_factory=list)
+    vega_idx: int | None = None
+    magerr_idx: int | None = None
+
+
+def build_epoch_plan(
+    columns: Path,
+    *,
+    search_dirs: Iterable[Path] | None = None,
+) -> list[EpochPhot]:
+    """One photometry group per exposure × filter (chips combined)."""
+    plan: dict[tuple[str, str, str], EpochPhot] = {}
+    frame_cache: dict[str, dict[str, Any]] = {}
+    dirs = [Path(p) for p in (search_dirs or []) if p]
+
+    def frame_meta(image: str) -> dict[str, Any]:
+        stem = _frame_stem(image)
+        if stem not in frame_cache:
+            path = _lookup_frame(image, dirs)
+            frame_cache[stem] = read_image_header(path) if path else {}
+        return frame_cache[stem]
+
+    for idx, desc in parse_columns_file(columns):
+        parsed = _PER_IMAGE.match(desc)
+        if not parsed:
+            continue
+        field = parsed.group('field').strip()
+        image = parsed.group('image').strip()
+        extra = parsed.group('extra') or ''
+        tag = _split_tag(image)
+        extra_tag = None
+        for token in extra.replace(',', ' ').split():
+            extra_tag = _split_tag(token) or extra_tag
+        meta = {} if tag else frame_meta(image)
+        instrument = (
+            (tag[0] if tag else '')
+            or (extra_tag[0] if extra_tag else '')
+            or (meta.get('instrument') or '')
+        ).upper()
+        filt = (
+            (tag[1] if tag else '')
+            or (extra_tag[1] if extra_tag else '')
+            or (meta.get('filter') or '')
+        ).upper()
+        if not instrument or not filt:
+            continue
+        exposure = _frame_stem(image)
+        key = (exposure, instrument, filt)
+        phot = plan.get(key)
+        if phot is None:
+            phot = EpochPhot(
+                exposure=exposure,
+                instrument=instrument,
+                filt=filt,
+                mjd=None if tag else meta.get('mjd'),
+                zp_ab=None if tag else ab_zeropoint(meta.get('photflam'), meta.get('photplam')),
+            )
+            plan[key] = phot
+        elif phot.mjd is None and not tag:
+            phot.mjd = meta.get('mjd')
+        if phot.zp_ab is None and not tag:
+            phot.zp_ab = ab_zeropoint(meta.get('photflam'), meta.get('photplam'))
+        if field == 'Normalized count rate':
+            phot.rate_idxs.append(idx)
+        elif field == 'Normalized count rate uncertainty':
+            phot.rateerr_idxs.append(idx)
+        elif field == 'Instrumental ABMAG magnitude':
+            phot.vega_idx = idx
+            phot.is_ab = True
+        elif field in {'Instrumental VEGAMAG magnitude', 'Instrumental magnitude'} and phot.vega_idx is None:
+            phot.vega_idx = idx
+        elif field == 'Magnitude uncertainty' and phot.magerr_idx is None:
+            phot.magerr_idx = idx
+
+    ordered = sorted(plan.values(), key=lambda row: (row.mjd is None, row.mjd or 0.0, row.instrument, row.filt, row.exposure))
+    return [row for row in ordered if row.rate_idxs or row.vega_idx is not None]
+
+
+def _epoch_mag(parts: list[str], phot: EpochPhot) -> dict[str, Any] | None:
+    mag = None
+    magerr = None
+    source = None
+    if phot.zp_ab is not None and phot.rate_idxs:
+        combined = _combine_rates(
+            parts,
+            FilterPhot(
+                instrument=phot.instrument,
+                filt=phot.filt,
+                rate_idxs=phot.rate_idxs,
+                rateerr_idxs=phot.rateerr_idxs,
+                zp_ab=phot.zp_ab,
+            ),
+        )
+        if combined is not None:
+            rate, rate_err = combined
+            mag = phot.zp_ab - 2.5 * math.log10(rate)
+            magerr = (2.5 / math.log(10)) * (rate_err / rate)
+            source = 'count_rate'
+    vega = _safe_float(parts, phot.vega_idx)
+    verr = _safe_float(parts, phot.magerr_idx)
+    if mag is None and vega is not None and abs(vega) < _SENTINEL_MAG:
+        if phot.is_ab:
+            mag = vega
+            source = 'dolphot_ab'
+        else:
+            offset = vega_to_ab_offset(phot.instrument, phot.filt)
+            if offset is not None:
+                mag = vega + offset
+                source = 'vega_to_ab'
+        if verr is not None and 0 <= verr < _SENTINEL_ERR:
+            magerr = verr
+    elif mag is not None and magerr is None and verr is not None and 0 <= verr < _SENTINEL_ERR:
+        magerr = verr
+    if mag is None or mag > 40:
+        return None
+    return _mag_row(
+        instrument=phot.instrument,
+        filt=phot.filt,
+        mag=float(mag),
+        magerr=None if magerr is None else float(magerr),
+        source=source,
+        mjd=phot.mjd,
+        exposure=phot.exposure,
+    )
+
+
+# Exposures closer than this are treated as one visit / observation.
+_VISIT_GAP_DAYS = 1.0
+
+
+def _combine_mag_rows(
+    rows: list[dict[str, Any]],
+    *,
+    source: str,
+    exposure: str | None = None,
+) -> dict[str, Any] | None:
+    """Inverse-variance flux average of magnitude rows (same instrument/filter)."""
+    if not rows:
+        return None
+    if len(rows) == 1 and source != 'visit_average':
+        # Keep singleton exposure rows as-is unless we are labeling a visit.
+        out = dict(rows[0])
+        out['n_epochs'] = 1
+        return out
+    fluxes: list[tuple[float, float, float | None]] = []
+    exposures: list[str] = []
+    instrument = str(rows[0].get('instrument') or '')
+    filt = str(rows[0].get('filter') or '')
+    for row in rows:
+        mag = row.get('mag')
+        if mag is None:
+            continue
+        flux = 10.0 ** (-0.4 * float(mag))
+        magerr = row.get('magerr')
+        if magerr is not None and magerr > 0:
+            # σ_f / f ≈ 0.4 ln(10) σ_m
+            rel = 0.4 * math.log(10) * float(magerr)
+            weight = 1.0 / (flux * rel) ** 2 if rel > 0 else 1.0
+        else:
+            weight = 1.0
+        fluxes.append((flux, weight, row.get('mjd')))
+        exp = row.get('exposure')
+        if exp:
+            exposures.append(str(exp))
+    if not fluxes:
+        return None
+    weight_sum = sum(weight for _flux, weight, _mjd in fluxes)
+    mean_flux = sum(flux * weight for flux, weight, _mjd in fluxes) / weight_sum
+    if mean_flux <= 0:
+        return None
+    mag = -2.5 * math.log10(mean_flux)
+    flux_err = math.sqrt(1.0 / weight_sum)
+    magerr = (2.5 / math.log(10)) * (flux_err / mean_flux)
+    mjds = [mjd for _flux, _weight, mjd in fluxes if mjd is not None]
+    mean_mjd = sum(mjds) / len(mjds) if mjds else None
+    return _mag_row(
+        instrument=instrument,
+        filt=filt,
+        mag=mag,
+        magerr=magerr,
+        source=source,
+        mjd=mean_mjd,
+        exposure=exposure if exposure is not None else '+'.join(dict.fromkeys(exposures)),
+        n_epochs=len(fluxes),
+    )
+
+
+def collapse_visit_epochs(
+    epochs: list[dict[str, Any]],
+    *,
+    max_gap_days: float = _VISIT_GAP_DAYS,
+) -> list[dict[str, Any]]:
+    """Combine same-filter exposures separated by less than ``max_gap_days``."""
+    groups: dict[tuple[str, str], list[dict[str, Any]]] = {}
+    for row in epochs:
+        key = (str(row.get('instrument') or ''), str(row.get('filter') or ''))
+        groups.setdefault(key, []).append(row)
+    out: list[dict[str, Any]] = []
+    for key, rows in sorted(groups.items()):
+        dated = [row for row in rows if row.get('mjd') is not None]
+        undated = [row for row in rows if row.get('mjd') is None]
+        dated.sort(key=lambda row: float(row['mjd']))
+        cluster: list[dict[str, Any]] = []
+        prev_mjd: float | None = None
+
+        def flush() -> None:
+            nonlocal cluster
+            if not cluster:
+                return
+            combined = _combine_mag_rows(cluster, source='visit_average')
+            if combined is not None:
+                out.append(combined)
+            cluster = []
+
+        for row in dated:
+            mjd = float(row['mjd'])
+            if cluster and prev_mjd is not None and (mjd - prev_mjd) > max_gap_days:
+                flush()
+            cluster.append(row)
+            prev_mjd = mjd
+        flush()
+        for row in undated:
+            singleton = _combine_mag_rows([row], source=str(row.get('source') or 'exposure'))
+            if singleton is not None:
+                out.append(singleton)
+    out.sort(key=lambda row: (row.get('mjd') is None, row.get('mjd') or 0.0, row.get('instrument') or '', row.get('filter') or ''))
+    return out
+
+
+def _average_filter_rows(epochs: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Inverse-variance flux average of epoch/visit rows, grouped by instrument+filter."""
+    groups: dict[tuple[str, str], list[dict[str, Any]]] = {}
+    for row in epochs:
+        key = (str(row.get('instrument') or ''), str(row.get('filter') or ''))
+        groups.setdefault(key, []).append(row)
+    out: list[dict[str, Any]] = []
+    for (instrument, filt), rows in sorted(groups.items()):
+        combined = _combine_mag_rows(rows, source='epoch_average')
+        if combined is not None:
+            # n_epochs here means contributing visit/epoch rows.
+            out.append(combined)
+    return out
+
+
+def source_photometry_tables(
+    parts: list[str],
+    epoch_plan: list[EpochPhot],
+) -> dict[str, list[dict[str, Any]]]:
+    """Return visit-combined and filter-averaged AB photometry for one DOLPHOT row."""
+    exposures: list[dict[str, Any]] = []
+    for phot in epoch_plan:
+        row = _epoch_mag(parts, phot)
+        if row is not None:
+            exposures.append(row)
+    epochs = collapse_visit_epochs(exposures)
+    return {
+        'epochs': epochs,
+        'combined': _average_filter_rows(epochs),
+    }

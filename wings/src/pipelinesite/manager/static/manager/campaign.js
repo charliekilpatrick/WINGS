@@ -158,6 +158,19 @@
     return text + ' AB mag';
   }
 
+  function formatMagCell(row) {
+    if (!row) {
+      return '—';
+    }
+    if (row.is_limit && row.limit_mag != null && isFinite(row.limit_mag)) {
+      return '< ' + Number(row.limit_mag).toFixed(3) + ' (3σ)';
+    }
+    if (row.mag == null || !isFinite(row.mag)) {
+      return '—';
+    }
+    return Number(row.mag).toFixed(3);
+  }
+
   function instrumentKey(value) {
     var text = String(value || '').toUpperCase();
     if (text.indexOf('WFPC2') >= 0) {
@@ -182,6 +195,36 @@
     return list.filter(function (row) {
       return instrumentKey(row.instrument) === inst && (row.filter || '').toUpperCase() === filt;
     })[0] || null;
+  }
+
+  function formatMjd(value) {
+    if (value == null || !isFinite(Number(value))) {
+      return '—';
+    }
+    return Number(value).toFixed(5);
+  }
+
+  function photometryTableHtml(title, rows, mjdLabel) {
+    if (!rows || !rows.length) {
+      return '<div class="photometry-section"><h4>' + esc(title) + '</h4>' +
+        '<p class="photometry-empty">No measurements.</p></div>';
+    }
+    var body = rows.map(function (row) {
+      return '<tr>' +
+        '<td>' + esc(formatMjd(row.mjd)) + '</td>' +
+        '<td>' + esc(row.instrument || '—') + '</td>' +
+        '<td>' + esc(row.filter || '—') + '</td>' +
+        '<td>' + esc(formatMagCell(row)) + '</td>' +
+        '<td>' + (row.is_limit || row.magerr == null || !isFinite(row.magerr)
+          ? '—'
+          : Number(row.magerr).toFixed(3)) + '</td>' +
+        '</tr>';
+    }).join('');
+    return '<div class="photometry-section"><h4>' + esc(title) + '</h4>' +
+      '<div class="photometry-table-wrap"><table class="photometry-table"><thead><tr>' +
+      '<th>' + esc(mjdLabel) + '</th><th>Instrument</th><th>Filter</th>' +
+      '<th>Magnitude</th><th>Uncertainty</th></tr></thead><tbody>' +
+      body + '</tbody></table></div></div>';
   }
 
   function tanPixToWorld(x, y, wcs) {
@@ -232,6 +275,54 @@
     };
   }
 
+  function pixelScaleArcsec(wcs) {
+    if (!wcs || !wcs.cd) {
+      return null;
+    }
+    var sx = Math.hypot(wcs.cd[0][0], wcs.cd[1][0]) * 3600;
+    var sy = Math.hypot(wcs.cd[0][1], wcs.cd[1][1]) * 3600;
+    var value = (sx + sy) / 2;
+    return value > 0 ? value : null;
+  }
+
+  function parseSkyPair(raText, decText) {
+    var raRaw = String(raText || '').trim();
+    var decRaw = String(decText || '').trim();
+    if (!raRaw && !decRaw) {
+      return null;
+    }
+    // Allow a single "RA Dec" paste into the RA field.
+    if (raRaw && !decRaw) {
+      var parts = raRaw.replace(/,/g, ' ').trim().split(/\s+/);
+      if (parts.length >= 2) {
+        var mid = Math.floor(parts.length / 2);
+        raRaw = parts.slice(0, mid).join(' ');
+        decRaw = parts.slice(mid).join(' ');
+      }
+    }
+    if (!raRaw || !decRaw) {
+      return null;
+    }
+    var raNum = Number(raRaw);
+    var decNum = Number(decRaw);
+    if (isFinite(raNum) && isFinite(decNum) && !/[hms:]/i.test(raRaw + decRaw)) {
+      return { ra: raNum, dec: decNum };
+    }
+    var text = (raRaw + ' ' + decRaw).replace(/:/g, ' ');
+    var match = text.match(
+      /(\d+)\s+(\d+)\s+([\d.]+)\s+([+-])\s*(\d+)\s+(\d+)\s+([\d.]+)/
+    );
+    if (!match) {
+      return null;
+    }
+    var ra = (Number(match[1]) + Number(match[2]) / 60 + Number(match[3]) / 3600) * 15;
+    var dec = Number(match[5]) + Number(match[6]) / 60 + Number(match[7]) / 3600;
+    if (match[4] === '-') {
+      dec = -dec;
+    }
+    return { ra: ra, dec: dec };
+  }
+
   function setupViewer(root, page) {
     if (!root) {
       return;
@@ -241,9 +332,11 @@
     var hud = root.querySelector('[data-sky-hud]');
     var previewUrl = root.dataset.previewUrl;
     var sourcesUrl = root.dataset.sourcesUrl;
+    var photometryUrlTemplate = root.dataset.photometryUrlTemplate || '';
+    var previewStaticBase = root.dataset.previewStatic || '';
     var selectedImageId = root.dataset.imageId || '';
     var ctx = canvas.getContext('2d');
-    var image = new Image();
+    var displayBitmap = null;
     var sources = [];
     var gaiaStars = [];
     var gaiaInfo = null;
@@ -258,23 +351,51 @@
     var showGaia = true;
     var selected = null;
     var selectedKind = null;
+    var sourcesCache = {};
+    var bitmapCache = {};
+    var rejectsLoaded = {};
+    var prefetchStarted = false;
+    var photometryCache = {};
+    var photometryPanel = scope.querySelector('[data-photometry-panel]');
+    var photometryTitle = scope.querySelector('[data-photometry-title]');
+    var photometryStatus = scope.querySelector('[data-photometry-status]');
+    var photometryTables = scope.querySelector('[data-photometry-tables]');
+    var gotoForm = scope.querySelector('[data-goto-sky]');
+    var gotoRa = scope.querySelector('[data-goto-ra]');
+    var gotoDec = scope.querySelector('[data-goto-dec]');
+    var gotoStatus = scope.querySelector('[data-goto-status]');
+    var gotoClear = scope.querySelector('[data-goto-clear]');
+    var gotoMark = null;
+    var GOTO_BOX_ARCSEC = 5;
+    var GOTO_MARK_ARCSEC = 0.5;
+    var GOTO_MAX_SCALE = 48;
+
+    function displaySize() {
+      if (displayBitmap) {
+        return { width: displayBitmap.width, height: displayBitmap.height };
+      }
+      return { width: 0, height: 0 };
+    }
 
     function fit() {
-      if (!image.width) {
+      var size = displaySize();
+      if (!size.width) {
         return;
       }
       var frame = canvas.parentElement || canvas;
       var box = frame.getBoundingClientRect();
+      // Fit the mosaic into the frame width without letterboxing empty bars into
+      // the canvas — those bars looked like vignetted / missing data.
       var width = Math.max(1, Math.floor(box.width || canvas.clientWidth || 640));
-      var height = Math.max(520, Math.floor(box.height || 520));
+      scale = width / size.width;
+      var height = Math.max(1, Math.floor(size.height * scale));
       canvas.width = width;
       canvas.height = height;
       // Keep CSS size equal to the drawing buffer so mouse coords match pixels.
       canvas.style.width = width + 'px';
       canvas.style.height = height + 'px';
-      scale = Math.min(canvas.width / image.width, canvas.height / image.height);
-      tx = (canvas.width - image.width * scale) / 2;
-      ty = (canvas.height - image.height * scale) / 2;
+      tx = 0;
+      ty = 0;
     }
 
     function pointerPos(event) {
@@ -314,6 +435,97 @@
       return { x: tx + px * scale, y: ty + py * scale };
     }
 
+    function setGotoStatus(message, isError) {
+      if (!gotoStatus) {
+        return;
+      }
+      gotoStatus.textContent = message || 'Zooms to 5″ × 5″ with a 0.5″ marker';
+      gotoStatus.classList.toggle('is-error', !!isError);
+    }
+
+    function skyToDisplay(ra, dec) {
+      if (!meta || !meta.wcs) {
+        return null;
+      }
+      var pix = tanWorldToPix(Number(ra), Number(dec), meta.wcs);
+      if (!pix) {
+        return null;
+      }
+      return {
+        x: (pix.x - 1) * meta.scale,
+        y: (meta.ny - pix.y) * meta.scale,
+        fitsX: pix.x,
+        fitsY: pix.y
+      };
+    }
+
+    function gotoSky(ra, dec) {
+      if (!meta || !meta.wcs || !displayBitmap) {
+        setGotoStatus('Mosaic WCS is not ready yet.', true);
+        return false;
+      }
+      var pixScale = pixelScaleArcsec(meta.wcs);
+      if (!pixScale) {
+        setGotoStatus('Could not determine the mosaic plate scale.', true);
+        return false;
+      }
+      var disp = skyToDisplay(ra, dec);
+      if (!disp) {
+        setGotoStatus('Coordinates are outside the mosaic WCS.', true);
+        return false;
+      }
+      if (disp.fitsX < 1 || disp.fitsY < 1 || disp.fitsX > meta.nx || disp.fitsY > meta.ny) {
+        setGotoStatus('Coordinates fall outside the mosaic footprint.', true);
+        return false;
+      }
+      var boxDisp = (GOTO_BOX_ARCSEC / pixScale) * meta.scale;
+      if (!(boxDisp > 0)) {
+        setGotoStatus('Could not size the 5″ zoom box.', true);
+        return false;
+      }
+      var view = Math.max(40, Math.min(canvas.width, canvas.height));
+      scale = Math.min(GOTO_MAX_SCALE, Math.max(0.2, view / boxDisp));
+      tx = canvas.width / 2 - disp.x * scale;
+      ty = canvas.height / 2 - disp.y * scale;
+      gotoMark = { ra: Number(ra), dec: Number(dec) };
+      setGotoStatus(
+        'Centered on ' + formatSky(gotoMark.ra, gotoMark.dec) + ' · 5″ field · 0.5″ marker'
+      );
+      draw();
+      return true;
+    }
+
+    function clearGotoMark() {
+      gotoMark = null;
+      setGotoStatus();
+      draw();
+    }
+
+    function drawGotoMark() {
+      if (!gotoMark || !meta || !meta.wcs) {
+        return;
+      }
+      var p = sourceToCanvas(gotoMark);
+      var pixScale = pixelScaleArcsec(meta.wcs);
+      if (!pixScale) {
+        return;
+      }
+      var r = Math.max(3, (GOTO_MARK_ARCSEC / pixScale) * meta.scale * scale);
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(220, 40, 70, 0.95)';
+      ctx.lineWidth = 1.8;
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(p.x - r - 4, p.y);
+      ctx.lineTo(p.x + r + 4, p.y);
+      ctx.moveTo(p.x, p.y - r - 4);
+      ctx.lineTo(p.x, p.y + r + 4);
+      ctx.strokeStyle = 'rgba(220, 40, 70, 0.85)';
+      ctx.lineWidth = 1.2;
+      ctx.stroke();
+    }
+
     function drawGaiaMark(p, used, highlight) {
       var r = highlight ? 9 : (used ? 7 : 6);
       ctx.beginPath();
@@ -332,8 +544,9 @@
     function draw() {
       ctx.fillStyle = '#f4f6f8';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-      if (image.width) {
-        ctx.drawImage(image, tx, ty, image.width * scale, image.height * scale);
+      var size = displaySize();
+      if (displayBitmap && size.width) {
+        ctx.drawImage(displayBitmap, tx, ty, size.width * scale, size.height * scale);
       }
       visibleSources().forEach(function (src) {
         var p = sourceToCanvas(src);
@@ -363,6 +576,7 @@
           ctx.stroke();
         }
       }
+      drawGotoMark();
     }
 
     function nearestIn(list, x, y, maxD) {
@@ -391,6 +605,91 @@
       return null;
     }
 
+    function photometryUrlFor(index) {
+      if (!photometryUrlTemplate) {
+        return '';
+      }
+      return String(photometryUrlTemplate).replace(/\/sources\/0\//, '/sources/' + index + '/');
+    }
+
+    function resetPhotometryPanel(message) {
+      if (photometryTitle) {
+        photometryTitle.textContent = 'Source photometry';
+      }
+      if (photometryStatus) {
+        photometryStatus.textContent = message || 'Click a DOLPHOT source to load its photometry.';
+      }
+      if (photometryTables) {
+        photometryTables.innerHTML = '';
+      }
+    }
+
+    function renderPhotometry(payload) {
+      if (!photometryPanel || !photometryTables) {
+        return;
+      }
+      if (photometryTitle) {
+        photometryTitle.textContent = 'Source ' + payload.index + ' photometry';
+      }
+      if (photometryStatus) {
+        photometryStatus.textContent =
+          (payload.epochs || []).length + ' epoch measurement' +
+          ((payload.epochs || []).length === 1 ? '' : 's') +
+          ' · ' +
+          (payload.combined || []).length + ' combined filter' +
+          ((payload.combined || []).length === 1 ? '' : 's');
+      }
+      photometryTables.innerHTML =
+        photometryTableHtml('Per-epoch photometry', payload.epochs || [], 'MJD') +
+        photometryTableHtml('Combined by filter', payload.combined || [], 'Average MJD');
+    }
+
+    function openPhotometry() {
+      if (!selected || selectedKind !== 'source' || selected.index == null) {
+        resetPhotometryPanel(
+          selectedKind === 'gaia'
+            ? 'Gaia sources have no DOLPHOT photometry.'
+            : 'Click a DOLPHOT source to load its photometry.'
+        );
+        return;
+      }
+      var index = selected.index;
+      var cacheKey = selectedImageId + '|' + index;
+      if (photometryCache[cacheKey]) {
+        renderPhotometry(photometryCache[cacheKey]);
+        return;
+      }
+      var url = photometryUrlFor(index);
+      if (!url) {
+        resetPhotometryPanel('Photometry endpoint is unavailable.');
+        return;
+      }
+      if (selectedImageId) {
+        url += (url.indexOf('?') >= 0 ? '&' : '?') + 'image=' + encodeURIComponent(selectedImageId);
+      }
+      if (photometryStatus) {
+        photometryStatus.textContent = 'Loading photometry for source ' + index + '…';
+      }
+      if (photometryTables) {
+        photometryTables.innerHTML = '';
+      }
+      fetch(url, { credentials: 'same-origin' }).then(function (resp) {
+        if (!resp.ok) {
+          throw new Error('photometry ' + resp.status);
+        }
+        return resp.json();
+      }).then(function (payload) {
+        photometryCache[cacheKey] = payload;
+        if (selected && selectedKind === 'source' && selected.index === index) {
+          renderPhotometry(payload);
+        }
+      }).catch(function () {
+        if (photometryStatus) {
+          photometryStatus.textContent = 'Could not load photometry for source ' + index + '.';
+        }
+      });
+    }
+
     function showSelected() {
       var box = scope.querySelector('[data-source-info]');
       if (!box) {
@@ -398,6 +697,7 @@
       }
       if (!selected) {
         box.textContent = 'Click a source to inspect it.';
+        openPhotometry();
         return;
       }
       if (selectedKind === 'gaia') {
@@ -411,6 +711,7 @@
           '<div>x,y = ' + selected.x.toFixed(2) + ', ' + selected.y.toFixed(2) + '</div>' +
           '<div>' + (selected.used ? 'Used for absolute WCS' : 'On image, not matched') +
           (residual != null ? ' (' + residual.toFixed(3) + '″ residual)' : '') + '</div>';
+        openPhotometry();
         return;
       }
       var refMag = pickReferenceMag(selected.mags, meta);
@@ -430,10 +731,12 @@
         (selected.chi != null ? '<div>χ² = ' + Number(selected.chi).toFixed(3) + '</div>' : '') +
         (selected.roundness != null ? '<div>round = ' + Number(selected.roundness).toFixed(3) + '</div>' : '') +
         '<div>type = ' + selected.type + (selected.passed ? ' (passed cuts)' : ' (rejected)') + '</div>';
+      openPhotometry();
     }
 
     function canvasToFits(mx, my) {
-      if (!meta || !image.width) {
+      var size = displaySize();
+      if (!meta || !size.width) {
         return null;
       }
       var px = (mx - tx) / scale;
@@ -528,16 +831,50 @@
         draw();
       });
     }
+    resetPhotometryPanel();
+
+    if (gotoForm) {
+      gotoForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+        var sky = parseSkyPair(gotoRa && gotoRa.value, gotoDec && gotoDec.value);
+        if (!sky) {
+          setGotoStatus('Enter RA/Dec as sexagesimal or decimal degrees.', true);
+          return;
+        }
+        gotoSky(sky.ra, sky.dec);
+      });
+    }
+    if (gotoClear) {
+      gotoClear.addEventListener('click', function () {
+        if (gotoRa) {
+          gotoRa.value = '';
+        }
+        if (gotoDec) {
+          gotoDec.value = '';
+        }
+        clearGotoMark();
+      });
+    }
+
     bindToggle(scope.querySelector('[data-show-quality]'), function (on) { showQuality = on; });
-    bindToggle(scope.querySelector('[data-show-cut]'), function (on) { showCut = on; });
+    bindToggle(scope.querySelector('[data-show-cut]'), function (on) {
+      showCut = on;
+      if (on) {
+        ensureRejects(selectedImageId).then(function () { draw(); });
+      }
+    });
     bindToggle(scope.querySelector('[data-show-gaia]'), function (on) { showGaia = on; });
 
     window.addEventListener('resize', function () {
-      fit();
-      draw();
+      if (gotoMark) {
+        gotoSky(gotoMark.ra, gotoMark.dec);
+      } else {
+        fit();
+        draw();
+      }
     });
 
-    function withImage(url, imageId) {
+    function withImage(url, imageId, extra) {
       if (!url) {
         return url;
       }
@@ -547,69 +884,231 @@
       } else {
         resolved.searchParams.delete('image');
       }
+      if (extra) {
+        Object.keys(extra).forEach(function (key) {
+          if (extra[key] == null || extra[key] === false) {
+            resolved.searchParams.delete(key);
+          } else {
+            resolved.searchParams.set(key, String(extra[key]));
+          }
+        });
+      }
       return resolved.pathname + resolved.search;
+    }
+
+    function applyPayload(payload, keepIndex, keepGaia) {
+      meta = payload.reference;
+      sources = payload.sources || [];
+      gaiaInfo = payload.gaia || {};
+      gaiaStars = gaiaInfo.stars || [];
+      if (keepIndex != null) {
+        selected = sources.filter(function (src) { return src.index === keepIndex; })[0] || null;
+        selectedKind = selected ? 'source' : null;
+      } else if (keepGaia != null) {
+        selected = gaiaStars.filter(function (star) { return star.source_id === keepGaia; })[0] || null;
+        selectedKind = selected ? 'gaia' : null;
+      } else {
+        selected = null;
+        selectedKind = null;
+      }
+      var count = scope.querySelector('[data-source-count]');
+      if (count) {
+        if (payload.catalog_note) {
+          count.textContent = payload.catalog_note;
+        } else if (payload.n_sources) {
+          count.textContent = payload.n_passed + ' / ' + payload.n_sources + ' pass quality cuts';
+        } else {
+          var filtLabel = [instrumentKey(meta && meta.instrument), ((meta && meta.filter) || '').toUpperCase()].filter(Boolean).join(' ');
+          count.textContent = filtLabel
+            ? ('No DOLPHOT catalog for ' + filtLabel + ' on this target')
+            : 'No DOLPHOT catalog yet';
+        }
+      }
+      var heading = scope.querySelector('[data-reference-heading]');
+      if (heading && meta && meta.heading) {
+        heading.textContent = meta.heading;
+      }
+      var gaiaCount = scope.querySelector('[data-gaia-count]');
+      if (gaiaCount) {
+        gaiaCount.textContent = payload.wcs_quality || (
+          gaiaInfo.n_on_image
+            ? gaiaInfo.n_used + ' / ' + gaiaInfo.n_on_image + ' Gaia stars used for absolute WCS'
+            : 'No Gaia alignment stars on this image'
+        );
+      }
+      showSelected();
+      if (gotoMark) {
+        gotoSky(gotoMark.ra, gotoMark.dec);
+      } else {
+        fit();
+        draw();
+      }
+    }
+
+    function previewCandidates(imageId, staticUrls) {
+      var urls = [];
+      if (staticUrls) {
+        if (staticUrls.webp) {
+          urls.push(staticUrls.webp);
+        }
+        if (staticUrls.avif) {
+          urls.push(staticUrls.avif);
+        }
+        if (staticUrls.jpeg) {
+          urls.push(staticUrls.jpeg);
+        }
+      }
+      if (previewStaticBase && imageId) {
+        // Match preview._publish_static cache-bust when static_urls are absent.
+        var bust = '?v=13';
+        urls.push(previewStaticBase + imageId + '.webp' + bust);
+        urls.push(previewStaticBase + imageId + '.avif' + bust);
+        urls.push(previewStaticBase + imageId + '.jpg' + bust);
+      }
+      urls.push(withImage(previewUrl, imageId));
+      var seen = {};
+      return urls.filter(function (url) {
+        if (!url || seen[url]) {
+          return false;
+        }
+        seen[url] = true;
+        return true;
+      });
+    }
+
+    function fetchSources(imageId, opts) {
+      var wantRejects = !!(opts && opts.rejects);
+      var cacheKey = (imageId || '') + (wantRejects ? '|rejects' : '|pass');
+      if (sourcesCache[cacheKey]) {
+        return Promise.resolve(sourcesCache[cacheKey]);
+      }
+      var url = withImage(sourcesUrl, imageId, wantRejects ? { rejects: 1 } : null);
+      return fetch(url, { credentials: 'same-origin' }).then(function (resp) {
+        if (!resp.ok) {
+          throw new Error('sources ' + resp.status);
+        }
+        return resp.json();
+      }).then(function (payload) {
+        sourcesCache[cacheKey] = payload;
+        if (wantRejects) {
+          rejectsLoaded[imageId || ''] = true;
+          sourcesCache[(imageId || '') + '|pass'] = Object.assign({}, payload, {
+            sources: (payload.sources || []).filter(function (src) { return src.passed; }),
+            n_overlay: (payload.sources || []).filter(function (src) { return src.passed; }).length
+          });
+        }
+        // Warm bitmap using static URLs from the payload when present.
+        var staticUrls = payload && payload.reference && payload.reference.static_urls;
+        loadBitmap(imageId, staticUrls).catch(function () {});
+        return payload;
+      });
+    }
+
+    function loadBitmap(imageId, staticUrls) {
+      var key = imageId || '';
+      if (bitmapCache[key]) {
+        return Promise.resolve(bitmapCache[key]);
+      }
+      var candidates = previewCandidates(imageId, staticUrls);
+      function tryNext(index) {
+        if (index >= candidates.length) {
+          return Promise.reject(new Error('preview unavailable'));
+        }
+        return fetch(candidates[index], { credentials: 'same-origin' }).then(function (resp) {
+          if (!resp.ok) {
+            return tryNext(index + 1);
+          }
+          return resp.blob().then(function (blob) {
+            // createImageBitmap decodes off the main thread when the browser allows it.
+            return createImageBitmap(blob).then(function (bitmap) {
+              bitmapCache[key] = bitmap;
+              return bitmap;
+            });
+          });
+        }).catch(function () {
+          return tryNext(index + 1);
+        });
+      }
+      if (typeof createImageBitmap !== 'function') {
+        return Promise.reject(new Error('createImageBitmap unsupported'));
+      }
+      return tryNext(0);
+    }
+
+    function ensureRejects(imageId) {
+      if (rejectsLoaded[imageId || '']) {
+        return Promise.resolve(sourcesCache[(imageId || '') + '|rejects']);
+      }
+      return fetchSources(imageId, { rejects: true }).then(function (payload) {
+        if ((imageId || '') === (selectedImageId || '')) {
+          sources = payload.sources || [];
+        }
+        return payload;
+      });
+    }
+
+    function prefetchOthers() {
+      if (prefetchStarted) {
+        return;
+      }
+      prefetchStarted = true;
+      var picker = scope.querySelector('[data-reference-select]');
+      if (!picker) {
+        return;
+      }
+      Array.prototype.forEach.call(picker.options, function (opt) {
+        if (!opt.value || opt.value === selectedImageId) {
+          return;
+        }
+        // Decode into ImageBitmap + JSON caches so later switches are memory-only.
+        Promise.all([
+          loadBitmap(opt.value),
+          fetchSources(opt.value)
+        ]).catch(function () {});
+      });
     }
 
     function loadView(imageId) {
       selectedImageId = imageId || '';
       root.dataset.imageId = selectedImageId;
-      var nextPreview = withImage(previewUrl, selectedImageId);
-      var nextSources = withImage(sourcesUrl, selectedImageId);
       var fits = scope.querySelector('[data-reference-fits]');
       if (fits) {
         fits.href = withImage(fits.getAttribute('href').split('?')[0], selectedImageId);
       }
       var keepIndex = selected && selectedKind === 'source' ? selected.index : null;
       var keepGaia = selected && selectedKind === 'gaia' ? selected.source_id : null;
-      Promise.all([
-        new Promise(function (resolve, reject) {
-          image.onload = resolve;
-          image.onerror = reject;
-          image.src = nextPreview;
-        }),
-        fetch(nextSources).then(function (resp) { return resp.json(); })
-      ]).then(function (parts) {
-        var payload = parts[1];
-        meta = payload.reference;
-        sources = payload.sources || [];
-        gaiaInfo = payload.gaia || {};
-        gaiaStars = gaiaInfo.stars || [];
-        if (keepIndex != null) {
-          selected = sources.filter(function (src) { return src.index === keepIndex; })[0] || null;
-          selectedKind = selected ? 'source' : null;
-        } else if (keepGaia != null) {
-          selected = gaiaStars.filter(function (star) { return star.source_id === keepGaia; })[0] || null;
-          selectedKind = selected ? 'gaia' : null;
-        } else {
-          selected = null;
-          selectedKind = null;
-        }
-        var count = scope.querySelector('[data-source-count]');
-        if (count) {
-          if (payload.n_sources) {
-            count.textContent = payload.n_passed + ' / ' + payload.n_sources + ' pass quality cuts';
-          } else {
-            count.textContent = 'No DOLPHOT catalog yet';
-          }
-        }
-        var heading = scope.querySelector('[data-reference-heading]');
-        if (heading && meta && meta.heading) {
-          heading.textContent = meta.heading;
-        }
-        var gaiaCount = scope.querySelector('[data-gaia-count]');
-        if (gaiaCount) {
-          gaiaCount.textContent = payload.wcs_quality || (
-            gaiaInfo.n_on_image
-              ? gaiaInfo.n_used + ' / ' + gaiaInfo.n_on_image + ' Gaia stars used for absolute WCS'
-              : 'No Gaia alignment stars on this image'
-          );
-        }
-        showSelected();
+      var cachedSources = sourcesCache[(selectedImageId || '') + (showCut ? '|rejects' : '|pass')];
+      var cachedBitmap = bitmapCache[selectedImageId || ''];
+
+      // Fast path: both assets already decoded in memory → draw only.
+      if (cachedBitmap && cachedSources) {
+        displayBitmap = cachedBitmap;
+        applyPayload(cachedSources, keepIndex, keepGaia);
+        window.setTimeout(prefetchOthers, 50);
+        return;
+      }
+
+      var bitmapPromise = loadBitmap(selectedImageId).then(function (bitmap) {
+        displayBitmap = bitmap;
         fit();
         draw();
+        return bitmap;
+      });
+      var sourcesPromise = showCut
+        ? fetchSources(selectedImageId, { rejects: true })
+        : fetchSources(selectedImageId);
+      Promise.all([bitmapPromise, sourcesPromise]).then(function (parts) {
+        applyPayload(parts[1], keepIndex, keepGaia);
+        window.setTimeout(prefetchOthers, 50);
       }).catch(function () {
-        ctx.fillStyle = '#333';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        var count = scope.querySelector('[data-source-count]');
+        if (count && !sources.length) {
+          count.textContent = 'Catalog overlay unavailable';
+        }
+        if (displayBitmap) {
+          fit();
+          draw();
+        }
       });
     }
 

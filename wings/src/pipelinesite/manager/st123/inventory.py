@@ -21,12 +21,14 @@ from .config import (
     target_config,
 )
 from .host_distance import format_distance, lookup_host_distance, warm_host_distances
-from .photometry import build_filter_plan, row_ab_mags
+from .photometry import build_epoch_plan, build_filter_plan, row_ab_mags, source_photometry_tables
 from .sky import format_obs_datetime, pix_to_world, read_image_header, reference_heading
 from .st123api import display_filter, instrument_name
 
 _SCIENCE_SKIP = ('_pam.fits', '_c1m.fits')
 _SCIENCE_SUFFIXES = ('_flc.fits', '_flt.fits', '_c0m.fits', '_cal.fits', '_i2d.fits')
+# Match st123.datamodels.hst: only NORMAL (or missing) EXPFLAG is science-usable.
+_GOOD_HST_EXPFLAGS = frozenset({None, '', 'NORMAL'})
 _BOXED_COADD = re.compile(r'^coadd_\d+_[0-9a-z]+_', re.IGNORECASE)
 _FILTER_IN_NAME = re.compile(r'_(f\d{3,4}w(?:n|m)?|f\d{3,4}lp|f150w2)_', re.IGNORECASE)
 _INST_IN_NAME = re.compile(r'(?:^|_)(acs|wfc3|wfpc2|nircam|miri|niriss)(?:_|$)', re.IGNORECASE)
@@ -233,6 +235,28 @@ def is_empty_mast_download(base_dir: Path) -> bool:
     if has_science_fits(Path(base_dir) / 'download'):
         return False
     return mast_imaging_found_count(base_dir) == 0
+
+
+def count_raw_science_fits(base_dir: Path) -> int:
+    """Count science FITS under ``reduction/raw`` (post link-raw / EXPFLAG gate)."""
+    raw = Path(base_dir) / 'reduction' / 'raw'
+    if not raw.is_dir():
+        return 0
+    return count_science_fits(raw)
+
+
+def is_unusable_hst_download(base_dir: Path) -> bool:
+    """True when MAST products exist but every frame was rejected at link-raw.
+
+    Typical case: all ``flc``/``flt`` have ``EXPFLAG=EXCESSIVE DOWNTIME`` (or
+    similar), so download "succeeds" with files on disk but ``reduction/raw``
+    is empty and align would find nothing to JHAT.
+    """
+    if is_empty_mast_download(base_dir):
+        return False
+    if not has_science_fits(Path(base_dir) / 'download'):
+        return False
+    return count_raw_science_fits(base_dir) == 0
 
 
 def revert_status_for_new_data(base_dir: Path) -> None:
@@ -521,7 +545,13 @@ def _fits_metadata_uncached(path: Path, download_root: Path) -> dict[str, Any]:
     tel_hdr = _header_value(header, 'TELESCOP')
     if tel_hdr:
         meta['telescope'] = str(tel_hdr)
+    # Flat reduction/raw symlinks have no filter directory; read ACS/WFC3 cards.
+    if not meta.get('filter'):
+        from .sky import _science_filter_from_cards
+
+        meta['filter'] = _science_filter_from_cards(header)
     meta['exptime'] = _header_value(header, 'EXPTIME', 'TEXPTIME')
+    meta['expflag'] = _header_value(header, 'EXPFLAG')
     meta['date_obs'] = format_obs_datetime(
         _header_value(header, 'DATE-OBS', 'DATE_OBS'),
         _header_value(header, 'TIME-OBS', 'TIME_OBS'),
@@ -546,15 +576,46 @@ def _fits_metadata_uncached(path: Path, download_root: Path) -> dict[str, Any]:
     return meta
 
 
+def _is_usable_science_row(meta: dict[str, Any]) -> bool:
+    """False for zero-time or bad-EXPFLAG frames the pipeline already rejects."""
+    exp = meta.get('exptime')
+    if exp is not None:
+        try:
+            if float(exp) <= 0.0:
+                return False
+        except (TypeError, ValueError):
+            pass
+    flag = meta.get('expflag')
+    if flag is not None:
+        text = str(flag).strip().upper()
+        if text and text not in _GOOD_HST_EXPFLAGS:
+            return False
+    return True
+
+
 def list_images(base_dir: Path) -> list[dict[str, Any]]:
-    download_root = base_dir / 'download'
+    """List science frames shown on the campaign page.
+
+    Prefer ``reduction/raw`` (post link-raw / EXPFLAG gate) when it has frames so
+    the table matches what align/mosaic/DOLPHOT actually used. Fall back to
+    ``download/``, still hiding zero-exptime and bad-EXPFLAG products.
+    """
+    root = Path(base_dir)
+    raw_root = root / 'reduction' / 'raw'
+    download_root = root / 'download'
+    if raw_root.is_dir() and has_science_fits(raw_root):
+        scan_root = raw_root
+    else:
+        scan_root = download_root
     rows = []
-    for path in _science_fits(download_root):
-        meta = _fits_metadata(path, download_root)
+    for path in _science_fits(scan_root):
+        meta = _fits_metadata(path, scan_root)
         if not meta.get('filter'):
             meta['filter'] = display_filter(_filter_from_name(path.name))
         else:
             meta['filter'] = display_filter(meta.get('filter')) or meta.get('filter')
+        if not _is_usable_science_row(meta):
+            continue
         rows.append(meta)
     return rows
 
@@ -665,12 +726,14 @@ def discover_phot_for_display(
     image_id: str | None = None,
     display_path: Path | None = None,
 ) -> Path | None:
-    """Pick the non-empty ``.phot`` whose stamp best matches the displayed mosaic."""
+    """Pick the non-empty ``.phot`` whose stamp best matches the displayed mosaic.
+
+    Prefer same instrument/filter, but still fall back to another catalog on the
+    target so aligned mosaics (e.g. WFPC2 F300W) can show ACS DOLPHOT positions.
+    """
     phot_files = discover_phot_files(base_dir)
     if not phot_files:
         return None
-    if len(phot_files) == 1:
-        return phot_files[0]
 
     want_name = Path(display_path).name.lower() if display_path is not None else ''
     want_filt = _filter_from_name(want_name) if want_name else None
@@ -698,6 +761,9 @@ def discover_phot_for_display(
         if want_filt and stamp_filt == want_filt:
             score += 10
         if want_inst and stamp_inst == want_inst:
+            score += 5
+        # Same instrument, different filter (multi-band DOLPHOT) still matches.
+        if want_inst and stamp_inst == want_inst and want_filt and stamp_filt and stamp_filt != want_filt:
             score += 5
         scored.append((score, phot))
     scored.sort(key=lambda item: (-item[0], str(item[1])))
@@ -835,8 +901,6 @@ def _disambiguate_mosaic_labels(found: list[dict[str, Any]]) -> None:
             item['label'] = f'{core} · {stage}' if stage else core
         if item.get('is_dolphot_reference'):
             item['option_label'] = f'{item["label"]} (DOLPHOT reference)'
-        elif item.get('is_full_field') and item.get('stage') == 'align':
-            item['option_label'] = f'{item["label"]} (full field)'
         else:
             item['option_label'] = item['label']
 
@@ -890,15 +954,11 @@ def _dedupe_mosaic_by_visit(found: list[dict[str, Any]]) -> list[dict[str, Any]]
         peers = by_visit.get(key) or []
         if not peers:
             best['is_full_field'] = True
-            if not best.get('is_dolphot_reference'):
-                best['option_label'] = f'{best["label"]} (full field)'
             kept_align.append(best)
             continue
         peer_area = max(int(item.get('area') or 0) for item in peers)
         if peer_area > 0 and int(best.get('area') or 0) >= peer_area * 2:
             best['is_full_field'] = True
-            if not best.get('is_dolphot_reference'):
-                best['option_label'] = f'{best["label"]} (full field)'
             kept_align.append(best)
 
     # Same-filter mosaic that covers ~the full align footprint is the full field.
@@ -1238,6 +1298,58 @@ def catalog_sources(
     return sources
 
 
+def source_photometry(
+    base_dir: Path,
+    *,
+    source_index: int,
+    image_id: str | None = None,
+) -> dict[str, Any] | None:
+    """Per-epoch and filter-averaged AB photometry for one DOLPHOT source index."""
+    from .preview import build_preview
+
+    if source_index < 1:
+        return None
+    preview = build_preview(base_dir, image_id=image_id)
+    display_path = Path(str(preview.get('source') or '')) if preview and preview.get('source') else None
+    if display_path is None or not display_path.is_file():
+        display_path = resolve_display_image(base_dir, image_id)
+    phot = discover_phot_for_display(base_dir, image_id=image_id, display_path=display_path)
+    if phot is None or not phot.is_file():
+        return None
+    stamp = discover_reference_for_phot(phot, base_dir) or discover_reference_image(base_dir)
+    stamp_header = read_image_header(stamp) if stamp else {}
+    columns = Path(str(phot) + '.columns')
+    root = Path(base_dir)
+    search_dirs = [
+        phot.parent,
+        phot.parent.parent,
+        root / 'reduction' / 'jhat',
+        root / 'reduction' / 'jhat_hst',
+        stamp.parent if stamp is not None else None,
+    ]
+    epoch_plan = build_epoch_plan(columns, search_dirs=[path for path in search_dirs if path])
+    line: str | None = None
+    with phot.open() as handle:
+        for idx, text in enumerate(handle, start=1):
+            if idx == source_index:
+                line = text
+                break
+    if line is None:
+        return None
+    parts = line.split()
+    tables = source_photometry_tables(parts, epoch_plan)
+    return {
+        'index': source_index,
+        'image_id': image_id,
+        'phot': str(phot),
+        'stamp': str(stamp) if stamp else None,
+        'instrument': (preview or {}).get('instrument') or stamp_header.get('instrument'),
+        'filter': (preview or {}).get('filter') or stamp_header.get('filter'),
+        'epochs': tables['epochs'],
+        'combined': tables['combined'],
+    }
+
+
 def _artifact_complete(
     base_dir: Path,
     stage_key: str,
@@ -1304,15 +1416,27 @@ def infer_stages(
         empty_mast = False
     else:
         empty_mast = is_empty_mast_download(base_dir)
+    stored_unusable = any(
+        bool((stored_stages.get(spec.key) or {}).get('unusable')) for spec in STAGES
+    )
+    unusable = stored_unusable or (
+        (not empty_mast) and is_unusable_hst_download(base_dir)
+    )
     rows = []
     for spec in STAGES:
         record = stored_stages.get(spec.key) or {}
         state = record.get('state')
         trust_stored = (not detailed) and state in {'completed', 'error', 'skipped'}
         artifact_done = False if trust_stored else _artifact_complete(base_dir, spec.key, facts)
-        if empty_mast and spec.key == 'download' and state == 'error':
+        # Treat empty MAST as a finished download even when status was never
+        # written (infer without stored) or was left as pending/error.
+        if empty_mast and spec.key == 'download' and state in {None, 'error', 'pending'}:
             state = 'completed'
         elif empty_mast and spec.key != 'download' and state in {None, 'error', 'pending'}:
+            state = 'skipped'
+        elif unusable and spec.key == 'download' and state in {None, 'error', 'pending'}:
+            state = 'completed'
+        elif unusable and spec.key != 'download' and state in {None, 'error', 'pending'}:
             state = 'skipped'
         if running and state == 'running':
             pass
@@ -1493,6 +1617,7 @@ def list_campaign_targets(program: str | None = None, *, refresh_distances: bool
                 'ra': target.ra,
                 'dec': target.dec,
                 'base_dir': target.base_dir,
+                'display_name': getattr(target, 'display_name', None),
             }
     host_distance: dict[str, Any] = {}
     missing: list[dict[str, Any]] = []
@@ -1503,6 +1628,7 @@ def list_campaign_targets(program: str | None = None, *, refresh_distances: bool
             dec=sky['dec'],
             base_dir=sky['base_dir'],
             remote=False,
+            display_name=sky.get('display_name'),
         )
         host_distance[key] = record
         if record is None or record.get('catalog') != 'NED':
@@ -1512,6 +1638,7 @@ def list_campaign_targets(program: str | None = None, *, refresh_distances: bool
                     'ra': sky['ra'],
                     'dec': sky['dec'],
                     'base_dir': sky['base_dir'],
+                    'display_name': sky.get('display_name'),
                 }
             )
     if refresh_distances and missing:
@@ -1705,6 +1832,31 @@ def warm_page_inventory(base_dir: Path) -> None:
     threading.Thread(target=_run, name='page-inventory', daemon=True).start()
 
 
+def warm_mosaic_previews(base_dir: Path) -> None:
+    """Build JPEG previews + source overlays for every mosaic in the background."""
+
+    def _run() -> None:
+        try:
+            from .preview import build_preview
+
+            for item in discover_mosaic_images(base_dir):
+                image_id = str(item.get('id') or '') or None
+                try:
+                    meta = build_preview(base_dir, image_id=image_id)
+                except Exception:
+                    meta = None
+                if meta is None:
+                    continue
+                try:
+                    ensure_sources_overlay(base_dir, image_id=image_id, meta=meta)
+                except Exception:
+                    continue
+        except Exception:
+            return
+
+    threading.Thread(target=_run, name='mosaic-previews', daemon=True).start()
+
+
 def rebuild_page_artifacts(base_dir: Path, *, include_preview: bool = True) -> dict[str, Any]:
     """Force-build page inventory (and optionally PNG preview) for a target."""
     clear_target_page_caches(base_dir)
@@ -1750,6 +1902,170 @@ def save_sources_overlay(
     tmp.replace(dest)
 
 
+_OVERLAY_REJECT_CAP = 8000
+
+
+def _round_overlay(value: Any, digits: int) -> Any:
+    if value is None:
+        return None
+    try:
+        return round(float(value), digits)
+    except (TypeError, ValueError):
+        return None
+
+
+def slim_overlay_source(src: dict[str, Any]) -> dict[str, Any]:
+    row = {
+        'index': src.get('index'),
+        'x': _round_overlay(src.get('x'), 2),
+        'y': _round_overlay(src.get('y'), 2),
+        'ra': _round_overlay(src.get('ra'), 7),
+        'dec': _round_overlay(src.get('dec'), 7),
+        'snr': _round_overlay(src.get('snr'), 2),
+        'sharp': _round_overlay(src.get('sharp'), 3),
+        'crowd': _round_overlay(src.get('crowd'), 3),
+        'chi': _round_overlay(src.get('chi'), 3),
+        'roundness': _round_overlay(src.get('roundness'), 3),
+        'type': src.get('type'),
+        'passed': bool(src.get('passed')),
+    }
+    mags = src.get('mags') or []
+    if mags:
+        row['mags'] = mags
+    return row
+
+
+def viewer_source_overlay(sources: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], int, int]:
+    n_total = len(sources)
+    passed = [src for src in sources if src.get('passed')]
+    rejected = [src for src in sources if not src.get('passed')]
+    rejected.sort(key=lambda src: float(src.get('snr') or 0.0), reverse=True)
+    overlay = [slim_overlay_source(src) for src in passed]
+    overlay.extend(slim_overlay_source(src) for src in rejected[:_OVERLAY_REJECT_CAP])
+    return overlay, n_total, len(passed)
+
+
+def sources_overlay_stamp(
+    *,
+    image_id: str | None,
+    meta: dict[str, Any],
+    phot: Path | None,
+    stamp: Path | None,
+) -> dict[str, Any]:
+    return {
+        'image_id': image_id or '',
+        'source': meta.get('source'),
+        'source_mtime': meta.get('source_mtime'),
+        'preview_version': meta.get('preview_version'),
+        'phot': str(phot) if phot else '',
+        'phot_mtime': phot.stat().st_mtime if phot is not None else 0.0,
+        'stamp': str(stamp) if stamp else '',
+        'stamp_mtime': stamp.stat().st_mtime if stamp is not None else 0.0,
+        'pairing': 'phot-stamp-v3',
+        'overlay': 'slim-v5',
+    }
+
+
+def ensure_sources_overlay(
+    base_dir: Path,
+    *,
+    image_id: str | None = None,
+    meta: dict[str, Any] | None = None,
+) -> dict[str, Any] | None:
+    """Build or reuse the cached catalog overlay for one mosaic option."""
+    from .gaia import format_wcs_quality, load_gaia_overlay
+    from .preview import build_preview
+
+    preview = meta or build_preview(base_dir, image_id=image_id)
+    if preview is None:
+        return None
+    display_path = Path(str(preview.get('source') or '')) if preview.get('source') else None
+    if display_path is None or not display_path.is_file():
+        display_path = resolve_display_image(base_dir, image_id)
+    phot = discover_phot_for_display(base_dir, image_id=image_id, display_path=display_path)
+    stamp = (
+        discover_reference_for_phot(phot, base_dir)
+        if phot is not None
+        else discover_reference_image(base_dir)
+    )
+    cache_stamp = sources_overlay_stamp(image_id=image_id, meta=preview, phot=phot, stamp=stamp)
+    cached = load_sources_overlay(base_dir, image_id, cache_stamp)
+    if cached is not None:
+        return cached
+    stamp_header = read_image_header(stamp) if stamp else {}
+    display_header = read_image_header(display_path) if display_path else {}
+    # Prefer the displayed mosaic's instrument/filter for "reference" mag
+    # highlighting; photometry itself still comes from the DOLPHOT stamp WCS.
+    header = {
+        'path': str(stamp) if stamp else preview.get('source'),
+        'instrument': preview.get('instrument')
+        or display_header.get('instrument')
+        or stamp_header.get('instrument'),
+        'detector': preview.get('detector')
+        or display_header.get('detector')
+        or stamp_header.get('detector'),
+        'filter': preview.get('filter')
+        or display_header.get('filter')
+        or stamp_header.get('filter'),
+        'photflam': preview.get('photflam')
+        or display_header.get('photflam')
+        or stamp_header.get('photflam'),
+        'photplam': preview.get('photplam')
+        or display_header.get('photplam')
+        or stamp_header.get('photplam'),
+        'wcs': stamp_header.get('wcs'),
+    }
+    sources: list[dict[str, Any]] = []
+    if phot is not None:
+        sources = catalog_sources(
+            phot,
+            reference=stamp,
+            wcs=stamp_header.get('wcs'),
+            header=header,
+            base_dir=base_dir,
+        )
+    overlay_sources, n_total, n_passed = viewer_source_overlay(sources)
+    gaia = load_gaia_overlay(
+        base_dir,
+        preview.get('wcs') or display_header.get('wcs') or stamp_header.get('wcs'),
+    )
+    display_inst = str(
+        preview.get('instrument') or display_header.get('instrument') or ''
+    ).upper()
+    display_filt = str(preview.get('filter') or display_header.get('filter') or '').upper()
+    stamp_inst = str(stamp_header.get('instrument') or '').upper()
+    stamp_filt = str(stamp_header.get('filter') or '').upper()
+    catalog_note = None
+    if phot is not None and stamp_inst and display_inst:
+        catalog_label = ' '.join(p for p in (stamp_inst, stamp_filt) if p)
+        display_label = ' '.join(p for p in (display_inst, display_filt) if p)
+        if stamp_inst != display_inst:
+            # Cross-instrument overlay: positions from another camera's run.
+            catalog_note = (
+                f'Showing {catalog_label} DOLPHOT positions on {display_label} '
+                f'(no {display_inst} catalog yet)'
+            )
+        elif stamp_filt and display_filt and stamp_filt != display_filt:
+            # Same multi-band DOLPHOT run; detection image differs from the
+            # mosaic filter (e.g. ACS F606W stamp under an ACS F814W mosaic).
+            catalog_note = (
+                f'DOLPHOT detections from {catalog_label} reference on '
+                f'{display_label} (same multi-band catalog)'
+            )
+    payload = {
+        'reference': preview,
+        'sources': overlay_sources,
+        'n_sources': n_total,
+        'n_passed': n_passed,
+        'n_overlay': len(overlay_sources),
+        'catalog_note': catalog_note,
+        'gaia': gaia,
+        'wcs_quality': format_wcs_quality(gaia),
+    }
+    save_sources_overlay(base_dir, image_id, cache_stamp, payload)
+    return payload
+
+
 def build_campaign_status(
     base_dir: Path | None = None,
     target=None,
@@ -1782,6 +2098,7 @@ def build_campaign_status(
         dec=target.dec,
         base_dir=root,
         remote=False,
+        display_name=getattr(target, 'display_name', None),
     )
     from .mast_updates import updates_by_target
 

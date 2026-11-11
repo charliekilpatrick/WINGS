@@ -186,9 +186,25 @@
     {% if campaign.viewer_ready %}
     <div class="viewer-shell">
       <div>
+        <form class="goto-sky" data-goto-sky>
+          <span class="goto-sky-label">Go to</span>
+          <label class="goto-sky-field">
+            RA
+            <input type="text" name="ra" data-goto-ra placeholder="hh:mm:ss.s or deg" autocomplete="off" spellcheck="false">
+          </label>
+          <label class="goto-sky-field">
+            Dec
+            <input type="text" name="dec" data-goto-dec placeholder="±dd:mm:ss.s or deg" autocomplete="off" spellcheck="false">
+          </label>
+          <button type="submit" class="viewer-toggle goto-sky-go">Go</button>
+          <button type="button" class="viewer-toggle goto-sky-clear" data-goto-clear>Clear</button>
+          <span class="goto-sky-hint" data-goto-status>Zooms to 5″ × 5″ with a 0.5″ marker</span>
+        </form>
         <div class="viewer-frame" data-viewer
              data-preview-url="{% url 'manager:target_preview' campaign.target.name %}"
              data-sources-url="{% url 'manager:target_sources' campaign.target.name %}"
+             data-photometry-url-template="{% url 'manager:target_source_photometry' campaign.target.name 0 %}"
+             data-preview-static="{{ campaign.preview_static_base|default:'' }}"
              data-image-id="{{ campaign.reference.id|default:'' }}">
           <canvas></canvas>
           <div class="viewer-hud is-empty" data-sky-hud></div>
@@ -208,6 +224,13 @@
         </div>
         <div data-source-info class="source-card">Click a source to inspect it.</div>
       </div>
+    </div>
+    <div class="photometry-panel" data-photometry-panel>
+      <div class="photometry-panel-head">
+        <h3 data-photometry-title>Source photometry</h3>
+      </div>
+      <p class="campaign-sub" data-photometry-status>Click a DOLPHOT source to load its photometry.</p>
+      <div class="photometry-tables" data-photometry-tables></div>
     </div>
     {% else %}
     <p>No mosaic or reference image yet.</p>

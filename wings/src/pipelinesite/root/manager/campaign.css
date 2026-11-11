@@ -278,13 +278,66 @@ body.campaign-page {
   gap: 1rem;
 }
 
+.goto-sky {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 0.45rem 0.55rem;
+  margin: 0 0 0.65rem;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid var(--line);
+  background: #f8fafc;
+}
+
+.goto-sky-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--ink);
+  padding-bottom: 0.35rem;
+}
+
+.goto-sky-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  margin: 0;
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+.goto-sky-field input {
+  min-width: 9.5rem;
+  padding: 0.28rem 0.45rem;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--ink);
+  font: 0.82rem/1.3 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.goto-sky-go,
+.goto-sky-clear {
+  width: auto;
+  padding: 0.28rem 0.7rem;
+}
+
+.goto-sky-hint {
+  flex: 1 1 10rem;
+  font-size: 0.78rem;
+  color: var(--muted);
+  padding-bottom: 0.35rem;
+}
+
+.goto-sky-hint.is-error {
+  color: #a33;
+}
+
 .viewer-frame {
   position: relative;
   background: #f4f6f8;
   border: 1px solid var(--line);
-  min-height: 520px;
   overflow: hidden;
   cursor: grab;
+  line-height: 0;
 }
 
 .viewer-frame.is-dragging {
@@ -293,12 +346,13 @@ body.campaign-page {
 
 .viewer-frame canvas {
   display: block;
-  /* Width/height are also set in JS to match the drawing buffer so
+  /* Width/height are set in JS to match the drawing buffer so
      pointer events stay aligned with the rendered mosaic. */
   width: 100%;
   height: auto;
   max-width: 100%;
   vertical-align: top;
+  background: #111;
 }
 
 .viewer-hud {
@@ -416,6 +470,71 @@ body.campaign-page {
 
 .source-card .mag-row {
   font-variant-numeric: tabular-nums;
+}
+
+.photometry-panel {
+  margin-top: 1rem;
+  padding: 0.85rem 1rem 1rem;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.photometry-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.35rem;
+}
+
+.photometry-panel-head h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.photometry-section {
+  margin-top: 0.85rem;
+}
+
+.photometry-section h4 {
+  margin: 0 0 0.4rem;
+  font-size: 0.9rem;
+}
+
+.photometry-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+}
+
+.photometry-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.photometry-table th,
+.photometry-table td {
+  padding: 0.35rem 0.55rem;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  white-space: nowrap;
+}
+
+.photometry-table th {
+  background: #f4f6f8;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.photometry-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.photometry-empty {
+  color: var(--muted);
+  font-size: 0.86rem;
+  margin: 0.35rem 0 0;
 }
 
 .alert-plain {

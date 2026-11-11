@@ -1,4 +1,4 @@
-"""Look up a host-galaxy distance from NED, then GLADE+ as fallback."""
+"""Look up a host-galaxy distance from NED, GWGC, then GLADE+ as fallback."""
 
 from __future__ import annotations
 
@@ -6,6 +6,7 @@ import fcntl
 import json
 import math
 import os
+import re
 import statistics
 import tempfile
 import threading
@@ -18,7 +19,13 @@ from urllib.request import Request, urlopen
 from .config import gladeplus_dir, output_root, status_dir
 
 _GLADE_PLUS = 'VII/291'
+_GWGC = 'VII/267/gwgc'
 _SEARCH_RADIUS_ARCMIN = 2.0
+_GWGC_SEARCH_RADIUS_ARCMIN = 3.0
+_VIZIER_MIRRORS = (
+    'vizier.cfa.harvard.edu',
+    'vizier.cds.unistra.fr',
+)
 _GLADE_COLUMNS = (
     'PGC',
     'GWGC',
@@ -33,12 +40,21 @@ _NED_DISTANCE_URL = (
     'https://ned.ipac.caltech.edu/NED::API/DistancesOfObject?TARGET={target}&MAXREC=5000'
 )
 _NED_USER_AGENT = 'WINGS-pipelinesite/1.0'
+# Prefer primary indicators, then SBF / FJ (often nearer than TF for early types),
+# then TF. Nearby-galaxy campaigns also prefer any method with median <= 20 Mpc
+# when the ladder-top pick is farther (see select_ned_distance).
 _METHOD_LADDER = (
     ('Cepheids', ('cepheids', 'cepheid')),
     ('TRGB', ('trgb', 'tipoftheredgiant')),
+    ('SBF', ('sbf', 'surfacebrightnessfluctuation')),
     ('SN Ia', ('snia', 'sneia')),
+    ('Faber-Jackson', ('faberjackson', 'faber')),
+    ('FP', ('fundamentalplane', 'fp')),
+    ('Sosies', ('sosie', 'sosies')),
+    ('Tertiary', ('tertiary',)),
     ('Tully-Fisher', ('tullyfisher', 'tullyest', 'tully')),
 )
+_NEARBY_MPC = 20.0
 
 
 def distance_cache_path(base_dir: Path) -> Path:
@@ -71,6 +87,8 @@ def format_distance(record: dict[str, Any] | None) -> str | None:
     method = str(record.get('method') or '').strip()
     if catalog == 'NED' and method:
         label = f'NED {method}'
+    elif catalog == 'GWGC':
+        label = 'GWGC'
     else:
         label = catalog or 'NED'
     if err not in (None, '') and round(float(err), 1) >= 0.1:
@@ -137,7 +155,46 @@ def select_ned_distance(rows: list[dict[str, Any]], *, host: str | None = None) 
         )
     if not ranked:
         return None
-    chosen = ranked[min(ranked)]
+
+    def _median_of(group: list[dict[str, Any]]) -> float:
+        return float(statistics.median([row['distance_mpc'] for row in group]))
+
+    # Ladder-best method first.
+    best_rank = min(ranked)
+    chosen = ranked[best_rank]
+    # Nearby-galaxy programs: if the ladder pick is beyond 20 Mpc but another
+    # method has a median <= 20 Mpc, prefer the best-ranked local method
+    # (SBF / FJ / TF subset) over an inflated TF / SN Ia median.
+    if _median_of(chosen) > float(_NEARBY_MPC):
+        local: list[tuple[int, float, list[dict[str, Any]]]] = []
+        for rank, group in ranked.items():
+            med = _median_of(group)
+            if med <= float(_NEARBY_MPC):
+                local.append((rank, med, group))
+        if local:
+            local.sort(key=lambda item: (item[0], item[1]))
+            chosen = local[0][2]
+        else:
+            # Same method can mix local and Hubble-flow TF values; keep the
+            # <=20 Mpc subset when it has at least one measurement.
+            nearby_rows = [
+                row
+                for row in chosen
+                if float(row['distance_mpc']) <= float(_NEARBY_MPC)
+            ]
+            if not nearby_rows:
+                for rank in sorted(ranked):
+                    nearby_rows = [
+                        row
+                        for row in ranked[rank]
+                        if float(row['distance_mpc']) <= float(_NEARBY_MPC)
+                    ]
+                    if nearby_rows:
+                        chosen = nearby_rows
+                        break
+            else:
+                chosen = nearby_rows
+
     distances = [row['distance_mpc'] for row in chosen]
     median = statistics.median(distances)
     formal = [row['distance_err_mpc'] for row in chosen if row.get('distance_err_mpc')]
@@ -201,16 +258,45 @@ def query_ned_distances(host: str | None, *, timeout: float = 45.0) -> list[dict
     return rows
 
 
+def _ned_name_candidates(*names: str | None) -> list[str]:
+    """Build NED query names, including ESO NNN-MMM -> ESO NNN-GMMM."""
+    import re
+
+    out: list[str] = []
+    for raw in names:
+        text = str(raw or '').strip()
+        if not text or text.lower().endswith(' parallel'):
+            continue
+        if text not in out:
+            out.append(text)
+        match = re.match(r'^(ESO)\s+(\d+)\s*-\s*(\d+)$', text, flags=re.IGNORECASE)
+        if match:
+            alt = f'{match.group(1).upper()} {int(match.group(2))}-G{int(match.group(3)):03d}'
+            if alt not in out:
+                out.append(alt)
+    return out
+
+
 def _lookup_ned(
     host: str | None,
     query_ned: Callable[[str | None], list[dict[str, Any]]] | None = None,
+    *,
+    display_name: str | None = None,
 ) -> dict[str, Any] | None:
     fetcher = query_ned or query_ned_distances
-    try:
-        rows = fetcher(host)
-    except Exception:
+    last_exc: Exception | None = None
+    for name in _ned_name_candidates(display_name, host):
+        try:
+            rows = fetcher(name)
+        except Exception as exc:
+            last_exc = exc
+            continue
+        record = select_ned_distance(rows, host=name)
+        if record is not None and record.get('distance_mpc') is not None:
+            return record
+    if last_exc is not None and not _ned_name_candidates(display_name, host):
         return None
-    return select_ned_distance(rows, host=host)
+    return None
 
 
 def _row_name(row: Any) -> str:
@@ -237,6 +323,123 @@ def _from_glade(row: Any) -> dict[str, Any]:
         'redshift': _masked_float(get('zhelio')) if 'zhelio' in colnames else None,
         'pgc': int(get('PGC')) if 'PGC' in colnames and _masked_float(get('PGC')) is not None else None,
     }
+
+
+def _from_gwgc(row: Any) -> dict[str, Any] | None:
+    get = row.__getitem__ if not isinstance(row, dict) else row.get
+    colnames = getattr(row, 'colnames', None) or (row.keys() if isinstance(row, dict) else [])
+    distance = _masked_float(get('Dist')) if 'Dist' in colnames else None
+    if distance is None:
+        return None
+    error = _masked_float(get('e_Dist')) if 'e_Dist' in colnames else None
+    pgc = None
+    if 'PGC' in colnames and _masked_float(get('PGC')) is not None:
+        pgc = int(get('PGC'))
+    return {
+        'catalog': 'GWGC',
+        'resolved_name': _row_name(row) or None,
+        'distance_mpc': float(distance),
+        'distance_err_mpc': None if error is None else float(error),
+        'pgc': pgc,
+    }
+
+
+def _vizier_client(*, columns: list[str] | None = None, row_limit: int = 20, timeout: float = 30.0):
+    from astroquery.vizier import Vizier
+
+    client = Vizier(columns=columns or ['**'], row_limit=row_limit)
+    client.TIMEOUT = timeout
+    return client
+
+
+def _vizier_with_mirrors(call: Callable[[Any], Any]):
+    """Run a Vizier callable, falling back across mirrors when CDS returns 404."""
+    from astroquery.vizier import Vizier
+
+    last_exc: Exception | None = None
+    for mirror in _VIZIER_MIRRORS:
+        Vizier.VIZIER_SERVER = mirror
+        try:
+            client = _vizier_client()
+            client.VIZIER_SERVER = mirror
+            result = call(client)
+            if result is not None:
+                return result
+        except Exception as exc:
+            last_exc = exc
+            continue
+    if last_exc is not None:
+        raise last_exc
+    return None
+
+
+def _gwgc_name_candidates(host: str | None) -> list[str]:
+    """GWGC Name values are compact (NGC4067, UGC02912, ESO431-002)."""
+    text = str(host or '').strip()
+    if not text:
+        return []
+    out: list[str] = []
+    compact = _norm_name(text)
+    if compact:
+        out.append(compact)
+    match = re.match(r'^(UGC)\s*0*(\d+)$', text, flags=re.IGNORECASE)
+    if match:
+        padded = f'UGC{int(match.group(2)):05d}'
+        if padded not in out:
+            out.append(padded)
+    match = re.match(r'^(IC|NGC)\s*0*(\d+)$', text, flags=re.IGNORECASE)
+    if match:
+        name = f'{match.group(1).upper()}{int(match.group(2))}'
+        if name not in out:
+            out.append(name)
+    match = re.match(r'^(ESO)\s+(\d+)\s*-\s*G?(\d+)$', text, flags=re.IGNORECASE)
+    if match:
+        name = f'ESO{int(match.group(2))}-{int(match.group(3)):03d}'
+        if name not in out:
+            out.append(name)
+    return out
+
+
+def _gwgc_pgc(host: str | None) -> str | None:
+    match = re.match(r'^PGC\s*0*(\d+)$', str(host or '').strip(), flags=re.IGNORECASE)
+    if not match:
+        return None
+    return str(int(match.group(1)))
+
+
+def _lookup_gwgc(host: str | None, ra: float, dec: float) -> dict[str, Any] | None:
+    """Query the White et al. 2011 GWGC (VII/267) for a nearby Dist."""
+    from astropy.coordinates import SkyCoord
+    import astropy.units as u
+
+    def _query(client: Any) -> dict[str, Any] | None:
+        pgc = _gwgc_pgc(host)
+        if pgc:
+            tables = client.query_constraints(catalog=_GWGC, PGC=f'={pgc}')
+            if tables:
+                record = _from_gwgc(tables[0][0])
+                if record is not None:
+                    return record
+        for name in _gwgc_name_candidates(host):
+            tables = client.query_constraints(catalog=_GWGC, Name=name)
+            if tables:
+                record = _from_gwgc(tables[0][0])
+                if record is not None:
+                    return record
+        tables = client.query_region(
+            SkyCoord(ra=float(ra) * u.deg, dec=float(dec) * u.deg),
+            radius=_GWGC_SEARCH_RADIUS_ARCMIN * u.arcmin,
+            catalog=_GWGC,
+        )
+        if not tables:
+            return None
+        row = _pick_row(tables[0], host)
+        return _from_gwgc(row) if row is not None else None
+
+    try:
+        return _vizier_with_mirrors(_query)
+    except Exception:
+        return None
 
 
 def discover_gladeplus_table(root: Path | None = None) -> Path | None:
@@ -302,20 +505,20 @@ def _lookup_local(host: str | None, ra: float, dec: float) -> dict[str, Any] | N
 
 
 def _query_vizier_glade(ra: float, dec: float):
-    from astroquery.vizier import Vizier
     from astropy.coordinates import SkyCoord
     import astropy.units as u
 
-    vizier = Vizier(columns=['**'], row_limit=20)
-    vizier.TIMEOUT = 20
-    tables = vizier.query_region(
-        SkyCoord(ra=ra, dec=dec, unit='deg'),
-        radius=_SEARCH_RADIUS_ARCMIN * u.arcmin,
-        catalog=_GLADE_PLUS,
-    )
-    if not tables:
-        return None
-    return tables[0]
+    def _query(client: Any):
+        tables = client.query_region(
+            SkyCoord(ra=ra, dec=dec, unit='deg'),
+            radius=_SEARCH_RADIUS_ARCMIN * u.arcmin,
+            catalog=_GLADE_PLUS,
+        )
+        if not tables:
+            return None
+        return tables[0]
+
+    return _vizier_with_mirrors(_query)
 
 
 def _pick_row(table, host: str | None):
@@ -332,6 +535,14 @@ def _pick_row(table, host: str | None):
 
 
 def _lookup_remote(host: str | None, ra: float, dec: float) -> dict[str, Any] | None:
+    # Prefer GWGC (nearby Dist) over GLADE+ luminosity distances, which can be
+    # redshift-inflated for Local Volume galaxies.
+    try:
+        gwgc = _lookup_gwgc(host, float(ra), float(dec))
+        if gwgc is not None and gwgc.get('distance_mpc') is not None:
+            return gwgc
+    except Exception:
+        pass
     try:
         glade = _pick_row(_query_vizier_glade(ra, dec), host)
         if glade is None:
@@ -342,6 +553,18 @@ def _lookup_remote(host: str | None, ra: float, dec: float) -> dict[str, Any] | 
     except Exception:
         return None
     return None
+
+
+def _prefer_nearby(record: dict[str, Any] | None, fallback: dict[str, Any] | None) -> dict[str, Any] | None:
+    """If the primary distance is beyond 20 Mpc, keep a local fallback when available."""
+    if record is None or record.get('distance_mpc') is None:
+        return fallback if fallback and fallback.get('distance_mpc') is not None else record
+    if float(record['distance_mpc']) <= float(_NEARBY_MPC):
+        return record
+    if fallback is not None and fallback.get('distance_mpc') is not None:
+        if float(fallback['distance_mpc']) <= float(_NEARBY_MPC):
+            return fallback
+    return record
 
 
 def cache_gladeplus_catalog(*, max_dl_mpc: float = 300.0, force: bool = False) -> Path | None:
@@ -383,14 +606,6 @@ def cache_gladeplus_catalog(*, max_dl_mpc: float = 300.0, force: bool = False) -
     }
     (out_dir / 'gladeplus_lite.json').write_text(json.dumps(meta, indent=2))
     return dest
-
-
-def _cache_is_ned(cached: dict[str, Any] | None, host: str | None = None) -> bool:
-    if not cached or cached.get('catalog') != 'NED' or cached.get('distance_mpc') is None:
-        return False
-    if host and cached.get('key', {}).get('host'):
-        return _norm_name(cached['key']['host']) == _norm_name(host)
-    return True
 
 
 def _usable_distance(cached: dict[str, Any] | None) -> bool:
@@ -438,7 +653,8 @@ def remember_host_distance(host: str | None, record: dict[str, Any] | None) -> N
         with _SHARED_LOCK:
             hosts = _load_shared_cache()
             current = hosts.get(key)
-            if _cache_is_ned(current, host) and not _cache_is_ned(record, host):
+            # Keep a fresh nearby NED/GWGC value over a worse remote fall-back.
+            if _cache_is_fresh(current, host) and not _cache_is_fresh(record, host):
                 return
             hosts[key] = dict(record)
             _write_shared_cache(hosts)
@@ -461,6 +677,20 @@ def shared_host_distance(host: str | None) -> dict[str, Any] | None:
     return record if isinstance(record, dict) else None
 
 
+def _cache_is_fresh(cached: dict[str, Any] | None, host: str | None = None) -> bool:
+    """Accept cached NED/GWGC values already in the nearby (<=20 Mpc) range."""
+    if not cached or cached.get('distance_mpc') is None:
+        return False
+    catalog = str(cached.get('catalog') or '')
+    if catalog not in {'NED', 'GWGC'}:
+        return False
+    if float(cached['distance_mpc']) > float(_NEARBY_MPC):
+        return False
+    if host and cached.get('key', {}).get('host'):
+        return _norm_name(cached['key']['host']) == _norm_name(host)
+    return True
+
+
 def lookup_host_distance(
     *,
     host: str | None,
@@ -470,12 +700,18 @@ def lookup_host_distance(
     force: bool = False,
     query_ned: Callable[[str | None], list[dict[str, Any]]] | None = None,
     remote: bool = True,
+    display_name: str | None = None,
 ) -> dict[str, Any] | None:
     """
-    Return a NED redshift-independent distance, preferring Cepheids, then TRGB,
-    SN Ia, Tully-Fisher, and any other NED method. GLADE+ is used only if NED
-    has no usable distance. Results are cached by host name so prime and
-    parallel fields of the same galaxy share one distance.
+    Return a host distance for nearby-galaxy campaigns.
+
+    Preference order:
+    1. NED redshift-independent methods (Cepheids / TRGB / SBF / SN Ia / FJ / TF),
+       keeping a <=20 Mpc subset when the ladder median is inflated.
+    2. GWGC Dist when NED is missing or still beyond 20 Mpc.
+    3. Local / remote GLADE+ only as a last resort.
+
+    Results are cached by host name so prime and parallel fields share one value.
     """
     cache_path = distance_cache_path(base_dir)
     key = {
@@ -485,10 +721,12 @@ def lookup_host_distance(
     }
     cached = _read_cache(cache_path) if cache_path.is_file() else None
     shared = shared_host_distance(host)
-    if not force and _cache_is_ned(cached, host):
+    # Stale GLADE+ / inflated TF caches must be refreshed when force=True or
+    # when the cached value is beyond the nearby cut.
+    if not force and _cache_is_fresh(cached, host):
         remember_host_distance(host, cached)
         return cached
-    if not force and _cache_is_ned(shared, host):
+    if not force and _cache_is_fresh(shared, host):
         return shared
     if not remote:
         if _usable_distance(shared):
@@ -497,11 +735,19 @@ def lookup_host_distance(
             return cached
         return None
 
-    record = _lookup_ned(host, query_ned=query_ned)
+    record = _lookup_ned(host, query_ned=query_ned, display_name=display_name)
+    if record is None or record.get('distance_mpc') is None or float(record['distance_mpc']) > float(
+        _NEARBY_MPC
+    ):
+        gwgc = _lookup_gwgc(host, float(ra), float(dec))
+        record = _prefer_nearby(record, gwgc)
     if record is None or record.get('distance_mpc') is None:
         record = _lookup_local(host, float(ra), float(dec))
         if record is None or record.get('distance_mpc') is None:
             record = _lookup_remote(host, float(ra), float(dec))
+        elif float(record['distance_mpc']) > float(_NEARBY_MPC):
+            remote_rec = _lookup_remote(host, float(ra), float(dec))
+            record = _prefer_nearby(record, remote_rec)
     if record is None or record.get('distance_mpc') is None:
         if _usable_distance(shared):
             return shared
@@ -526,7 +772,7 @@ def warm_host_distances(rows: list[dict[str, Any]]) -> None:
             key = _norm_name(host)
             if not key or key in _WARMER_KEYS:
                 continue
-            if _cache_is_ned(shared_host_distance(host), host):
+            if _cache_is_fresh(shared_host_distance(host), host):
                 continue
             _WARMER_KEYS.add(key)
             pending.append(row)
@@ -543,6 +789,7 @@ def warm_host_distances(rows: list[dict[str, Any]]) -> None:
                         dec=float(row['dec']),
                         base_dir=Path(row['base_dir']),
                         remote=True,
+                        display_name=row.get('display_name'),
                     )
                 except Exception:
                     continue

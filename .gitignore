@@ -26,6 +26,12 @@ docs/source/_templates
 # Ignore pycharm directory
 .idea
 
+# Cursor IDE local rules / state (never commit)
+.cursor/
+
+# Local scratch / throwaway experiments
+scratch/
+
 # Local pipelinesite demo
 wings/src/pipelinesite/.venv/
 wings/src/pipelinesite/.venv312/

@@ -367,12 +367,37 @@ def _preview_stem(image_id: str | None = None) -> str:
     return f'preview_{safe[:120]}'
 
 
-def preview_path(base_dir: Path | None = None, image_id: str | None = None) -> Path:
-    return status_dir(base_dir) / f'{_preview_stem(image_id)}.png'
+def preview_path(
+    base_dir: Path | None = None,
+    image_id: str | None = None,
+    *,
+    ext: str = 'webp',
+) -> Path:
+    """Local cache path for a preview image (webp/avif/jpg)."""
+    suffix = str(ext or 'webp').lstrip('.')
+    return status_dir(base_dir) / f'{_preview_stem(image_id)}.{suffix}'
 
 
 def preview_meta_path(base_dir: Path | None = None, image_id: str | None = None) -> Path:
     return status_dir(base_dir) / f'{_preview_stem(image_id)}.json'
+
+
+def mosaic_preview_static_root() -> Path:
+    """Files under STATIC_ROOT so nginx can serve previews without Django."""
+    settings = _django_settings()
+    if settings is not None and getattr(settings, 'STATIC_ROOT', None):
+        return Path(settings.STATIC_ROOT) / 'mosaic-previews'
+    return Path(__file__).resolve().parents[2] / 'root' / 'mosaic-previews'
+
+
+def mosaic_preview_publish_dir(base_dir: Path | None = None) -> Path:
+    root = Path(base_dir) if base_dir is not None else target_config().base_dir
+    return mosaic_preview_static_root() / root.parent.name / root.name
+
+
+def mosaic_preview_static_base_url(base_dir: Path | None = None) -> str:
+    root = Path(base_dir) if base_dir is not None else target_config().base_dir
+    return f'/static/mosaic-previews/{root.parent.name}/{root.name}/'
 
 
 def gladeplus_dir() -> Path:

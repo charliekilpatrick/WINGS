@@ -845,7 +845,7 @@
     {
       "name": "sn2017hta",
       "display_name": "SN 2017HTA",
-      "host": "",
+      "host": "UGCA 81",
       "sn_type": "",
       "field_role": "prime",
       "ra": 54.949999999999996,
@@ -1547,5 +1547,6 @@
       "program_id": "17070"
     }
   ],
-  "host_source": "wis-tns+ned"
+  "host_source": "literature+wis-tns+ned-cone+glade",
+  "hosts_updated_at": "2026-11-11T17:13:24.804942+00:00"
 }

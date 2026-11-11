@@ -9,7 +9,7 @@
     {
       "name": "eso138-010",
       "display_name": "ESO 138-010",
-      "host": "ESO 138",
+      "host": "ESO 138-010",
       "sn_type": "",
       "field_role": "prime",
       "ra": 254.76190000000003,
@@ -35,7 +35,7 @@
     {
       "name": "eso305-009",
       "display_name": "ESO 305-009",
-      "host": "ESO 305",
+      "host": "ESO 305-009",
       "sn_type": "",
       "field_role": "prime",
       "ra": 77.0283,
@@ -61,7 +61,7 @@
     {
       "name": "eso305-009par",
       "display_name": "ESO 305-009 parallel",
-      "host": "ESO 305",
+      "host": "ESO 305-009",
       "sn_type": "",
       "field_role": "parallel",
       "ra": 77.12073436528605,
@@ -88,7 +88,7 @@
     {
       "name": "eso318-024",
       "display_name": "ESO 318-024",
-      "host": "ESO 318",
+      "host": "ESO 318-024",
       "sn_type": "",
       "field_role": "prime",
       "ra": 164.4666,
@@ -114,7 +114,7 @@
     {
       "name": "eso318-024par",
       "display_name": "ESO 318-024 parallel",
-      "host": "ESO 318",
+      "host": "ESO 318-024",
       "sn_type": "",
       "field_role": "parallel",
       "ra": 164.56051408141172,
@@ -141,7 +141,7 @@
     {
       "name": "eso375-071",
       "display_name": "ESO 375-071",
-      "host": "ESO 375",
+      "host": "ESO 375-071",
       "sn_type": "",
       "field_role": "prime",
       "ra": 159.0397,
@@ -167,7 +167,7 @@
     {
       "name": "eso375-071par",
       "display_name": "ESO 375-071 parallel",
-      "host": "ESO 375",
+      "host": "ESO 375-071",
       "sn_type": "",
       "field_role": "parallel",
       "ra": 159.13080303850288,
@@ -194,7 +194,7 @@
     {
       "name": "eso384-002",
       "display_name": "ESO 384-002",
-      "host": "ESO 384",
+      "host": "ESO 384-002",
       "sn_type": "",
       "field_role": "prime",
       "ra": 207.8287,
@@ -220,7 +220,7 @@
     {
       "name": "eso384-002par",
       "display_name": "ESO 384-002 parallel",
-      "host": "ESO 384",
+      "host": "ESO 384-002",
       "sn_type": "",
       "field_role": "parallel",
       "ra": 207.9159880350312,
@@ -247,7 +247,7 @@
     {
       "name": "eso431-002",
       "display_name": "ESO 431-002",
-      "host": "ESO 431",
+      "host": "ESO 431-002",
       "sn_type": "",
       "field_role": "prime",
       "ra": 124.43020000000001,
@@ -273,7 +273,7 @@
     {
       "name": "eso431-002par",
       "display_name": "ESO 431-002 parallel",
-      "host": "ESO 431",
+      "host": "ESO 431-002",
       "sn_type": "",
       "field_role": "parallel",
       "ra": 124.52457810332356,
@@ -300,7 +300,7 @@
     {
       "name": "eso434-033",
       "display_name": "ESO 434-033",
-      "host": "ESO 434",
+      "host": "ESO 434-033",
       "sn_type": "",
       "field_role": "prime",
       "ra": 146.2008,
@@ -326,7 +326,7 @@
     {
       "name": "eso434-033par",
       "display_name": "ESO 434-033 parallel",
-      "host": "ESO 434",
+      "host": "ESO 434-033",
       "sn_type": "",
       "field_role": "parallel",
       "ra": 146.2861618480428,
@@ -353,7 +353,7 @@
     {
       "name": "eso481-014",
       "display_name": "ESO 481-014",
-      "host": "ESO 481",
+      "host": "ESO 481-014",
       "sn_type": "",
       "field_role": "prime",
       "ra": 48.419399999999996,
@@ -379,7 +379,7 @@
     {
       "name": "eso481-014par",
       "display_name": "ESO 481-014 parallel",
-      "host": "ESO 481",
+      "host": "ESO 481-014",
       "sn_type": "",
       "field_role": "parallel",
       "ra": 48.49955064243231,
@@ -406,7 +406,7 @@
     {
       "name": "eso494-026",
       "display_name": "ESO 494-026",
-      "host": "ESO 494",
+      "host": "ESO 494-026",
       "sn_type": "",
       "field_role": "prime",
       "ra": 121.546,
@@ -432,7 +432,7 @@
     {
       "name": "eso565-003",
       "display_name": "ESO 565-003",
-      "host": "ESO 565",
+      "host": "ESO 565-003",
       "sn_type": "",
       "field_role": "prime",
       "ra": 140.7922,
@@ -458,7 +458,7 @@
     {
       "name": "eso576-050",
       "display_name": "ESO 576-050",
-      "host": "ESO 576",
+      "host": "ESO 576-050",
       "sn_type": "",
       "field_role": "prime",
       "ra": 201.1741,
@@ -484,7 +484,7 @@
     {
       "name": "eso576-050par",
       "display_name": "ESO 576-050 parallel",
-      "host": "ESO 576",
+      "host": "ESO 576-050",
       "sn_type": "",
       "field_role": "parallel",
       "ra": 201.25113528049124,

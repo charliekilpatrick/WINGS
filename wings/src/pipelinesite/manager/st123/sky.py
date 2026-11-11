@@ -15,6 +15,24 @@ def _header_get(header, *keys):
     return None
 
 
+def _science_filter_from_cards(header) -> str | None:
+    """Return the non-CLEAR filter from ACS/WFC3-style FILTER/FILTER1/FILTER2 cards."""
+    from .st123api import display_filter
+
+    values: list[str] = []
+    for key in ('FILTER', 'FILTNAM1', 'FILTER2', 'FILTER1', 'FILTNAM2'):
+        raw = _header_get(header, key)
+        if raw is None:
+            continue
+        text = display_filter(str(raw))
+        if not text:
+            continue
+        if text.startswith('CLEAR'):
+            continue
+        values.append(text)
+    return values[0] if values else None
+
+
 def separation_arcmin(ra1: float, dec1: float, ra2: float, dec2: float) -> float:
     """Great-circle distance in arcminutes between two ICRS positions."""
     r1, d1, r2, d2 = (math.radians(float(v)) for v in (ra1, dec1, ra2, dec2))
@@ -221,6 +239,22 @@ def ab_zeropoint(photflam: float | None, photplam: float | None) -> float | None
     return -2.5 * math.log10(float(photflam)) - 5.0 * math.log10(float(photplam)) - 2.408
 
 
+def _mjd_from_isot(text: str | None) -> float | None:
+    """Convert ``YYYY-MM-DDTHH:MM:SS`` (or date-only) to MJD."""
+    raw = str(text or '').strip()
+    if not raw:
+        return None
+    for fmt in ('%Y-%m-%dT%H:%M:%S', '%Y-%m-%d'):
+        try:
+            dt = datetime.strptime(raw, fmt)
+        except ValueError:
+            continue
+        # MJD = JD - 2400000.5; Unix epoch JD = 2440587.5
+        unix = (dt - datetime(1970, 1, 1)).total_seconds()
+        return unix / 86400.0 + 40587.0
+    return None
+
+
 _HEADER_CACHE: dict[tuple[str, float], dict[str, Any]] = {}
 _HEADER_CACHE_MAX = 256
 
@@ -248,6 +282,7 @@ def read_image_header(path: Path) -> dict[str, Any]:
         'detector': None,
         'filter': None,
         'date_obs': None,
+        'mjd': None,
         'exptime': None,
         'photflam': None,
         'photplam': None,
@@ -268,16 +303,17 @@ def read_image_header(path: Path) -> dict[str, Any]:
     except Exception:
         return _store(meta)
 
+    filt_from_cards = None
+    inst = detector = None
+    date_obs = time_obs = exptime = None
+    mjd_obs = None
+    header = None
     try:
         with warnings.catch_warnings():
             warnings.simplefilter('ignore', FITSFixedWarning)
             with fits.open(path, memmap=True) as hdul:
                 header = hdul[0].header
                 wcs_header = None
-                inst = detector = None
-                date_obs = None
-                time_obs = None
-                exptime = None
                 for hdu in hdul:
                     cards = getattr(hdu, 'header', None)
                     if cards is None:
@@ -294,6 +330,10 @@ def read_image_header(path: Path) -> dict[str, Any]:
                         time_obs = _header_get(cards, 'TIME-OBS', 'TIME_OBS')
                     if exptime is None:
                         exptime = _header_get(cards, 'TEXPTIME', 'EXPTIME')
+                    if mjd_obs is None:
+                        mjd_obs = _header_get(cards, 'EXPSTART', 'MJD-OBS', 'MJDOBS')
+                    if filt_from_cards is None:
+                        filt_from_cards = _science_filter_from_cards(cards)
                     if meta['photflam'] is None and 'PHOTFLAM' in cards:
                         try:
                             meta['photflam'] = float(cards['PHOTFLAM'])
@@ -311,10 +351,14 @@ def read_image_header(path: Path) -> dict[str, Any]:
     meta['instrument'] = None if inst is None else str(inst).strip()
     meta['detector'] = None if detector is None else str(detector).strip()
     if not meta.get('filter'):
-        filt = _header_get(header, 'FILTER', 'FILTNAM1', 'FILTER1')
-        if filt:
-            meta['filter'] = display_filter(str(filt))
+        meta['filter'] = filt_from_cards or _science_filter_from_cards(header)
     meta['date_obs'] = format_obs_datetime(date_obs, time_obs)
+    try:
+        meta['mjd'] = None if mjd_obs is None else float(mjd_obs)
+    except (TypeError, ValueError):
+        meta['mjd'] = None
+    if meta['mjd'] is None and meta.get('date_obs'):
+        meta['mjd'] = _mjd_from_isot(meta['date_obs'])
     try:
         meta['exptime'] = None if exptime is None else float(exptime)
     except (TypeError, ValueError):
@@ -417,13 +461,15 @@ def apply_north_up_east_left(
         return arr, out
 
     old_ny, old_nx = int(arr.shape[0]), int(arr.shape[1])
-    # PIL y increases downward; flip into a y-up canvas, rotate in FITS CCW
-    # (negate angle for PIL), optional East-left mirror, then flip back.
+    # PIL stores row 0 at the top, while FITS arrays have y=0 at the bottom.
+    # Flip into display space, rotate by +delta (PIL CCW on a y-down canvas is
+    # the same as FITS CCW after the flip sandwich), optional East-left mirror,
+    # then flip back so the returned array stays FITS-ordered.
     img = Image.fromarray(arr)
     img = img.transpose(getattr(Image, 'FLIP_TOP_BOTTOM', 1))
     if do_rotate:
         img = img.rotate(
-            -delta,
+            delta,
             expand=True,
             resample=getattr(Image, 'BILINEAR', 2),
             fillcolor=0,
@@ -457,4 +503,30 @@ def apply_north_up_east_left(
     out_wcs['orientation'] = 'north_up_east_left'
     out_wcs['rotation_deg'] = float(delta)
     out_wcs['flip_x'] = bool(flip_x)
-    return out_arr, out_wcs
+    return _crop_fill_border(out_arr, out_wcs, fill=0)
+
+
+def _crop_fill_border(arr, wcs: dict[str, Any] | None, *, fill: float = 0):
+    """Trim uniform fill introduced by ``expand=True`` rotation; update WCS CRPIX."""
+    import numpy as np
+
+    data = np.asarray(arr)
+    if data.ndim != 2 or wcs is None:
+        return arr, wcs
+    # Exact fill match — rotation pads with a constant, science rarely hits it after stretch.
+    content = data != fill
+    if not np.any(content):
+        return data, wcs
+    rows = np.any(content, axis=1)
+    cols = np.any(content, axis=0)
+    y0, y1 = int(np.argmax(rows)), int(len(rows) - np.argmax(rows[::-1]))
+    x0, x1 = int(np.argmax(cols)), int(len(cols) - np.argmax(cols[::-1]))
+    if x0 == 0 and y0 == 0 and x1 == data.shape[1] and y1 == data.shape[0]:
+        return data, wcs
+    cropped = data[y0:y1, x0:x1]
+    out = dict(wcs)
+    crpix = list(out.get('crpix') or [1.0, 1.0])
+    out['crpix'] = [float(crpix[0]) - x0, float(crpix[1]) - y0]
+    out['nx'] = int(cropped.shape[1])
+    out['ny'] = int(cropped.shape[0])
+    return cropped, out
